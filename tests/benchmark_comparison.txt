@@ -1,0 +1,912 @@
+TOKENSMITH BENCHMARK QUESTION vs BASELINE vs LLM RESPONSE
+top_k=10, rerank=cross_encoder, FAISS only
+================================================================================
+
+SINGLE-HOP avg keyword hit rate (retrieved chunks): 0.66   n=12
+MULTI-HOP  avg keyword hit rate (retrieved chunks): 0.52   n=13
+
+Note: KHR = fraction of expected keywords found in first 300 chars of each
+retrieved chunk. Multi-hop deficit shows FAISS finds wrong/shallow sections.
+
+================================================================================
+[SINGLE]  sh_wal_rule   KHR=1.0
+
+QUESTION:
+  What is the write-ahead logging rule?
+
+EXPECTED ANSWER (what we want):
+  The write-ahead logging rule states that a log record for a data item must
+  be written to stable storage before the data item itself is written to disk.
+  This guarantees that the log always contains enough information to undo any
+  update that has been applied to the database.
+
+LLM GENERATED:
+  The write-ahead logging (WAL) rule is a fundamental principle in database
+  systems that ensures data consistency in the face of failures. The rule
+  states that before a block of data in main memory can be output to
+  nonvolatile storage (such as disk), all log records pertaining to data in
+  that block must have been output to stable storage. This means that all
+  changes made to the database must be recorded in the log before they are
+  physically written to disk to ensure that the database can be recovered to a
+  consistent state in case of a system crash. The rule is important because it
+  guarantees that the database state can be restored to a consistent state by
+  replaying the log records, even if a crash occurs before the data is written
+  to disk. This helps maintain the atomicity of transactions, ensuring that
+  either all changes are committed or none are, thus preserving the integrity
+  of the database. This rule is enforced by systems to ensure that the
+  database remains consistent and can be recovered from failures, and it is a
+  key component in the design of database recovery mechanisms.
+
+RETRIEVED CHUNK IDs: [1242, 1241, 1217, 1244, 1222, 1230, 1243, 1267, 1269, 1226]
+
+================================================================================
+[SINGLE]  sh_dirty_read   KHR=0.6
+
+QUESTION:
+  What is a dirty read in transaction processing?
+
+EXPECTED ANSWER (what we want):
+  A dirty read occurs when a transaction reads data written by another
+  transaction that has not yet committed. If the writing transaction later
+  aborts, the reading transaction has seen data that never officially existed,
+  violating isolation.
+
+LLM GENERATED:
+  A dirty read in transaction processing occurs when a transaction reads data
+  that has been modified by another transaction but not yet committed. This
+  means the data read by the first transaction is in an "uncommitted" state
+  and could potentially be rolled back or modified by the second transaction
+  before it commits. In the context of SQL and database systems, dirty reads
+  are explicitly disallowed by various isolation levels, such as Repeatable
+  Read and Serializable. These isolation levels are designed to prevent dirty
+  reads by ensuring that a transaction sees either committed data or no data
+  at all (Read Uncommitted), thus avoiding inconsistencies caused by reading
+  uncommitted data.
+
+RETRIEVED CHUNK IDs: [1097, 1154, 1096, 1104, 1067, 1070, 36, 1165, 1139, 1197]
+MISSING KEYWORDS:    ['dirty read', 'abort']
+
+================================================================================
+[SINGLE]  sh_2pl   KHR=1.0
+
+QUESTION:
+  What is the two-phase locking protocol?
+
+EXPECTED ANSWER (what we want):
+  Two-phase locking (2PL) is a concurrency control protocol in which a
+  transaction acquires all locks before releasing any lock. The growing phase
+  allows lock acquisitions; the shrinking phase allows only releases. This
+  guarantees conflict serializability.
+
+LLM GENERATED:
+  The two-phase locking protocol is a method used to ensure serializability in
+  database transactions. Here's a breakdown of the key points: 1 Phases:
+  Transactions are divided into two phases: • Growing Phase: During this
+  phase, a transaction can acquire locks but cannot release any locks. •
+  Shrinking Phase: During this phase, a transaction can release locks but
+  cannot acquire any new locks. 2 Initial State: Transactions start in the
+  growing phase. 3 Locking: Transactions acquire locks as needed during the
+  growing phase. Once a transaction releases a lock, it enters the shrinking
+  phase and can no longer issue lock requests. 4 Serializability: The protocol
+  ensures that schedules are conflict-serializable, meaning that the
+  transactions can be ordered in a way that avoids conflicts and ensures that
+  the final state is consistent. 5 Deadlock Avoidance: The two-phase locking
+  protocol does not inherently avoid deadlocks. Deadlocks can occur if
+  transactions hold locks for too long, leading to a situation where multiple
+  transactions are waiting for each other to release locks. 6 Lock Conversion:
+  To enhance concurrency, the protocol allows lock conversions (upgrading or
+  downgrading locks) within specific phases: • Upgrading: From shared to
+  exclusive mode, allowed only in the growing phase. • Downgrading: From
+  exclusive to shared mode, allowed only in the shrinking phase. 7
+  Concurrency: The protocol allows for more concurrency by allowing lock
+  conversions, but it must be managed carefully to avoid conflicts and ensure
+  serializability. 8 Limitations: The protocol does not prevent cascading
+  rollbacks, where a failure in one transaction can cause rollbacks of other
+  transactions. To mitigate this, modifications like the strict two-phase
+  locking protocol or the rigorous two-phase locking protocol with lock
+  conversions are used. This protocol is widely used in database systems to
+  ensure that transactions can be executed in a serializable manner, meaning
+
+RETRIEVED CHUNK IDs: [1116, 1117, 1101, 1154, 1122, 1137, 1118, 1126, 1540, 1485]
+
+================================================================================
+[SINGLE]  sh_bptree_search   KHR=0.5
+
+QUESTION:
+  How does a B+ tree support search operations?
+
+EXPECTED ANSWER (what we want):
+  A B+ tree search starts at the root, uses key comparisons at each internal
+  node to follow the correct child pointer, and terminates at a leaf node
+  containing the search key or a pointer to the record. All actual data
+  pointers reside in leaf nodes, which are linked for efficient range scans.
+
+LLM GENERATED:
+  A B+ tree supports search operations by traversing a path from the root to a
+  leaf node based on the search key value. Here's a step-by-step breakdown of
+  how it works: 1 Start at the Root: The search begins at the root of the B+
+  tree. 2 Compare Search Key: For each node, the search key value is compared
+  with the search key value being sought. 3 Move to Appropriate Subtree: If
+  the search key value is less than the current node's search key, move to the
+  left child (or the leftmost child if it's a leaf node). If the search key
+  value is greater, move to the right child. 4 Repeat Until Leaf Node:
+  Continue this process until reaching a leaf node. Leaf nodes contain the
+  actual records. 5 Check for Match: In the leaf node, search for the exact
+  match of the search key value. If found, return the pointer to the record. 6
+  No Match: If the search key value is not found in the leaf node, return null
+  to indicate that no record with the specified search key value exists. This
+  process ensures that the search operation is efficient, as it only requires
+  traversing a path of nodes that are likely to contain the search key value,
+  rather than potentially scanning the entire tree. The height of the B+ tree,
+  which is determined by the number of levels needed to accommodate the
+  maximum number of keys, is typically lower than that of a balanced binary
+  tree, making the search operation faster. <<>
+
+RETRIEVED CHUNK IDs: [843, 841, 869, 842, 871, 839, 855, 836, 846, 857]
+MISSING KEYWORDS:    ['B+ tree', 'internal node', 'pointer']
+
+================================================================================
+[SINGLE]  sh_functional_dependency   KHR=0.8
+
+QUESTION:
+  What is a functional dependency?
+
+EXPECTED ANSWER (what we want):
+  A functional dependency X -> Y holds on a relation if, whenever two tuples
+  agree on all attributes in X, they must also agree on all attributes in Y.
+  It expresses a constraint between attribute sets and is the foundation of
+  normalization theory.
+
+LLM GENERATED:
+  A functional dependency is a rule that describes how the values of certain
+  attributes (the dependent attributes) are determined by the values of other
+  attributes (the determinant attributes) in a relation. Specifically, a
+  functional dependency α → β means that for every possible tuple t1 in the
+  relation, if the value of the determinant attributes α in t1 is the same as
+  the value of the determinant attributes in another tuple t2, then the value
+  of the dependent attributes β in t1 must be the same as the value of the
+  dependent attributes in t2. In simpler terms, it states that if two tuples
+  have the same values for the determinant attributes, they must have the same
+  values for the dependent attributes. For example, in a relation representing
+  students and their grades, a functional dependency might be "student ID →
+  grade," meaning that the grade of a student is uniquely determined by their
+  student ID. Functional dependencies are used in database theory to define
+  constraints on the structure of relations and to determine normal forms,
+  which are ways to organize data to minimize redundancy and anomalies.<<>
+
+RETRIEVED CHUNK IDs: [388, 406, 387, 389, 412, 417, 390, 402, 407, 400]
+MISSING KEYWORDS:    ['agree']
+
+================================================================================
+[SINGLE]  sh_bcnf   KHR=0.8
+
+QUESTION:
+  What is Boyce-Codd Normal Form (BCNF)?
+
+EXPECTED ANSWER (what we want):
+  A relation is in BCNF if for every non-trivial functional dependency X -> Y,
+  X is a superkey of the relation. BCNF eliminates all redundancy arising from
+  functional dependencies by ensuring that only superkeys can determine other
+  attributes.
+
+LLM GENERATED:
+  Boyce-Codd Normal Form (BCNF) is a more restrictive normal form than 3NF. A
+  relation schema R is in BCNF with respect to a set F of functional
+  dependencies if, for all nontrivial functional dependencies in F+ of the
+  form α → β, where α ⊆ R and β ⊆ R, at least one of the following holds: 1 α
+  → β is a trivial functional dependency. 2 α is a superkey for R. 3 Each
+  attribute A in β - α is contained in a candidate key for R. In simpler
+  terms, BCNF requires that every nontrivial functional dependency must have
+  the left side as a superkey. This ensures that no redundant information is
+  stored and that the schema is in a state where it can be decomposed into 3NF
+  without losing any information. BCNF is a more restrictive normal form than
+  3NF, meaning that if a relation is in BCNF, it is also in 3NF, but not vice
+  versa.
+
+RETRIEVED CHUNK IDs: [394, 421, 400, 395, 422, 402, 423, 428, 431, 425]
+MISSING KEYWORDS:    ['non-trivial']
+
+================================================================================
+[SINGLE]  sh_checkpoint   KHR=0.6666666666666667
+
+QUESTION:
+  What is the purpose of a checkpoint in database recovery?
+
+EXPECTED ANSWER (what we want):
+  A checkpoint limits how far back the recovery manager must scan the log
+  after a crash. At checkpoint time, all dirty buffer pages are flushed to
+  disk and a checkpoint log record is written, so the redo pass need only
+  replay log records after the most recent checkpoint.
+
+LLM GENERATED:
+  The purpose of a checkpoint in database recovery is to provide a stable
+  point in the transaction log that can be used to determine which
+  transactions need to be redone or undone during the recovery process. By
+  capturing the state of the database at a specific point, checkpoints allow
+  for a more efficient recovery process. Specifically, a checkpoint allows the
+  system to streamline its recovery procedure by only needing to apply redo or
+  undo operations to transactions that were active at the time of the
+  checkpoint. This reduces the amount of work needed during recovery and can
+  significantly speed up the process.
+
+RETRIEVED CHUNK IDs: [1230, 1231, 1235, 1267, 1232, 1248, 1222, 1207, 1281, 1236]
+MISSING KEYWORDS:    ['dirty pages', 'flush']
+
+================================================================================
+[SINGLE]  sh_phantom_read   KHR=0.5
+
+QUESTION:
+  What is a phantom read?
+
+EXPECTED ANSWER (what we want):
+  A phantom read occurs when a transaction re-executes a query and finds new
+  rows that were inserted by another committed transaction between the two
+  executions. The rows are 'phantoms' because they did not exist during the
+  first read.
+
+LLM GENERATED:
+  A phantom read occurs when a transaction sees a set of tuples that are not
+  visible to other transactions, leading to results that are not consistent
+  with the eventual serial execution of transactions. This phenomenon is
+  particularly relevant in the context of concurrency control in databases,
+  where transactions may see "phantom" data that was not present in the
+  database when the transaction started, due to changes made by other
+  transactions that occurred concurrently. In the context of the textbook
+  excerpt provided, phantom reads can happen when a transaction reads
+  information about what tuples are in a relation, and the information used to
+  find those tuples can be updated by other transactions. This can lead to a
+  situation where a transaction sees tuples that were not present when it
+  started, causing inconsistency in the results. For example, in the scenario
+  described in the excerpt, if a transaction T30 reads tuples in the
+  instructor relation and finds tuples with dept_name = 'Physics', it might
+  see tuples that were added by another transaction T31 after T30 started.
+  This is because T30 is not aware of the changes made by T31, and thus sees
+  "phantom" data. To prevent phantom reads, various concurrency control
+  mechanisms are employed, including locking, timestamp ordering, and other
+  techniques to ensure that transactions see a consistent view of the
+  database.<<>
+
+RETRIEVED CHUNK IDs: [1107, 1143, 1142, 1106, 1176, 1154, 1172, 1174, 1151, 1104]
+MISSING KEYWORDS:    ['new rows', 'inserted', 're-execute']
+
+================================================================================
+[SINGLE]  sh_clustered_vs_unclustered   KHR=0.33333333333333337
+
+QUESTION:
+  What is the difference between a clustered and an unclustered index?
+
+EXPECTED ANSWER (what we want):
+  A clustered index stores the data records in the same order as the index
+  key, so a range scan fetches records in few I/Os. An unclustered index
+  stores index entries separately from records; a range scan may require one
+  I/O per matching record, making it much more expensive for large ranges.
+
+LLM GENERATED:
+  The key difference between a clustered and an unclustered index lies in how
+  the records are stored in the underlying data file: • Clustered Index: • In
+  a clustered index, the records are stored in the same order as the index.
+  The index defines the physical order of the data in the file. • Only the
+  first record with each unique search-key value is stored, and the rest are
+  stored sequentially after it. • A clustering index may be sparse, meaning it
+  doesn't store every record with the same search-key value, but only the
+  first record and the rest are stored sequentially. • Unclustered (Secondary)
+  Index: • In an unclustered index, the records are not stored in the same
+  order as the index. Instead, each index entry contains a search-key value
+  and a pointer to the first data record with that search-key value. • Each
+  index entry can point to multiple records, and these records are not
+  necessarily stored sequentially in the file. • A secondary index must store
+  pointers to all records, even if they have the same search-key value, since
+  the records may be scattered throughout the file. In summary, a clustered
+  index stores the data in the same order as the index, while an unclustered
+  index stores the data in a different order and points to the records using
+  pointers.
+
+RETRIEVED CHUNK IDs: [832, 820, 919, 821, 1659, 834, 790, 922, 819, 822]
+MISSING KEYWORDS:    ['clustered', 'unclustered', 'range scan', 'I/O']
+
+================================================================================
+[SINGLE]  sh_conflict_serializable   KHR=0.6
+
+QUESTION:
+  What does it mean for a schedule to be conflict serializable?
+
+EXPECTED ANSWER (what we want):
+  A schedule is conflict serializable if it is conflict-equivalent to some
+  serial schedule. Two schedules are conflict-equivalent if they have the same
+  set of conflicting operations in the same order. Conflict serializability
+  can be tested by checking whether the precedence graph of the schedule is
+  acyclic.
+
+LLM GENERATED:
+  For a schedule to be conflict serializable means it is conflict equivalent
+  to a serial schedule. In other words, it can be transformed into a serial
+  schedule through a series of swaps of non-conflicting instructions. This
+  concept is important in database systems to ensure that concurrent
+  transactions do not produce inconsistent results, and it forms the basis for
+  ensuring isolation and consistency in concurrent environments. To break it
+  down further: • A schedule is conflict serializable if it can be made serial
+  by swapping non-conflicting instructions. • Conflict serializability is a
+  stricter condition than just being conflict equivalent, as it requires the
+  schedule to be equivalent to a serial schedule, not just any serial
+  schedule. • It ensures that the transactions can be executed in a serial
+  order without violating any conflicts between read and write operations.
+  This concept is crucial for maintaining data integrity in concurrent
+  database systems, as it helps to prevent situations where transactions might
+  read or write data in an order that could lead to inconsistent results.<<>
+
+RETRIEVED CHUNK IDs: [1089, 1091, 1086, 1088, 1090, 1156, 1114, 1092, 1175, 1171]
+MISSING KEYWORDS:    ['conflict-equivalent', 'acyclic']
+
+================================================================================
+[SINGLE]  sh_aries_overview   KHR=0.6666666666666667
+
+QUESTION:
+  What is the ARIES recovery algorithm?
+
+EXPECTED ANSWER (what we want):
+  ARIES (Algorithm for Recovery and Isolation Exploiting Semantics) is a
+  write-ahead logging recovery algorithm that performs three passes after a
+  crash: an analysis pass to determine which transactions were active and
+  which pages were dirty, a redo pass to replay history and restore the
+  database to its crash state, and an undo pass to roll back all uncommitted
+  transactions.
+
+LLM GENERATED:
+  The ARIES recovery algorithm is a sophisticated method designed to improve
+  the recovery process in database systems. It incorporates several key
+  optimizations to reduce recovery time and logging overhead. Here are the
+  main features of ARIES: 1 Log Sequence Number (LSN) for Log Records: ARIES
+  uses LSNs to uniquely identify log records and store them in database pages,
+  allowing for efficient identification of which operations have been applied
+  to a database page. 2 Physiological Redo Operations: ARIES supports redo
+  operations that are physical in nature, meaning the affected page is
+  identified but can be logical within the page. This allows for more
+  efficient logging, as only the necessary changes need to be recorded. 3
+  Dirty Page Table: ARIES employs a dirty page table to minimize unnecessary
+  redo operations during recovery. This table keeps track of pages that have
+  been updated but not yet written to disk, allowing for efficient recovery. 4
+  Fuzzy Checkpointing: ARIES uses a fuzzy-checkpointing scheme that records
+  only information about dirty pages and associated metadata, reducing the
+  overhead of checkpointing. 5 Nested Top Actions: ARIES allows for the
+  logging of operations that should not be undone even if a transaction gets
+  rolled back, such as page allocations, ensuring that these operations are
+  not lost during recovery. 6 Recovery Independence: Some pages can be
+  recovered independently from others, allowing for concurrent recovery and
+  processing of transactions. 7 Savepoints: Transactions can record savepoints
+  and be rolled back partially up to a savepoint, which can be useful for
+  handling deadlocks and errors during transaction execution. 8 Fine-Grained
+  Locking: The algorithm can be used with index concurrency-control algorithms
+  that permit tuple-level locking, improving concurrency. 9 Redo Pass: ARIES
+  recovers from a system crash in three passes: an analysis pass, a redo pass,
+  and an undo pass. The redo pass starts from a position determined during the
+  analysis pass and performs a redo
+
+RETRIEVED CHUNK IDs: [1267, 1269, 1277, 1278, 1272, 1233, 1230, 1207, 1235, 1222]
+MISSING KEYWORDS:    ['write-ahead log', 'crash recovery']
+
+================================================================================
+[SINGLE]  sh_query_optimization   KHR=0.4
+
+QUESTION:
+  What is the goal of query optimization?
+
+EXPECTED ANSWER (what we want):
+  Query optimization transforms a declarative SQL query into an efficient
+  execution plan. The optimizer enumerates alternative relational algebra
+  expressions and physical execution strategies, estimates their cost using
+  statistics, and selects the plan with the lowest estimated cost.
+
+LLM GENERATED:
+  The goal of query optimization is to construct an efficient query-evaluation
+  plan that minimizes the cost of query evaluation. This involves selecting
+  the most effective sequence of operations to process the query and
+  estimating the cost of each operation to choose the plan with the lowest
+  overall cost. The process of query optimization is not something users
+  typically need to perform directly. Instead, it is the responsibility of the
+  database system to optimize the query automatically, based on the structure
+  and content of the query, the available data, and the capabilities of the
+  database system. The optimization process aims to reduce the time and
+  resources required to execute a query, such as by minimizing disk accesses
+  and avoiding redundant computations. By doing so, the system can provide
+  faster query results, which is crucial for applications that require
+  frequent and timely access to data.<<>
+
+RETRIEVED CHUNK IDs: [1669, 1030, 1033, 910, 1034, 1056, 1021, 1022, 908, 1028]
+MISSING KEYWORDS:    ['execution plan', 'statistics', 'relational algebra']
+
+================================================================================
+[MULTI]  mh_aries_steal_wal   KHR=0.4285714285714286
+
+QUESTION:
+  What logging strategy does the buffer management policy that ARIES adopts
+  require, and why?
+
+EXPECTED ANSWER (what we want):
+  ARIES adopts a steal/no-force buffer management policy. The steal policy
+  allows dirty (uncommitted) pages to be written to disk before the
+  transaction commits, so the log must record old values (undo information) to
+  reverse those writes on abort. The no-force policy does not require dirty
+  pages to be flushed at commit time, so the log must record new values (redo
+  information) to reapply committed updates after a crash. Together these
+  requirements mandate write-ahead logging with both undo and redo log
+  records.
+
+LLM GENERATED:
+  The buffer management policy that ARIES adopts requires a logging strategy
+  that involves using latches on buffer pages to prevent them from being
+  written to disk while they are being updated. This is necessary because: 1
+  Preventing Dirty Pages: When a page is updated, it is marked as "dirty" in
+  the DirtyPageTable. The buffer page latch is used to prevent the page from
+  being written to disk until the update is completed and the log record for
+  the update has been written to the log. This ensures that the page is not
+  written to disk with an incomplete update, which could lead to
+  inconsistencies. 2 Ensuring Consistency: By keeping the buffer page latch on
+  until the update is fully logged and committed, ARIES ensures that the page
+  on disk always reflects the most up-to-date state of the data. This is
+  crucial for maintaining data consistency, especially during transaction
+  rollbacks or partial rollbacks. 3 Reducing Redo Operations: Once the log
+  record is written to the log, the buffer page latch is released. This allows
+  the page to be flushed to disk, ensuring that the updated version of the
+  page is permanently saved. This process minimizes the need for redo
+  operations, as the log records are now part of the permanent log and can be
+  used to recover the state of the database. 4 Efficiency: The use of latches
+  and the log ensures that updates are logged efficiently, reducing the
+  overhead associated with logging operations. This is particularly important
+  in a transactional database system where frequent updates are common. In
+  summary, the use of latches on buffer pages in ARIES ensures that updates
+  are logged and committed before the page is flushed to disk, thereby
+  maintaining data consistency and reducing the need for redo operations,
+  which are costly in terms of both time and resources.
+
+RETRIEVED CHUNK IDs: [1267, 1269, 1243, 1222, 1277, 1270, 1241, 1278, 1230, 1217]
+MISSING KEYWORDS:    ['steal', 'no-force', 'write-ahead logging', 'dirty pages']
+
+================================================================================
+[MULTI]  mh_strict2pl_cascading   KHR=0.33333333333333337
+
+QUESTION:
+  Why does strict two-phase locking prevent cascading aborts while basic two-
+  phase locking does not?
+
+EXPECTED ANSWER (what we want):
+  In basic two-phase locking a transaction may release write locks during its
+  shrinking phase, before it commits. Other transactions can then read the
+  unlocked data. If the original transaction later aborts, the transactions
+  that read its data must also abort, causing cascading aborts. Strict two-
+  phase locking prevents this by requiring that all write locks be held until
+  the transaction commits or aborts, so no other transaction ever reads
+  uncommitted data.
+
+LLM GENERATED:
+  Strict two-phase locking prevents cascading aborts while basic two-phase
+  locking does not because of the stricter requirement that all exclusive-mode
+  locks taken by a transaction must be held until the transaction commits.
+  This ensures that any data written by an uncommitted transaction are locked
+  in exclusive mode until the transaction commits, preventing other
+  transactions from reading the data. In contrast, basic two-phase locking
+  does not enforce this requirement. Therefore, if a transaction fails after
+  acquiring an exclusive lock but before committing, the locks it acquired can
+  be released, allowing other transactions to read the data that was written
+  by the failed transaction. This can lead to cascading aborts where the
+  failure of one transaction causes the failure of subsequent transactions
+  that depend on the data written by the first transaction. =
+
+RETRIEVED CHUNK IDs: [1116, 1117, 1126, 1125, 1178, 1154, 1127, 1095, 1540, 1122]
+MISSING KEYWORDS:    ['strict 2PL', 'write locks', 'uncommitted', 'commit']
+
+================================================================================
+[MULTI]  mh_dpt_redo_scope   KHR=0.6666666666666667
+
+QUESTION:
+  How does the dirty page table in ARIES limit the amount of work done during
+  the redo pass?
+
+EXPECTED ANSWER (what we want):
+  The dirty page table (DPT) maintained by ARIES records each dirty buffer
+  page and its recLSN, the LSN of the first log record that dirtied the page.
+  During the redo pass, ARIES starts scanning from the minimum recLSN across
+  all DPT entries, skipping earlier records entirely. For each log record
+  encountered, ARIES checks whether the page's current pageLSN on disk is at
+  least as large as the log record's LSN; if so, the update was already
+  applied before the crash and is skipped. This combination of recLSN-based
+  scan start and pageLSN-based per-record check avoids redundant I/Os and re-
+  application of already-persisted updates.
+
+LLM GENERATED:
+  The dirty page table in ARIES helps limit the amount of work done during the
+  redo pass by identifying pages that have been updated but not yet written to
+  disk. During the analysis pass, the dirty page table is populated with pages
+  that are dirty at the time of the crash. During the redo pass, the redo pass
+  only needs to redo the log records that affect these dirty pages. This means
+  that it doesn't need to fetch and check every page in the database, but only
+  those that are marked as dirty in the dirty page table. This significantly
+  reduces the amount of work needed during the redo pass, as it avoids
+  unnecessary fetches and redos of pages that are already up-to-date. So, the
+  dirty page table in ARIES allows the redo pass to focus on the pages that
+  actually need to be updated, thereby minimizing the work done and speeding
+  up the recovery process.<<>
+
+RETRIEVED CHUNK IDs: [1278, 1267, 1274, 1269, 1276, 1277, 1272, 1268, 1281, 1270]
+MISSING KEYWORDS:    ['pageLSN', 'skip']
+
+================================================================================
+[MULTI]  mh_steal_atomicity   KHR=0.7142857142857143
+
+QUESTION:
+  How does write-ahead logging ensure atomicity even when the steal buffer
+  policy allows uncommitted pages to reach disk?
+
+EXPECTED ANSWER (what we want):
+  The steal policy allows the buffer manager to evict a dirty page belonging
+  to an uncommitted transaction, writing it to disk before commit. If the
+  system then crashes, that page on disk reflects a partial transaction.
+  Write-ahead logging guarantees that the undo log record for that page was
+  written to stable storage before the page itself was written to disk. During
+  recovery, the undo pass reads those log records and restores the old values,
+  completely reversing the partial transaction and preserving the all-or-
+  nothing guarantee of atomicity.
+
+LLM GENERATED:
+  Write-ahead logging (WAL) ensures atomicity even when the steal buffer
+  policy allows uncommitted pages to reach disk by imposing specific
+  requirements on the recovery techniques. Specifically, the three rules of
+  write-ahead logging ensure that certain log records must be output to stable
+  storage before a transaction can commit: 1 Transaction T_i enters the commit
+  state after the < T_i commit > log record has been output to stable storage.
+  2 Before the < T_i commit > log record can be output to stable storage, all
+  log records pertaining to transaction T_i must have been output to stable
+  storage. 3 Before a block of data in main memory can be output to the
+  database (in nonvolatile storage), all log records pertaining to data in
+  that block must have been output to stable storage. These rules ensure that
+  the database state is consistent even if some transactions have not yet
+  committed and their changes are still in memory. If a crash occurs, the log
+  records ensure that the database can be restored to a consistent state by
+  replaying the committed transactions from the log. This approach allows for
+  the steal policy, which allows modified blocks to be written to disk even if
+  the transactions that made those modifications have not yet committed.
+  However, it requires that all log records pertaining to a transaction be
+  written to stable storage before the transaction can commit, ensuring that
+  the database remains consistent across crashes.
+
+RETRIEVED CHUNK IDs: [1244, 1243, 1241, 1222, 1242, 1217, 807, 1269, 1267, 1230]
+MISSING KEYWORDS:    ['atomicity', 'uncommitted']
+
+================================================================================
+[MULTI]  mh_repeatable_read_phantom   KHR=0.5
+
+QUESTION:
+  Why does the repeatable read isolation level fail to prevent phantom reads
+  even though it prevents non-repeatable reads?
+
+EXPECTED ANSWER (what we want):
+  Repeatable read prevents non-repeatable reads by holding shared locks on all
+  rows read by a transaction until it commits, ensuring those rows cannot be
+  modified by others. However, it only locks existing rows; it does not
+  prevent other transactions from inserting new rows that satisfy the same
+  predicate. When the transaction re-executes the same query it sees the newly
+  inserted rows, a phantom, because row-level locking cannot cover rows that
+  did not exist at the time of the first read. Preventing phantoms requires
+  predicate locking or index-range locking.
+
+LLM GENERATED:
+  The repeatable read isolation level prevents non-repeatable reads by
+  ensuring that between two reads of a data item by a transaction, no other
+  transaction is allowed to update that data item. However, it does not
+  prevent phantom reads. Phantom reads occur when a transaction reads the same
+  data multiple times and sees different data due to changes made by other
+  transactions that have committed between the reads. Repeatable read
+  isolation does not address this issue because it does not control the
+  visibility of changes made by other transactions that have not yet
+  committed. In contrast, read committed isolation, which is a lower isolation
+  level, does not prevent non-repeatable reads or phantom reads. It only
+  ensures that the data read by a transaction is consistent with the state of
+  the database at the start of the transaction, but it does not guarantee that
+  the data will not change between reads. Therefore, while repeatable read
+  provides stronger consistency guarantees than read committed, it still does
+  not prevent phantom reads, which can lead to inconsistent results for
+  transactions that read the same data multiple times.<<>
+
+RETRIEVED CHUNK IDs: [1174, 1176, 1097, 1107, 1096, 1143, 1105, 1172, 1175, 1142]
+MISSING KEYWORDS:    ['predicate locking', 'shared locks', 'non-repeatable']
+
+================================================================================
+[MULTI]  mh_no_force_commit   KHR=0.2857142857142857
+
+QUESTION:
+  What mechanism allows a database to commit a transaction without forcing its
+  dirty pages to disk at commit time?
+
+EXPECTED ANSWER (what we want):
+  The no-force buffer policy allows a transaction to commit without flushing
+  its modified pages to disk. Durability is still guaranteed because write-
+  ahead logging ensures that the redo log records for all committed updates
+  have been written to stable storage before the commit is acknowledged. If
+  the system crashes before the pages are written to disk, the recovery
+  manager's redo pass reads those log records and reapplies the updates,
+  restoring the committed state.
+
+LLM GENERATED:
+  The mechanism that allows a database to commit a transaction without forcing
+  its dirty pages to disk at commit time is the no-force policy. This policy
+  allows a transaction to commit even if it has modified some blocks that have
+  not yet been written back to disk. This can result in faster commit of
+  transactions and can reduce the number of output operations, especially for
+  frequently updated blocks. > This answer directly addresses the question by
+  referring to the information provided in the given text excerpt.
+
+RETRIEVED CHUNK IDs: [1243, 1222, 1238, 1225, 1219, 1268, 1070, 1218, 1221, 1080]
+MISSING KEYWORDS:    ['redo log', 'durability', 'crash', 'buffer']
+
+================================================================================
+[MULTI]  mh_clr_crash_during_undo   KHR=0.16666666666666663
+
+QUESTION:
+  How do compensation log records in ARIES prevent repeated undo operations if
+  the system crashes during the undo pass?
+
+EXPECTED ANSWER (what we want):
+  When ARIES undoes an update it writes a compensation log record (CLR) that
+  describes the undo action and carries an undoNextLSN pointing to the next
+  log record to be undone for that transaction. CLRs are redo-only records and
+  are treated as regular log records during the redo pass. If the system
+  crashes during the undo pass, the subsequent restart replays all CLRs during
+  redo, restoring the partial undo work already done. The undo pass then
+  resumes from the undoNextLSN recorded in the last CLR, skipping log records
+  that were already undone before the second crash.
+
+LLM GENERATED:
+  Compensation log records in ARIES prevent repeated undo operations if the
+  system crashes during the undo pass by ensuring that the undo actions
+  performed are recorded in the log. Specifically, these records contain
+  information about the values that were restored to data items during the
+  rollback process. When a transaction is rolled back, the undo actions (such
+  as writing the original values back to the data items) are recorded in the
+  log as special redo-only log records. These records do not require undo
+  information because they are redo-only, meaning they are only used to undo
+  the rollback actions. If the system crashes during the undo pass, the redo
+  pass will start from the last checkpoint and replay all the redo-only log
+  records, including the compensation log records. This ensures that the undo
+  actions are performed only once, preventing repeated undo operations. In
+  essence, the compensation log records act as a marker that the undo actions
+  have been taken, and they are used to prevent the redo pass from reapplying
+  these undo actions, thus maintaining the integrity of the database state.
+
+RETRIEVED CHUNK IDs: [1267, 1272, 1275, 1277, 1234, 1077, 1235, 1270, 1269, 1230]
+MISSING KEYWORDS:    ['CLR', 'compensation log record', 'undoNextLSN', 'redo-only', 'crash during undo']
+
+================================================================================
+[MULTI]  mh_bcnf_fd_preservation   KHR=1.0
+
+QUESTION:
+  Why does decomposing a relation into BCNF not always preserve all functional
+  dependencies?
+
+EXPECTED ANSWER (what we want):
+  BCNF requires that for every non-trivial functional dependency X -> Y, X
+  must be a superkey. When a relation violates BCNF, it is decomposed by
+  splitting off the violating FD into a separate relation. If the violating
+  FD's attributes are split across different decomposed relations, the
+  dependency cannot be enforced by checking any single relation; it would
+  require a join to verify. Because the join is not always performed, the
+  dependency is effectively lost. This is why 3NF, which allows some non-
+  superkey dependencies, is sometimes preferred when dependency preservation
+  is required.
+
+LLM GENERATED:
+  Decomposing a relation into BCNF does not always preserve all functional
+  dependencies because BCNF requires that all nontrivial functional
+  dependencies have a superkey as their left side. This can lead to loss of
+  dependencies that do not meet this criterion. Specifically, BCNF allows
+  certain nontrivial functional dependencies whose left side is not a
+  superkey, which are not allowed in BCNF. This relaxation is necessary to
+  ensure that the resulting BCNF schemas can still be decomposed into 3NF,
+  which is a more relaxed normal form that allows for some nontrivial
+  dependencies with non-superkey left sides. In simpler terms, BCNF decomposes
+  the relation into schemas where each nontrivial dependency has a superkey as
+  its left side. This can sometimes result in losing some dependencies that do
+  not meet this stricter criterion, as they would not be preserved in the BCNF
+  decomposition. This is why BCNF is not always able to preserve all
+  functional dependencies, but it does ensure that the resulting schemas can
+  be further decomposed into 3NF, which is a more flexible normal form.
+
+RETRIEVED CHUNK IDs: [421, 395, 422, 424, 402, 425, 400, 396, 423, 391]
+
+================================================================================
+[MULTI]  mh_lsn_redo_undo   KHR=0.5
+
+QUESTION:
+  How does the log sequence number serve both the redo pass and the undo pass
+  in ARIES?
+
+EXPECTED ANSWER (what we want):
+  Each log record in ARIES is assigned a monotonically increasing log sequence
+  number (LSN). During the redo pass, ARIES compares a log record's LSN
+  against the pageLSN stored in the page on disk; if the page's pageLSN is at
+  least as large as the record's LSN, the update was already applied and is
+  skipped. During the undo pass, ARIES uses the prevLSN field in each log
+  record to navigate backward through a transaction's history. When an undo
+  action is performed, a compensation log record (CLR) is written with an
+  undoNextLSN pointing to the next record to undo, allowing ARIES to skip
+  already-undone records if a second crash occurs.
+
+LLM GENERATED:
+  In ARIES, the log sequence number (LSN) serves both the redo pass and the
+  undo pass in the following ways: 1 Redo Pass: • The LSN uniquely identifies
+  each log record, allowing the redo pass to determine which actions need to
+  be replayed. • The LSN helps the redo pass to identify and execute log
+  records that have not yet been applied to the database pages. Specifically,
+  it ensures that log records with LSNs less than or equal to the PageLSN of a
+  page are not executed on that page, as their effects are already reflected
+  there. 2 Undo Pass: • The LSN helps the undo pass to identify and roll back
+  transactions that were incomplete at the time of the crash. • The LSN is
+  used to determine the order in which transactions should be undone. The last
+  LSN recorded during the analysis pass is used to find the last log record
+  for each transaction in the undo list. This ensures that transactions are
+  undone in the correct order. In both passes, the LSN is crucial for
+  maintaining the integrity of the database state and ensuring that the
+  correct actions are taken to either recover from a crash or to undo
+  transactions that were not completed at the time of the crash. The LSNs help
+  in tracking the sequence of operations and in determining which operations
+  need to be applied or undone.
+
+RETRIEVED CHUNK IDs: [1267, 1269, 1275, 1274, 1272, 1276, 1277, 1270, 1278, 1226]
+MISSING KEYWORDS:    ['pageLSN', 'CLR', 'undoNextLSN', 'prevLSN']
+
+================================================================================
+[MULTI]  mh_bptree_fanout_io   KHR=0.5714285714285714
+
+QUESTION:
+  How does the fan-out of a B+ tree relate to the number of I/Os required to
+  answer a range query?
+
+EXPECTED ANSWER (what we want):
+  The fan-out of a B+ tree is the number of child pointers in an internal
+  node, determined by how many keys and pointers fit within a disk page. A
+  high fan-out yields a shallow tree: the tree height is proportional to log
+  base fan-out of the number of entries, so doubling the fan-out reduces
+  height by one level. A range query first traverses from root to the first
+  qualifying leaf, costing height I/Os, then follows the linked leaf chain to
+  retrieve all qualifying entries. A larger fan-out means fewer I/Os to reach
+  the first leaf, making range queries cheaper.
+
+LLM GENERATED:
+  The fan-out of a B+ tree does not directly determine the number of I/Os
+  required to answer a range query. The number of I/Os required for a range
+  query is proportional to the height of the B+ tree, which is determined by
+  the number of log ⌈n/2⌉ (N) operations, where N is the number of records in
+  the file and n is the maximum number of pointers in a node. The fan-out
+  (number of pointers per node) affects the structure and balance of the tree,
+  which in turn influences the height of the tree. A higher fan-out can lead
+  to a more balanced tree, potentially reducing the height and thus the number
+  of I/Os required for a range query. However, the direct relationship between
+  fan-out and the number of I/Os for a range query is not linear and is more
+  complex than a simple proportional relationship. In summary, while a higher
+  fan-out can help reduce the height of the tree, leading to fewer I/Os, the
+  exact number of I/Os required for a range query is primarily determined by
+  the height of the tree, which is log ⌈n/2⌉ (N).
+
+RETRIEVED CHUNK IDs: [855, 842, 843, 866, 836, 865, 870, 856, 838, 860]
+MISSING KEYWORDS:    ['fan-out', 'B+ tree', 'range query']
+
+================================================================================
+[MULTI]  mh_mvcc_readers   KHR=0.4285714285714286
+
+QUESTION:
+  What allows multi-version concurrency control to serve readers without
+  acquiring read locks?
+
+EXPECTED ANSWER (what we want):
+  Multi-version concurrency control (MVCC) maintains multiple timestamped
+  versions of each data item. When a transaction reads a data item, it
+  retrieves the version whose timestamp is the largest one not exceeding the
+  transaction's start timestamp, giving it a consistent snapshot of the
+  database as of that moment. Because the version the reader needs already
+  exists and is never overwritten by concurrent writers (who create new
+  versions instead), the reader does not need to acquire any lock. Writers and
+  readers therefore never block each other.
+
+LLM GENERATED:
+  Multi-version concurrency control (MVCC) allows readers to serve without
+  acquiring read locks by maintaining multiple versions of a data item. When a
+  read-only transaction issues a read operation, it can read the latest
+  version of the data item. This latest version is chosen based on the
+  timestamp ordering protocol, ensuring that the transaction sees the most up-
+  to-date data available at the time of the read operation. Since the
+  transaction does not acquire a lock to read the data, it does not interfere
+  with other transactions that may be updating the same data item. This
+  mechanism enables concurrent reads without the need for read locks,
+  improving concurrency and performance, especially for read-heavy workloads.
+  Multi-version concurrency control (MVCC) allows readers to serve without
+  acquiring read locks by maintaining multiple versions of a data item. When a
+  read-only transaction issues a read operation, it can read the latest
+  version of the data item. This latest version is chosen based on the
+  timestamp ordering protocol, ensuring that the transaction sees the most up-
+  to-date data available at the time of the read operation. Since the
+  transaction does not acquire a lock to read the data, it does not interfere
+  with other transactions that may be updating the same data item. This
+  mechanism enables concurrent reads without the need for read locks,
+  improving concurrency and performance, especially for read-heavy workloads.
+
+RETRIEVED CHUNK IDs: [1160, 1159, 1162, 1104, 1540, 1183, 1166, 1224, 1554, 1161]
+MISSING KEYWORDS:    ['MVCC', 'read lock', 'writer', 'reader']
+
+================================================================================
+[MULTI]  mh_hash_join_memory   KHR=0.7142857142857143
+
+QUESTION:
+  What makes a hash join faster than a nested-loop join, and when does this
+  advantage disappear?
+
+EXPECTED ANSWER (what we want):
+  A hash join builds an in-memory hash table on the smaller relation and then
+  probes it once per tuple of the larger relation, giving O(n+m) cost compared
+  to the O(n*m) cost of a naive nested-loop join. The advantage disappears
+  when the hash table does not fit in memory: the algorithm must then
+  partition both relations to disk and process each partition pair separately,
+  adding extra I/O passes. If memory is very small relative to the relation
+  sizes, the partitioning overhead can make the hash join slower than a well-
+  tuned block nested-loop join that exploits sequential I/O.
+
+LLM GENERATED:
+  A hash join can be faster than a nested-loop join in scenarios where the
+  outer relation is significantly smaller and the index lookups fetch only a
+  few tuples from the inner relation. This is because the hash join algorithm
+  can process multiple tuples in parallel by partitioning the outer relation
+  and using an index on the inner relation to quickly find matching tuples.
+  However, this advantage can disappear in cases where a secondary index is
+  used on the outer relation, and the number of tuples in the outer relation
+  is large. In such cases, the nested-loop join can become more efficient
+  because it only needs to compare a few tuples from the outer relation with
+  all tuples in the inner relation, which can be less costly than the hash
+  join's overhead of partitioning and index building. The key factor is the
+  number of tuples in the outer relation. If the outer relation is large, the
+  nested-loop join can outperform the hash join. This is also influenced by
+  the size of memory available; if the build relation is much larger than
+  memory, the hybrid hash-join algorithm might be more beneficial. In summary,
+  the hash join is faster when the outer relation is small and the index
+  lookups fetch a few tuples, but this advantage diminishes when the outer
+  relation is large and a secondary index is used. The performance can also be
+  influenced by the size of memory available to the system.
+
+RETRIEVED CHUNK IDs: [947, 954, 938, 948, 935, 946, 939, 934, 953, 955]
+MISSING KEYWORDS:    ['hash table', 'I/O']
+
+================================================================================
+[MULTI]  mh_deadlock_granularity   KHR=0.4285714285714286
+
+QUESTION:
+  How does lock granularity in two-phase locking affect the likelihood of
+  deadlock?
+
+EXPECTED ANSWER (what we want):
+  Lock granularity refers to the size of the data unit being locked, ranging
+  from individual tuples to entire tables. Finer granularity (e.g., tuple-
+  level locking) increases concurrency by allowing transactions to lock only
+  the data they need, but it also increases the number of locks each
+  transaction holds. More locks mean more opportunities for two transactions
+  to hold locks the other needs, raising the probability of a deadlock cycle
+  in the waits-for graph. Coarser granularity (e.g., table-level locking)
+  reduces lock count and deadlock risk but serializes transactions that access
+  different rows of the same table, reducing throughput.
+
+LLM GENERATED:
+  In two-phase locking, lock granularity refers to the level of detail at
+  which locks are acquired. In the basic two-phase locking protocol, locks are
+  acquired at the level of individual data items or records. This can lead to
+  a higher likelihood of deadlock because it allows for more opportunities for
+  cyclic waits to occur. In contrast, the multiple-granularity protocol, which
+  is a variant of two-phase locking, requires locks to be acquired in a top-
+  down (root-to-leaf) order and released in a bottom-up (leaf-to-root) order.
+  This approach can reduce the likelihood of deadlock because it enforces a
+  strict order in which locks are acquired and released, making it harder for
+  cyclic waits to form. Therefore, while the basic two-phase locking protocol
+  allows for more granular locking, which can lead to more opportunities for
+  deadlock, the multiple-granularity protocol, by enforcing a specific lock
+  acquisition and release order, can help mitigate the risk of deadlock.
+  However, it's important to note that the multiple-granularity protocol can
+  still lead to deadlock under certain conditions, and it may not be as
+  flexible as the basic two-phase locking protocol in terms of accommodating
+  different types of transactions and data structures.
+
+RETRIEVED CHUNK IDs: [1126, 1116, 1125, 1137, 1127, 1134, 1117, 1122, 1132, 1114]
+MISSING KEYWORDS:    ['lock granularity', 'waits-for graph', 'tuple', 'table']

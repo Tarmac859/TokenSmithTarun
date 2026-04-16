@@ -58,6 +58,9 @@ class RAGConfig:
     # user feedback modeling
     enable_topic_extraction: bool = False
 
+    # graph-augmented retrieval
+    graph_db_path: str = "index/graph/knowledge_graph.db"
+
     # ---------- factory + validation ----------
     @classmethod
     def from_yaml(cls, path: os.PathLike) -> RAGConfig:

@@ -19,13 +19,15 @@ from src.ranking.ranker import EnsembleRanker
 from src.preprocessing.chunking import DocumentChunker
 from src.query_enhancement import generate_hypothetical_document, contextualize_query
 from src.retriever import (
-    filter_retrieved_chunks, 
-    BM25Retriever, 
-    FAISSRetriever, 
-    IndexKeywordRetriever, 
-    get_page_numbers, 
+    filter_retrieved_chunks,
+    BM25Retriever,
+    FAISSRetriever,
+    IndexKeywordRetriever,
+    get_page_numbers,
     load_artifacts
 )
+from src.graph.graph_store import GraphStore
+from src.graph.graph_retriever import GraphRetriever
 from src.ranking.reranker import rerank
 
 ANSWER_NOT_FOUND = "I'm sorry, but I don't have enough information to answer that question."
@@ -290,6 +292,9 @@ def run_chat_session(args: argparse.Namespace, cfg: RAGConfig):
         retrievers = [FAISSRetriever(faiss_idx, cfg.embed_model), BM25Retriever(bm25_idx)]
         if cfg.ranker_weights.get("index_keywords", 0) > 0:
             retrievers.append(IndexKeywordRetriever(cfg.extracted_index_path, cfg.page_to_chunk_map_path))
+        if cfg.ranker_weights.get("graph", 0) > 0:
+            graph_store = GraphStore(db_path=cfg.graph_db_path)
+            retrievers.append(GraphRetriever(graph_store))
         
         ranker = EnsembleRanker(ensemble_method=cfg.ensemble_method, weights=cfg.ranker_weights, rrf_k=int(cfg.rrf_k))
         print("Loaded retrievers and initialized ranker.")
