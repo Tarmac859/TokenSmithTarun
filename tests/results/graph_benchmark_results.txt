@@ -1,0 +1,121 @@
+Loading artifacts...
+Loading gen model for semantic keyword checking...
+Loaded 1,780 chunks.
+
+[PASS] sh_wal_rule                               hop=single  keyword_hit=1.00
+[PASS] sh_dirty_read                             hop=single  keyword_hit=0.80
+[PASS] sh_2pl                                    hop=single  keyword_hit=1.00
+[PASS] sh_bptree_search                          hop=single  keyword_hit=0.83
+[PASS] sh_functional_dependency                  hop=single  keyword_hit=0.80
+[PASS] sh_bcnf                                   hop=single  keyword_hit=1.00
+[PASS] sh_checkpoint                             hop=single  keyword_hit=0.83
+[FAIL] sh_phantom_read                           hop=single  keyword_hit=0.67
+[FAIL] sh_clustered_vs_unclustered               hop=single  keyword_hit=0.67
+[FAIL] sh_conflict_serializable                  hop=single  keyword_hit=0.60
+[FAIL] sh_aries_overview                         hop=single  keyword_hit=0.67
+[PASS] sh_query_optimization                     hop=single  keyword_hit=1.00
+[PASS] mh_aries_steal_wal                        hop=multi   keyword_hit=1.00
+[FAIL] mh_strict2pl_cascading                    hop=multi   keyword_hit=0.33
+[PASS] mh_dpt_redo_scope                         hop=multi   keyword_hit=1.00
+[PASS] mh_steal_atomicity                        hop=multi   keyword_hit=0.86
+[FAIL] mh_repeatable_read_phantom                hop=multi   keyword_hit=0.50
+[PASS] mh_no_force_commit                        hop=multi   keyword_hit=0.86
+[PASS] mh_clr_crash_during_undo                  hop=multi   keyword_hit=0.83
+[PASS] mh_bcnf_fd_preservation                   hop=multi   keyword_hit=1.00
+[PASS] mh_lsn_redo_undo                          hop=multi   keyword_hit=1.00
+[FAIL] mh_bptree_fanout_io                       hop=multi   keyword_hit=0.71
+[FAIL] mh_mvcc_readers                           hop=multi   keyword_hit=0.57
+[PASS] mh_hash_join_memory                       hop=multi   keyword_hit=0.86
+[FAIL] mh_deadlock_granularity                   hop=multi   keyword_hit=0.57
+
+======================================================================
+Single-hop avg keyword hit rate : 0.82  (n=12)
+Multi-hop  avg keyword hit rate : 0.78  (n=13)
+
+--- FAILED questions (below threshold) ---
+
+  sh_phantom_read  (single)
+  Q: What is a phantom read?
+  Missing keywords: ['new rows', 're-execute']
+  Retrieved chunk IDs: [1104, 1172, 1097, 1096, 1165, 1105, 1175, 1160, 1107, 1067]
+
+  sh_clustered_vs_unclustered  (single)
+  Q: What is the difference between a clustered and an unclustered index?
+  Missing keywords: ['unclustered', 'range scan']
+  Retrieved chunk IDs: [832, 919, 208, 821, 207, 819, 922, 820, 1647, 823]
+
+  sh_conflict_serializable  (single)
+  Q: What does it mean for a schedule to be conflict serializable?
+  Missing keywords: ['conflict-equivalent', 'acyclic']
+  Retrieved chunk IDs: [1091, 1086, 1088, 1090, 1116, 1548, 1175, 1547, 1096, 1100]
+
+  sh_aries_overview  (single)
+  Q: What is the ARIES recovery algorithm?
+  Missing keywords: ['analysis', 'crash recovery']
+  Retrieved chunk IDs: [1267, 1277, 37, 1230, 36, 1072, 1077, 1243, 1231, 1269]
+
+  mh_strict2pl_cascading  (multi)
+  Q: Why does strict two-phase locking prevent cascading aborts while basic two-phase locking does not?
+  Missing keywords: ['strict 2PL', 'cascading abort', 'write locks', 'uncommitted']
+  Retrieved chunk IDs: [1116, 1126, 1125, 1122, 1118, 1160, 1100, 1224, 36, 1181]
+
+  mh_repeatable_read_phantom  (multi)
+  Q: Why does the repeatable read isolation level fail to prevent phantom reads even though it prevents non-repeatable reads?
+  Missing keywords: ['predicate locking', 'shared locks', 'non-repeatable']
+  Retrieved chunk IDs: [1097, 1096, 1105, 1172, 1104, 1175, 1165, 1174, 1116, 1095]
+
+  mh_bptree_fanout_io  (multi)
+  Q: How does the fan-out of a B+ tree relate to the number of I/Os required to answer a range query?
+  Missing keywords: ['fan-out', 'B+ tree']
+  Retrieved chunk IDs: [842, 855, 843, 866, 836, 865, 870, 869, 1647, 856]
+
+  mh_mvcc_readers  (multi)
+  Q: What allows multi-version concurrency control to serve readers without acquiring read locks?
+  Missing keywords: ['read lock', 'writer', 'reader']
+  Retrieved chunk IDs: [1104, 1160, 1159, 1183, 1161, 1224, 1540, 1165, 1554, 1100]
+
+  mh_deadlock_granularity  (multi)
+  Q: How does lock granularity in two-phase locking affect the likelihood of deadlock?
+  Missing keywords: ['lock granularity', 'waits-for graph', 'tuple']
+  Retrieved chunk IDs: [1116, 1126, 1125, 1122, 1132, 1110, 1100, 1120, 1118, 1115]
+
+--- Multi-hop: top-1 chunk snippet ---
+
+  mh_aries_steal_wal
+  The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, bu
+
+  mh_strict2pl_cascading
+  One protocol that ensures serializability is the two-phase locking protocol . This protocol requires that each transaction issue lock and unlock requests in two phases: 1. Growing phase . A transaction may obtain locks, but may not release any lock. 
+
+  mh_dpt_redo_scope
+  The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, bu
+
+  mh_steal_atomicity
+  .  Page 803 Thus, because of the failure, the state of the system no longer reflects a real state of the world that the database is supposed to capture. We term such a state an inconsistent state . We must ensure that such inconsistencies are not vis
+
+  mh_repeatable_read_phantom
+  . - Repeatable read allows only committed data to be read and further requires that, between two reads of a data item by a transaction, no other transaction is allowed to update it. However, the transaction may not be serializable with respect to oth
+
+  mh_no_force_commit
+  In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire 
+
+  mh_clr_crash_during_undo
+  The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, bu
+
+  mh_bcnf_fd_preservation
+  . There is an algorithm that can compute a BCNF decomposition in polynomial time; however, the algorithm may 'overnormalize, ' that is, decompose a relation unnecessarily.  As a longer example of the use of the BCNF decomposition algorithm, suppose w
+
+  mh_lsn_redo_undo
+  The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, bu
+
+  mh_bptree_fanout_io
+  . If no search key with value v is found in the leaf node, no record with key value v exists in the relation, and function find returns null, to indicate failure. B + -trees can also be used to find all records with search key values in a specified r
+
+  mh_mvcc_readers
+  By maintaining more than one version of a data item, it is possible to allow a transaction to read an old version of a data item rather than a newer version written by an uncommitted transaction or by a transaction that should come later in the seria
+
+  mh_hash_join_memory
+  The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are no
+
+  mh_deadlock_granularity
+  One protocol that ensures serializability is the two-phase locking protocol . This protocol requires that each transaction issue lock and unlock requests in two phases: 1. Growing phase . A transaction may obtain locks, but may not release any lock. 

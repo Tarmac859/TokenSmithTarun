@@ -31,7 +31,8 @@ chapters/
 data/
 *.faiss
 *.pkl
-index/cache/
+*.db
+index/
 
 # --- Model files ---
 models/
@@ -251,4 +252,4 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-tests/results
+# tests/results intentionally tracked (benchmark output)

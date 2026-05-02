@@ -1,0 +1,314 @@
+# graph_benchmarks.yaml
+#
+# 25-question benchmark for evaluating Graph-Augmented Retrieval vs flat FAISS.
+#
+# hop_type:
+#   single - answer lives in one chunk; FAISS expected to succeed (control group)
+#   multi  - answer requires connecting concepts across 2+ chunks; FAISS expected
+#            to fail or underperform; graph traversal should improve recall
+#
+# faiss_chunk_ids: chunk IDs actually retrieved by FAISS when the question was
+#   asked through the live chat system (python -m src.main chat, top_k=10,
+#   rerank_mode=cross_encoder, rerank_top_k=5).  These are post-rerank IDs,
+#   i.e. what the model actually saw.
+#
+# faiss_khr: keyword hit rate — fraction of 'keywords' found in retrieved chunk
+#   snippets (first 300 chars per chunk).  Note: snippet truncation makes this
+#   a lower bound; full-chunk KHR is ~0.14 higher on average.
+#
+# golden_chunks: to be filled in after graph index is built and evaluated.
+#
+# BASELINE (live chat, Apr 2026)
+#   single-hop avg KHR : 0.66  (n=12)
+#   multi-hop  avg KHR : 0.52  (n=13)   <-- gap indicates retrieval difficulty
+
+benchmarks:
+
+  # ============================================================
+  # SINGLE-HOP QUESTIONS  (control group, n=12)
+  # ============================================================
+
+  - id: "sh_wal_rule"
+    hop_type: "single"
+    question: "What is the write-ahead logging rule?"
+    expected_answer: "The write-ahead logging rule states that a log record for a data item must be written to stable storage before the data item itself is written to disk. This guarantees that the log always contains enough information to undo any update that has been applied to the database."
+    keywords: ["write-ahead", "log record", "stable storage", "before", "disk", "undo"]
+    similarity_threshold: 0.72
+    faiss_khr: 1.00
+    faiss_chunk_ids: [1242, 1241, 1217, 1244, 1222, 1230, 1243, 1267, 1269, 1226]
+    golden_chunks: null
+
+  - id: "sh_dirty_read"
+    hop_type: "single"
+    question: "What is a dirty read in transaction processing?"
+    expected_answer: "A dirty read occurs when a transaction reads data written by another transaction that has not yet committed. If the writing transaction later aborts, the reading transaction has seen data that never officially existed, violating isolation."
+    keywords: ["dirty read", "uncommitted", "abort", "isolation", "transaction"]
+    similarity_threshold: 0.72
+    faiss_khr: 0.60
+    faiss_chunk_ids: [1097, 1154, 1096, 1104, 1067, 1070, 36, 1165, 1139, 1197]
+    golden_chunks: null
+
+  - id: "sh_2pl"
+    hop_type: "single"
+    question: "What is the two-phase locking protocol?"
+    expected_answer: "Two-phase locking (2PL) is a concurrency control protocol in which a transaction acquires all locks before releasing any lock. The growing phase allows lock acquisitions; the shrinking phase allows only releases. This guarantees conflict serializability."
+    keywords: ["two-phase locking", "growing phase", "shrinking phase", "lock", "serializability"]
+    similarity_threshold: 0.75
+    faiss_khr: 1.00
+    faiss_chunk_ids: [1116, 1117, 1101, 1154, 1122, 1137, 1118, 1126, 1540, 1485]
+    golden_chunks: null
+
+  - id: "sh_bptree_search"
+    hop_type: "single"
+    question: "How does a B+ tree support search operations?"
+    expected_answer: "A B+ tree search starts at the root, uses key comparisons at each internal node to follow the correct child pointer, and terminates at a leaf node containing the search key or a pointer to the record. All actual data pointers reside in leaf nodes, which are linked for efficient range scans."
+    keywords: ["B+ tree", "root", "leaf node", "search key", "internal node", "pointer"]
+    similarity_threshold: 0.75
+    faiss_khr: 0.50
+    faiss_chunk_ids: [843, 841, 869, 842, 871, 839, 855, 836, 846, 857]
+    # Note: low KHR due to snippet truncation; textbook writes "B + -tree" (with spaces)
+    golden_chunks: null
+
+  - id: "sh_functional_dependency"
+    hop_type: "single"
+    question: "What is a functional dependency?"
+    expected_answer: "A functional dependency X -> Y holds on a relation if, whenever two tuples agree on all attributes in X, they must also agree on all attributes in Y. It expresses a constraint between attribute sets and is the foundation of normalization theory."
+    keywords: ["functional dependency", "attributes", "tuples", "agree", "constraint"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.80
+    faiss_chunk_ids: [388, 406, 387, 389, 412, 417, 390, 402, 407, 400]
+    golden_chunks: null
+
+  - id: "sh_bcnf"
+    hop_type: "single"
+    question: "What is Boyce-Codd Normal Form (BCNF)?"
+    expected_answer: "A relation is in BCNF if for every non-trivial functional dependency X -> Y, X is a superkey of the relation. BCNF eliminates all redundancy arising from functional dependencies by ensuring that only superkeys can determine other attributes."
+    keywords: ["BCNF", "superkey", "functional dependency", "non-trivial", "redundancy"]
+    similarity_threshold: 0.72
+    faiss_khr: 0.80
+    faiss_chunk_ids: [394, 421, 400, 395, 422, 402, 423, 428, 431, 425]
+    golden_chunks: null
+
+  - id: "sh_checkpoint"
+    hop_type: "single"
+    question: "What is the purpose of a checkpoint in database recovery?"
+    expected_answer: "A checkpoint limits how far back the recovery manager must scan the log after a crash. At checkpoint time, all dirty buffer pages are flushed to disk and a checkpoint log record is written, so the redo pass need only replay log records after the most recent checkpoint."
+    keywords: ["checkpoint", "log", "dirty pages", "flush", "redo", "recovery"]
+    similarity_threshold: 0.72
+    faiss_khr: 0.67
+    faiss_chunk_ids: [1230, 1231, 1235, 1267, 1232, 1248, 1222, 1207, 1281, 1236]
+    golden_chunks: null
+
+  - id: "sh_phantom_read"
+    hop_type: "single"
+    question: "What is a phantom read?"
+    expected_answer: "A phantom read occurs when a transaction re-executes a query and finds new rows that were inserted by another committed transaction between the two executions. The rows are 'phantoms' because they did not exist during the first read."
+    keywords: ["phantom", "new rows", "inserted", "re-execute", "query", "committed"]
+    similarity_threshold: 0.72
+    faiss_khr: 0.50
+    faiss_chunk_ids: [1107, 1143, 1142, 1106, 1176, 1154, 1172, 1174, 1151, 1104]
+    golden_chunks: null
+
+  - id: "sh_clustered_vs_unclustered"
+    hop_type: "single"
+    question: "What is the difference between a clustered and an unclustered index?"
+    expected_answer: "A clustered index stores the data records in the same order as the index key, so a range scan fetches records in few I/Os. An unclustered index stores index entries separately from records; a range scan may require one I/O per matching record, making it much more expensive for large ranges."
+    keywords: ["clustered", "unclustered", "order", "range scan", "I/O", "records"]
+    similarity_threshold: 0.72
+    faiss_khr: 0.33
+    faiss_chunk_ids: [832, 820, 919, 821, 1659, 834, 790, 922, 819, 822]
+    # Note: textbook uses "clustering index" not "clustered"; keyword mismatch causes low KHR
+    golden_chunks: null
+
+  - id: "sh_conflict_serializable"
+    hop_type: "single"
+    question: "What does it mean for a schedule to be conflict serializable?"
+    expected_answer: "A schedule is conflict serializable if it is conflict-equivalent to some serial schedule. Two schedules are conflict-equivalent if they have the same set of conflicting operations in the same order. Conflict serializability can be tested by checking whether the precedence graph of the schedule is acyclic."
+    keywords: ["conflict serializable", "serial schedule", "conflict-equivalent", "precedence graph", "acyclic"]
+    similarity_threshold: 0.73
+    faiss_khr: 0.60
+    faiss_chunk_ids: [1089, 1091, 1086, 1088, 1090, 1156, 1114, 1092, 1175, 1171]
+    golden_chunks: null
+
+  - id: "sh_aries_overview"
+    hop_type: "single"
+    question: "What is the ARIES recovery algorithm?"
+    expected_answer: "ARIES (Algorithm for Recovery and Isolation Exploiting Semantics) is a write-ahead logging recovery algorithm that performs three passes after a crash: an analysis pass to determine which transactions were active and which pages were dirty, a redo pass to replay history and restore the database to its crash state, and an undo pass to roll back all uncommitted transactions."
+    keywords: ["ARIES", "analysis", "redo", "undo", "write-ahead log", "crash recovery"]
+    similarity_threshold: 0.75
+    faiss_khr: 0.67
+    faiss_chunk_ids: [1267, 1269, 1277, 1278, 1272, 1233, 1230, 1207, 1235, 1222]
+    golden_chunks: null
+
+  - id: "sh_query_optimization"
+    hop_type: "single"
+    question: "What is the goal of query optimization?"
+    expected_answer: "Query optimization transforms a declarative SQL query into an efficient execution plan. The optimizer enumerates alternative relational algebra expressions and physical execution strategies, estimates their cost using statistics, and selects the plan with the lowest estimated cost."
+    keywords: ["query optimization", "execution plan", "cost", "statistics", "relational algebra"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.40
+    faiss_chunk_ids: [1669, 1030, 1033, 910, 1034, 1056, 1021, 1022, 908, 1028]
+    golden_chunks: null
+
+  # ============================================================
+  # MULTI-HOP QUESTIONS  (experimental group, n=13)
+  # Each question requires connecting concepts across 2+ sections.
+  # The hop chain is annotated for reference.
+  # Questions marked [STRONG FAIL] are the best candidates for
+  # graph RAG improvement — FAISS retrieves wrong/shallow chunks.
+  # ============================================================
+
+  - id: "mh_aries_steal_wal"
+    hop_type: "multi"
+    question: "What logging strategy does the buffer management policy that ARIES adopts require, and why?"
+    # Hop chain: ARIES → steal/no-force policy → steal requires undo log → no-force requires redo log → WAL
+    expected_answer: "ARIES adopts a steal/no-force buffer management policy. The steal policy allows dirty (uncommitted) pages to be written to disk before the transaction commits, so the log must record old values (undo information) to reverse those writes on abort. The no-force policy does not require dirty pages to be flushed at commit time, so the log must record new values (redo information) to reapply committed updates after a crash. Together these requirements mandate write-ahead logging with both undo and redo log records."
+    keywords: ["steal", "no-force", "undo", "redo", "write-ahead logging", "ARIES", "dirty pages"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.43
+    faiss_chunk_ids: [1267, 1269, 1243, 1222, 1277, 1270, 1241, 1278, 1230, 1217]
+    # FAISS retrieves general ARIES overview chunks — misses the steal/no-force section (chunk ~1244)
+    golden_chunks: null
+
+  - id: "mh_strict2pl_cascading"
+    hop_type: "multi"
+    question: "Why does strict two-phase locking prevent cascading aborts while basic two-phase locking does not?"
+    # Hop chain: basic 2PL → shrinking phase releases locks → other txns read uncommitted data → cascading abort
+    #            strict 2PL → write locks held until commit → no uncommitted data read → no cascade
+    expected_answer: "In basic two-phase locking a transaction may release write locks during its shrinking phase, before it commits. Other transactions can then read the unlocked data. If the original transaction later aborts, the transactions that read its data must also abort, causing cascading aborts. Strict two-phase locking prevents this by requiring that all write locks be held until the transaction commits or aborts, so no other transaction ever reads uncommitted data."
+    keywords: ["strict 2PL", "cascading abort", "shrinking phase", "write locks", "uncommitted", "commit"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.33
+    faiss_chunk_ids: [1116, 1117, 1126, 1125, 1178, 1154, 1127, 1095, 1540, 1122]
+    # [STRONG FAIL] FAISS retrieves basic 2PL chunks; strict 2PL and cascading abort connection missing
+    golden_chunks: null
+
+  - id: "mh_dpt_redo_scope"
+    hop_type: "multi"
+    question: "How does the dirty page table in ARIES limit the amount of work done during the redo pass?"
+    # Hop chain: dirty page table → recLSN per page → redo pass starts from min(recLSN) → pageLSN comparison skips already-applied updates
+    expected_answer: "The dirty page table (DPT) maintained by ARIES records each dirty buffer page and its recLSN, the LSN of the first log record that dirtied the page. During the redo pass, ARIES starts scanning from the minimum recLSN across all DPT entries, skipping earlier records entirely. For each log record encountered, ARIES checks whether the page's current pageLSN on disk is at least as large as the log record's LSN; if so, the update was already applied before the crash and is skipped. This combination of recLSN-based scan start and pageLSN-based per-record check avoids redundant I/Os and re-application of already-persisted updates."
+    keywords: ["dirty page table", "recLSN", "pageLSN", "redo pass", "skip", "ARIES"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.67
+    faiss_chunk_ids: [1278, 1267, 1274, 1269, 1276, 1277, 1272, 1268, 1281, 1270]
+    golden_chunks: null
+
+  - id: "mh_steal_atomicity"
+    hop_type: "multi"
+    question: "How does write-ahead logging ensure atomicity even when the steal buffer policy allows uncommitted pages to reach disk?"
+    # Hop chain: steal → uncommitted dirty page on disk → crash → WAL guarantees undo log on stable storage → undo restores old values → atomicity
+    expected_answer: "The steal policy allows the buffer manager to evict a dirty page belonging to an uncommitted transaction, writing it to disk before commit. If the system then crashes, that page on disk reflects a partial transaction. Write-ahead logging guarantees that the undo log record for that page was written to stable storage before the page itself was written to disk. During recovery, the undo pass reads those log records and restores the old values, completely reversing the partial transaction and preserving the all-or-nothing guarantee of atomicity."
+    keywords: ["write-ahead logging", "steal", "atomicity", "undo", "stable storage", "crash", "uncommitted"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.71
+    faiss_chunk_ids: [1244, 1243, 1241, 1222, 1242, 1217, 807, 1269, 1267, 1230]
+    golden_chunks: null
+
+  - id: "mh_repeatable_read_phantom"
+    hop_type: "multi"
+    question: "Why does the repeatable read isolation level fail to prevent phantom reads even though it prevents non-repeatable reads?"
+    # Hop chain: repeatable read → locks held on read rows → new insertions not locked → re-scan sees new rows → phantom
+    expected_answer: "Repeatable read prevents non-repeatable reads by holding shared locks on all rows read by a transaction until it commits, ensuring those rows cannot be modified by others. However, it only locks existing rows; it does not prevent other transactions from inserting new rows that satisfy the same predicate. When the transaction re-executes the same query it sees the newly inserted rows, a phantom, because row-level locking cannot cover rows that did not exist at the time of the first read. Preventing phantoms requires predicate locking or index-range locking."
+    keywords: ["repeatable read", "phantom", "predicate locking", "insert", "shared locks", "non-repeatable"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.50
+    faiss_chunk_ids: [1174, 1176, 1097, 1107, 1096, 1143, 1105, 1172, 1175, 1142]
+    # [STRONG FAIL] predicate locking concept not found in retrieved chunks
+    golden_chunks: null
+
+  - id: "mh_no_force_commit"
+    hop_type: "multi"
+    question: "What mechanism allows a database to commit a transaction without forcing its dirty pages to disk at commit time?"
+    # Hop chain: no-force policy → pages stay in buffer → crash loses committed updates → redo log on stable storage → redo pass reapplies → durability preserved
+    expected_answer: "The no-force buffer policy allows a transaction to commit without flushing its modified pages to disk. Durability is still guaranteed because write-ahead logging ensures that the redo log records for all committed updates have been written to stable storage before the commit is acknowledged. If the system crashes before the pages are written to disk, the recovery manager's redo pass reads those log records and reapplies the updates, restoring the committed state."
+    keywords: ["no-force", "commit", "redo log", "stable storage", "durability", "crash", "buffer"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.29
+    faiss_chunk_ids: [1243, 1222, 1238, 1225, 1219, 1268, 1070, 1218, 1221, 1080]
+    # [STRONG FAIL] retrieved storage-hierarchy chunks; no-force policy section (chunk ~1244) ranked low
+    golden_chunks: null
+
+  - id: "mh_clr_crash_during_undo"
+    hop_type: "multi"
+    question: "How do compensation log records in ARIES prevent repeated undo operations if the system crashes during the undo pass?"
+    # Hop chain: crash during undo → restart → redo pass replays CLRs → CLRs redo the undo already done → undoNextLSN skips already-undone records
+    expected_answer: "When ARIES undoes an update it writes a compensation log record (CLR) that describes the undo action and carries an undoNextLSN pointing to the next log record to be undone for that transaction. CLRs are redo-only records and are treated as regular log records during the redo pass. If the system crashes during the undo pass, the subsequent restart replays all CLRs during redo, restoring the partial undo work already done. The undo pass then resumes from the undoNextLSN recorded in the last CLR, skipping log records that were already undone before the second crash."
+    keywords: ["CLR", "compensation log record", "undoNextLSN", "redo-only", "crash during undo", "ARIES"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.17
+    faiss_chunk_ids: [1267, 1272, 1275, 1277, 1234, 1077, 1235, 1270, 1269, 1230]
+    # [STRONG FAIL] WORST multi-hop question. FAISS returns generic ARIES chunks — CLR/undoNextLSN
+    # section not retrieved. Bot answer is vague and never mentions CLRs specifically.
+    golden_chunks: null
+
+  - id: "mh_bcnf_fd_preservation"
+    hop_type: "multi"
+    question: "Why does decomposing a relation into BCNF not always preserve all functional dependencies?"
+    # Hop chain: BCNF decomposition → split relation to satisfy superkey constraint → FD whose attributes span two decomposed relations → cannot be checked in either relation alone → not preserved
+    expected_answer: "BCNF requires that for every non-trivial functional dependency X -> Y, X must be a superkey. When a relation violates BCNF, it is decomposed by splitting off the violating FD into a separate relation. If the violating FD's attributes are split across different decomposed relations, the dependency cannot be enforced by checking any single relation; it would require a join to verify. Because the join is not always performed, the dependency is effectively lost. This is why 3NF, which allows some non-superkey dependencies, is sometimes preferred when dependency preservation is required."
+    keywords: ["BCNF", "functional dependency", "decomposition", "dependency preservation", "3NF", "superkey"]
+    similarity_threshold: 0.70
+    faiss_khr: 1.00
+    faiss_chunk_ids: [421, 395, 422, 424, 402, 425, 400, 396, 423, 391]
+    # FAISS handles this well — normalization concepts cluster together in the index
+    golden_chunks: null
+
+  - id: "mh_lsn_redo_undo"
+    hop_type: "multi"
+    question: "How does the log sequence number serve both the redo pass and the undo pass in ARIES?"
+    # Hop chain: LSN monotonically increasing → each log record has LSN → pageLSN used in redo to skip applied updates → CLR undoNextLSN used in undo to navigate backward
+    expected_answer: "Each log record in ARIES is assigned a monotonically increasing log sequence number (LSN). During the redo pass, ARIES compares a log record's LSN against the pageLSN stored in the page on disk; if the page's pageLSN is at least as large as the record's LSN, the update was already applied and is skipped. During the undo pass, ARIES uses the prevLSN field in each log record to navigate backward through a transaction's history. When an undo action is performed, a compensation log record (CLR) is written with an undoNextLSN pointing to the next record to undo, allowing ARIES to skip already-undone records if a second crash occurs."
+    keywords: ["LSN", "pageLSN", "redo pass", "undo pass", "CLR", "undoNextLSN", "prevLSN", "ARIES"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.50
+    faiss_chunk_ids: [1267, 1269, 1275, 1274, 1272, 1276, 1277, 1270, 1278, 1226]
+    golden_chunks: null
+
+  - id: "mh_bptree_fanout_io"
+    hop_type: "multi"
+    question: "How does the fan-out of a B+ tree relate to the number of I/Os required to answer a range query?"
+    # Hop chain: fan-out = keys+pointers per node → tree height = log_fanout(n) → root-to-leaf traversal = height I/Os → then follow leaf links for range
+    expected_answer: "The fan-out of a B+ tree is the number of child pointers in an internal node, determined by how many keys and pointers fit within a disk page. A high fan-out yields a shallow tree: the tree height is proportional to log base fan-out of the number of entries, so doubling the fan-out reduces height by one level. A range query first traverses from root to the first qualifying leaf, costing height I/Os, then follows the linked leaf chain to retrieve all qualifying entries. A larger fan-out means fewer I/Os to reach the first leaf, making range queries cheaper."
+    keywords: ["fan-out", "B+ tree", "height", "I/O", "range query", "leaf", "log"]
+    similarity_threshold: 0.72
+    faiss_khr: 0.57
+    faiss_chunk_ids: [855, 842, 843, 866, 836, 865, 870, 856, 838, 860]
+    # Note: textbook uses "order" rather than "fan-out" terminology; keyword mismatch lowers KHR
+    golden_chunks: null
+
+  - id: "mh_mvcc_readers"
+    hop_type: "multi"
+    question: "What allows multi-version concurrency control to serve readers without acquiring read locks?"
+    # Hop chain: MVCC → multiple versions per data item → each txn reads snapshot at its start timestamp → no locking needed → writers create new version, readers see old
+    expected_answer: "Multi-version concurrency control (MVCC) maintains multiple timestamped versions of each data item. When a transaction reads a data item, it retrieves the version whose timestamp is the largest one not exceeding the transaction's start timestamp, giving it a consistent snapshot of the database as of that moment. Because the version the reader needs already exists and is never overwritten by concurrent writers (who create new versions instead), the reader does not need to acquire any lock. Writers and readers therefore never block each other."
+    keywords: ["MVCC", "version", "snapshot", "timestamp", "read lock", "writer", "reader"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.43
+    faiss_chunk_ids: [1160, 1159, 1162, 1104, 1540, 1183, 1166, 1224, 1554, 1161]
+    # [STRONG FAIL] textbook uses "multiversion" not "MVCC" acronym; retrieved timestamp-ordering
+    # chunks but not the section explaining why no read locks are needed
+    golden_chunks: null
+
+  - id: "mh_hash_join_memory"
+    hop_type: "multi"
+    question: "What makes a hash join faster than a nested-loop join, and when does this advantage disappear?"
+    # Hop chain: hash join → build hash table in memory → probe phase O(n+m) → vs nested loop O(n*m) → memory constraint → partition/grace hash join → if memory too small → nested loop may win
+    expected_answer: "A hash join builds an in-memory hash table on the smaller relation and then probes it once per tuple of the larger relation, giving O(n+m) cost compared to the O(n*m) cost of a naive nested-loop join. The advantage disappears when the hash table does not fit in memory: the algorithm must then partition both relations to disk and process each partition pair separately, adding extra I/O passes. If memory is very small relative to the relation sizes, the partitioning overhead can make the hash join slower than a well-tuned block nested-loop join that exploits sequential I/O."
+    keywords: ["hash join", "nested-loop", "hash table", "memory", "partition", "I/O", "probe"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.71
+    faiss_chunk_ids: [947, 954, 938, 948, 935, 946, 939, 934, 953, 955]
+    golden_chunks: null
+
+  - id: "mh_deadlock_granularity"
+    hop_type: "multi"
+    question: "How does lock granularity in two-phase locking affect the likelihood of deadlock?"
+    # Hop chain: fine granularity → more locks acquired → more overlap → higher deadlock probability → coarse granularity → fewer locks but lower concurrency → deadlock less likely
+    expected_answer: "Lock granularity refers to the size of the data unit being locked, ranging from individual tuples to entire tables. Finer granularity (e.g., tuple-level locking) increases concurrency by allowing transactions to lock only the data they need, but it also increases the number of locks each transaction holds. More locks mean more opportunities for two transactions to hold locks the other needs, raising the probability of a deadlock cycle in the waits-for graph. Coarser granularity (e.g., table-level locking) reduces lock count and deadlock risk but serializes transactions that access different rows of the same table, reducing throughput."
+    keywords: ["lock granularity", "deadlock", "waits-for graph", "tuple", "table", "concurrency", "two-phase locking"]
+    similarity_threshold: 0.70
+    faiss_khr: 0.43
+    faiss_chunk_ids: [1126, 1116, 1125, 1137, 1127, 1134, 1117, 1122, 1132, 1114]
+    # [STRONG FAIL] retrieved deadlock prevention chunks; granularity + waits-for graph connection missing
+    golden_chunks: null

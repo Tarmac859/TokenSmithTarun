@@ -1,0 +1,1839 @@
+[
+  {
+    "id": "sh_wal_rule",
+    "hop": "single",
+    "question": "What is the write-ahead logging rule?",
+    "answer": "The write-ahead logging (WAL) rule is a fundamental principle in database      \nsystems that ensures data consistency in the face of failures. The rule states \nthat before a block of data in main memory can be output to nonvolatile storage\n(such as disk), all log records pertaining to data in that block must have been\noutput to stable storage. This means that all changes made to the database must\nbe recorded in the log before they are physically written to disk to ensure    \nthat the database can be recovered to a consistent state in case of a system   \ncrash.                                                                         \n\nThe rule is important because it guarantees that the database state can be     \nrestored to a consistent state by replaying the log records, even if a crash   \noccurs before the data is written to disk. This helps maintain the atomicity of\ntransactions, ensuring that either all changes are committed or none are, thus \npreserving the integrity of the database.                                      \n\n<<>> This rule is enforced by systems to ensure that the database remains      \nconsistent and can be recovered from failures, and it is a key component in the\ndesign of database recovery mechanisms.",
+    "keyword_hit_rate": 1.0,
+    "missing_keywords": [],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1242,
+        "snippet": ". - Before a block of data in main memory can be output to the database (in nonvolatile storage), all log records pertaining to data in that block must have been output to stable storage.  Page 927 This rule is called the write-ahead logging (WAL) rule. (Strictly speaking, the WAL rule requires only",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1241,
+        "snippet": "So far, we have assumed that every log record is output to stable storage at the time it is created. This assumption imposes a high overhead on system execution for several reasons: Typically, output to stable storage is in units of blocks. In most cases, a log record is much smaller than a block. T",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1217,
+        "snippet": "The most widely used structure for recording database modifications is the log . The log is a sequence of log records , recording all the update activities in the database. There are several types of log records. An update log record describes a single database write. It has these fields: - Transact",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1244,
+        "snippet": ". Further, the no-steal policy does not work with transactions that perform a large number of updates, since the buffer may get filled with updated pages that cannot be evicted to disk, and the transaction cannot then proceed. As a result, the standard approach taken by most systems is the steal pol",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1222,
+        "snippet": "As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has c",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1230,
+        "snippet": "When a system crash occurs, we must consult the log to determine those transactions that need to be redone and those that need to be undone. In principle, we need to search the entire log to determine this information. There are two major difficulties with this approach:  1. The search process is ti",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1243,
+        "snippet": "In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1226,
+        "snippet": "We now provide an overview of how the log can be used to recover from a system crash and to roll back transactions during normal operation. However, we postpone details of the procedures for failure recovery and rollback to Section 19.4. Consider our simplified banking system. Let T 0 be a transacti",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_dirty_read",
+    "hop": "single",
+    "question": "What is a dirty read in transaction processing?",
+    "answer": "A dirty read in transaction processing occurs when a transaction reads data    \nthat has been modified by another transaction but not yet committed. This means\nthe data read by the first transaction is in an \"uncommitted\" state and could  \npotentially be rolled back or modified by the second transaction before it     \ncommits.                                                                       \n\nIn the context of SQL and database systems, dirty reads are explicitly         \ndisallowed by various isolation levels, such as Repeatable Read and            \nSerializable. These isolation levels are designed to prevent dirty reads by    \nensuring that a transaction sees either committed data or no data at all (Read \nUncommitted), thus avoiding inconsistencies caused by reading uncommitted data.",
+    "keyword_hit_rate": 0.6,
+    "missing_keywords": [
+      "dirty read",
+      "abort"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1097,
+        "snippet": ". - Repeatable read allows only committed data to be read and further requires that, between two reads of a data item by a transaction, no other transaction is allowed to update it. However, the transaction may not be serializable with respect to other transactions. For instance, when it is searchin",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1154,
+        "snippet": "In cases where a majority of transactions are read-only transactions, the rate of conflicts among transactions may be low. Thus, many of these transactions, if executed without the supervision of a concurrency-control scheme, would nevertheless leave the system in a consistent state. A concurrency-c",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1096,
+        "snippet": "Serializability is a useful concept because it allows programmers to ignore issues related to concurrency when they code transactions. If every transaction has the property that it maintains database consistency if executed alone, then serializability ensures that concurrent executions maintain cons",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1104,
+        "snippet": "By maintaining more than one version of a data item, it is possible to allow a transaction to read an old version of a data item rather than a newer version written by an uncommitted transaction or by a transaction that should come later in the serialization order. There are a variety of multiversio",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1067,
+        "snippet": "Page 800 A transaction is a unit of program execution that accesses and possibly updates various data items. Usually, a transaction is initiated by a user program written in a highlevel data-manipulation language (typically SQL), or programming language (e.g., C++ or Java), with embedded database ac",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1070,
+        "snippet": "Because SQL is a powerful and complex language, we begin our study of transactions with a simple database language that focuses on when data are moved from disk to main memory and from main memory to disk. In doing this, we ignore SQL insert and delete operations and defer considering them until Sec",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1165,
+        "snippet": "Page 873 Snapshot isolation is a particular type of concurrency-control scheme that has gained wide acceptance in commercial and open-source systems, including Oracle, PostgreSQL, and SQL Server. We introduced snapshot isolation in Section 17.9.3. Here, we take a more detailed look into how it works",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1139,
+        "snippet": "Until now, we have restricted our attention to read and write operations. This restriction limits transactions to data items already in the database. Some transactions require not only access to existing data items, but also the ability to create new data items. Others require the ability to delete ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1197,
+        "snippet": "The transaction concept developed initially in the context of data-processing applications, in which most transactions are noninteractive and of short duration. Serious problems arise when this concept is applied to database systems that involve human interaction. Such transactions have these key pr",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_2pl",
+    "hop": "single",
+    "question": "What is the two-phase locking protocol?",
+    "answer": "The two-phase locking protocol is a method used to ensure serializability in   \ndatabase transactions. Here's a breakdown of the key points:                   \n\n 1 Phases: Transactions are divided into two phases:                           \n    \u2022 Growing Phase: During this phase, a transaction can acquire locks but    \n      cannot release any locks.                                                \n    \u2022 Shrinking Phase: During this phase, a transaction can release locks but  \n      cannot acquire any new locks.                                            \n 2 Initial State: Transactions start in the growing phase.                     \n 3 Locking: Transactions acquire locks as needed during the growing phase. Once\n   a transaction releases a lock, it enters the shrinking phase and can no     \n   longer issue lock requests.                                                 \n 4 Serializability: The protocol ensures that schedules are                    \n   conflict-serializable, meaning that the transactions can be ordered in a way\n   that avoids conflicts and ensures that the final state is consistent.       \n 5 Deadlock Avoidance: The two-phase locking protocol does not inherently avoid\n   deadlocks. Deadlocks can occur if transactions hold locks for too long,     \n   leading to a situation where multiple transactions are waiting for each     \n   other to release locks.                                                     \n 6 Lock Conversion: To enhance concurrency, the protocol allows lock           \n   conversions (upgrading or downgrading locks) within specific phases:        \n    \u2022 Upgrading: From shared to exclusive mode, allowed only in the growing    \n      phase.                                                                   \n    \u2022 Downgrading: From exclusive to shared mode, allowed only in the shrinking\n      phase.                                                                   \n 7 Concurrency: The protocol allows for more concurrency by allowing lock      \n   conversions, but it must be managed carefully to avoid conflicts and ensure \n   serializability.                                                            \n 8 Limitations: The protocol does not prevent cascading rollbacks, where a     \n   failure in one transaction can cause rollbacks of other transactions. To    \n   mitigate this, modifications like the strict two-phase locking protocol or  \n   the rigorous two-phase locking protocol with lock conversions are used.     \n\n<<>>                                                                           \n\nThis protocol is widely used in database systems to ensure that transactions   \ncan be executed in a serializable manner, meaning",
+    "keyword_hit_rate": 1.0,
+    "missing_keywords": [],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1116,
+        "snippet": "One protocol that ensures serializability is the two-phase locking protocol . This protocol requires that each transaction issue lock and unlock requests in two phases: 1. Growing phase . A transaction may obtain locks, but may not release any lock. 2. Shrinking phase . A transaction may release loc",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1117,
+        "snippet": ". Cascading rollback may occur under two-phase locking. As an illustration, consider the partial schedule of Figure 18.8. Each transaction observes the two-phase locking protocol, but the failure of T 5 after the read(A) step of T 7 leads to cascading rollback of T 6 and T 7 . Figure 18.8 Partial sc",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1101,
+        "snippet": "Instead of locking the entire database, a transaction could instead lock only those data items that it accesses. Under such a policy, the transaction must hold locks long enough to ensure serializability, but for a period short enough not to harm performance excessively. Complicating matters are SQL",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1154,
+        "snippet": "In cases where a majority of transactions are read-only transactions, the rate of conflicts among transactions may be low. Thus, many of these transactions, if executed without the supervision of a concurrency-control scheme, would nevertheless leave the system in a consistent state. A concurrency-c",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1122,
+        "snippet": "As noted in Section 18.1.3, if we wish to develop protocols that are not two phase, we need additional information on how each transaction will access the database. There are various models that can give us the additional information, each differing in the amount of information provided. The simples",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1137,
+        "snippet": ". It requires that a transaction T i that attempts to lock a node Q must follow these rules: - Transaction T i must observe the lock-compatibility function of Figure 18.16. - Transaction T i must lock the root of the tree first and can lock it in any mode. - Transaction T i can lock a node Q in S or",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1118,
+        "snippet": ". This observation leads us to a refinement of the basic twophase locking protocol, in which lock conversions are allowed. We shall provide a mechanism for upgrading a shared lock to an exclusive lock, and downgrading an exclusive lock to a shared lock. We denote conversion from shared to exclusive ",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1126,
+        "snippet": "There are two approaches to deadlock prevention. One approach ensures that no cyclic waits can occur by ordering the requests for locks, or requiring all locks to be acquired together. The other approach is closer to deadlock recovery, and it performs transaction rollback instead of waiting for a  P",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1540,
+        "snippet": "The multiversion two-phase locking (MV2PL) protocol, described in Section 18.7.2, combines the benefits of lockfree read-only transactions with the serializability guarantees of two-phase locking. Read-only transactions see a snapshot at a point in time, while update transactions use two-phase locki",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1485,
+        "snippet": "If we are to ensure atomicity, all the nodes in which a transaction T executed must agree on the final outcome of the execution. T must either commit at all nodes, or it must abort at all nodes. T o ensure this property, the transaction coordinator of T must execute a commit protocol. Among the simp",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_bptree_search",
+    "hop": "single",
+    "question": "How does a B+ tree support search operations?",
+    "answer": "A B+ tree supports search operations by traversing a path from the root to a   \nleaf node based on the search key value. Here's a step-by-step breakdown of how\nit works:                                                                      \n\n 1 Start at the Root: The search begins at the root of the B+ tree.            \n 2 Compare Search Key: For each node, the search key value is compared with the\n   search key value being sought.                                              \n 3 Move to Appropriate Subtree: If the search key value is less than the       \n   current node's search key, move to the left child (or the leftmost child if \n   it's a leaf node). If the search key value is greater, move to the right    \n   child.                                                                      \n 4 Repeat Until Leaf Node: Continue this process until reaching a leaf node.   \n   Leaf nodes contain the actual records.                                      \n 5 Check for Match: In the leaf node, search for the exact match of the search \n   key value. If found, return the pointer to the record.                      \n 6 No Match: If the search key value is not found in the leaf node, return null\n   to indicate that no record with the specified search key value exists.      \n\nThis process ensures that the search operation is efficient, as it only        \nrequires traversing a path of nodes that are likely to contain the search key  \nvalue, rather than potentially scanning the entire tree. The height of the B+  \ntree, which is determined by the number of levels needed to accommodate the    \nmaximum number of keys, is typically lower than that of a balanced binary tree,\nmaking the search operation faster.                                            \n\n<<>",
+    "keyword_hit_rate": 0.5,
+    "missing_keywords": [
+      "B+ tree",
+      "internal node",
+      "pointer"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 843,
+        "snippet": ". We now consider the cost of querying on a B + -tree index. In processing a query, we traverse a path in the tree from the root to some leaf node. If there are N records in the file, the path is no longer than \u2308log \u2308 n /2\u2309 ( N )\u2309. Typically, the node size is chosen to be the same as the size of a d",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 841,
+        "snippet": "Let us consider how we process queries on a B + -tree. Suppose that we wish to find a record with a given value v for the search key. Figure 14.11 presents pseudocode for a function find(v ) to carry out this task, assuming there are no duplicates, that is, there is at most one record with a particu",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 869,
+        "snippet": "B-tree indices are similar to B + -tree indices. The primary distinction between the two approaches is that a B-tree eliminates the redundant storage of search-key values. In the B + -tree of Figure 14.9, the search keys 'Einstein', 'Gold', 'Mozart', and 'Srinivasan' appear in nonleaf nodes, in addi",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 842,
+        "snippet": ". If no search key with value v is found in the leaf node, no record with key value v exists in the relation, and function find returns null, to indicate failure. B + -trees can also be used to find all records with search key values in a specified range [ lb, ub ]. For example, with a B + -tree on ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 871,
+        "snippet": ". Deletion in a B-tree is more complicated. In a B + -tree, the deleted entry always appears in a leaf. In a B-tree, the deleted entry may appear in a nonleaf node. The proper value must be selected as a replacement from the subtree of the node containing the deleted entry. Specifically, if search k",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 839,
+        "snippet": ". Figure 14.10 shows another B + -tree for the instructor file, this time with n = 6. Observe that the height of this tree is less than that of the previous tree, which had n = 4. Figure 14.10 B + -tree for instructor file with n = 6. Page 637 These examples of B + -trees are all balanced. That is, ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 855,
+        "snippet": "Although insertion and deletion operations on B + -trees are complicated, they require relatively few I/O operations, which is an important benefit since I/O operations are expensive. It can be shown that the number of I/O operations needed in the worst case for an insertion is proportional to log \u2308",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 836,
+        "snippet": "The main disadvantage of the index-sequential file organization is that performance degrades as the file grows, both for index lookups and for sequential scans through the data. Although this degradation can be remedied by reorganization of the file, frequent reorganizations are undesirable. The B +",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 846,
+        "snippet": "When a record is inserted into, or deleted from a relation, indices on the relation must be updated correspondingly. Recall that updates to a record can be modeled as a deletion of the old record followed by insertion of the updated record. Hence we only consider the case of insertion and deletion. ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 857,
+        "snippet": "We have assumed so far that search keys are unique. Recall also that we described earlier, in Section 14.3.1, how to make search keys unique by creating a composite search key containing the original search key and extra attributes, that together are unique across all records. The extra attribute ca",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_functional_dependency",
+    "hop": "single",
+    "question": "What is a functional dependency?",
+    "answer": "A functional dependency is a rule that describes how the values of certain     \nattributes (the dependent attributes) are determined by the values of other    \nattributes (the determinant attributes) in a relation. Specifically, a         \nfunctional dependency \u03b1 \u2192 \u03b2 means that for every possible tuple t1 in the      \nrelation, if the value of the determinant attributes \u03b1 in t1 is the same as the\nvalue of the determinant attributes in another tuple t2, then the value of the \ndependent attributes \u03b2 in t1 must be the same as the value of the dependent    \nattributes in t2.                                                              \n\nIn simpler terms, it states that if two tuples have the same values for the    \ndeterminant attributes, they must have the same values for the dependent       \nattributes. For example, in a relation representing students and their grades, \na functional dependency might be \"student ID \u2192 grade,\" meaning that the grade  \nof a student is uniquely determined by their student ID.                       \n\nFunctional dependencies are used in database theory to define constraints on   \nthe structure of relations and to determine normal forms, which are ways to    \norganize data to minimize redundancy and anomalies.<<>",
+    "keyword_hit_rate": 0.8,
+    "missing_keywords": [
+      "agree"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 388,
+        "snippet": ". 4 Functional dependencies allow us to express constraints that we cannot express with superkeys. In Section 7.1, we considered the schema: in\\_dep ( ID , name, salary, dept\\_name, building, budget ) in which the functional dependency dept\\_name \u2192 budget holds because for each department (identifie",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 406,
+        "snippet": "We shall see that, given a set F of functional dependencies on a schema, we can prove that certain other functional dependencies also hold on the schema. We say that such functional dependencies are 'logically implied' by F . When testing for normal forms, it is not sufficient to consider the given ",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 387,
+        "snippet": "Some of the most commonly used types of real-world constraints can be represented formally as keys (superkeys, candidate keys, and primary keys), or as functional dependencies, which we define below. In Section 2.3, we defined the notion of a superkey as a set of one or more attributes that, taken c",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 389,
+        "snippet": ". Thus, we have found a pair of tuples t 1 and t 2 such that t 1 [ C ] = t 2 [ C ], but t 1 [ A ] \u2260 t 2 [ A ]. Figure 7.4 Sample instance of relation r .  Page 312 Some functional dependencies are said to be trivial because they are satisfied by all relations. For example, A \u2192 A is satisfied by all ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 412,
+        "snippet": "Suppose that we have a set of functional dependencies F on a relation schema. Whenever a user performs an update on the relation, the database system must ensure that the update does not violate any functional dependencies, that is, all the functional dependencies in F are satisfied in the new datab",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 417,
+        "snippet": "Page 329 Using the theory of functional dependencies, there is a way to describe dependency preservation that is simpler than the ad hoc approach we used in Section 7.3.1.2. Let F be a set of functional dependencies on a schema R, and let R 1 , R 2 ,..., R n be a decomposition of R . The restriction",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 390,
+        "snippet": ".  Given that a set of functional dependencies F holds on a relation r ( R ), it may be possible to infer that certain other functional dependencies must also hold on the relation. For example, given a schema r(A, B, C ), if functional dependencies A \u2192 B and B \u2192 C hold on r , we can infer the functi",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 402,
+        "snippet": "Of the two normal forms for relational database schemas, 3NF and BCNF there are advantages to 3NF in that we know that it is always possible to obtain a 3NF design without sacrificing losslessness or dependency preservation. Nevertheless, there are disadvantages to 3NF: We may have to use null value",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 407,
+        "snippet": ". Such a computation of F + requires arguments of the type just used to show that A \u2192 H is in the closure of our example set of dependencies. Axioms , or rules of inference, provide a simpler technique for reasoning about functional dependencies. In the rules that follow, we use Greek letters (\u03b1, \u03b2,",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 400,
+        "snippet": "BCNF requires that all nontrivial dependencies be of the form \u03b1 \u2192 \u03b2, where \u03b1 is a superkey. Third normal form (3NF) relaxes this constraint slightly by allowing certain nontrivial functional dependencies whose left side is not a superkey. Before we define 3NF, we recall that a candidate key is a min",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_bcnf",
+    "hop": "single",
+    "question": "What is Boyce-Codd Normal Form (BCNF)?",
+    "answer": "Boyce-Codd Normal Form (BCNF) is a more restrictive normal form than 3NF. A    \nrelation schema R is in BCNF with respect to a set F of functional dependencies\nif, for all nontrivial functional dependencies in F+ of the form \u03b1 \u2192 \u03b2, where \u03b1\n\u2286 R and \u03b2 \u2286 R, at least one of the following holds:                            \n\n 1 \u03b1 \u2192 \u03b2 is a trivial functional dependency.                                   \n 2 \u03b1 is a superkey for R.                                                      \n 3 Each attribute A in \u03b2 - \u03b1 is contained in a candidate key for R.            \n\nIn simpler terms, BCNF requires that every nontrivial functional dependency    \nmust have the left side as a superkey. This ensures that no redundant          \ninformation is stored and that the schema is in a state where it can be        \ndecomposed into 3NF without losing any information. BCNF is a more restrictive \nnormal form than 3NF, meaning that if a relation is in BCNF, it is also in 3NF,\nbut not vice versa.",
+    "keyword_hit_rate": 0.8,
+    "missing_keywords": [
+      "non-trivial"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 394,
+        "snippet": "One of the more desirable normal forms that we can obtain is Boyce - Codd normal form ( BCNF ). It eliminates all redundancy that can be discovered based on functional dependencies, though, as we shall see in Section 7.6, there may be other types of redundancy remaining.",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 421,
+        "snippet": "The definition of BCNF can be used directly to test if a relation is in BCNF . However, computation of F + can be a tedious task. We first describe simplified tests for verifying if a relation is in BCNF . If a relation is not in BCNF, it can be decomposed to create relations that are in BCNF. Later",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 400,
+        "snippet": "BCNF requires that all nontrivial dependencies be of the form \u03b1 \u2192 \u03b2, where \u03b1 is a superkey. Third normal form (3NF) relaxes this constraint slightly by allowing certain nontrivial functional dependencies whose left side is not a superkey. Before we define 3NF, we recall that a candidate key is a min",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 395,
+        "snippet": "A relation schema R is in BCNF with respect to a set F of functional dependencies if, for all functional dependencies in F + of the form \u03b1 \u2192 \u03b2, where \u03b1 \u2286 R and \u03b2 \u2286 R , at least one of the following holds: - Page 314 \u03b1 \u2192 \u03b2 is a trivial functional dependency (i.e., \u03b2 \u2286 \u03b1). - \u03b1 is a superkey for schema",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 422,
+        "snippet": "Testing of a relation schema R to see if it satisfies BCNF can be simplified in some cases: - To check if a nontrivial dependency \u03b1 \u2192 \u03b2 causes a violation of BCNF, compute \u03b1 + (the attribute closure of \u03b1), and verify that it includes all attributes of R ; that is, it is a superkey for R . - To check",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 402,
+        "snippet": "Of the two normal forms for relational database schemas, 3NF and BCNF there are advantages to 3NF in that we know that it is always possible to obtain a 3NF design without sacrificing losslessness or dependency preservation. Nevertheless, there are disadvantages to 3NF: We may have to use null value",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 423,
+        "snippet": ". T o check if a relation schema Ri in a decomposition of R is in BCNF, we apply this test: - For every subset \u03b1 of attributes in Ri , check that \u03b1 + (the attribute closure of \u03b1 under F ) either includes no attribute of Ri - \u03b1, or includes all attributes of Ri . If the condition is violated by some ",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 428,
+        "snippet": ". The preceding example illustrates an interesting property of the 3NF algorithm. Sometimes, the result is not only in 3NF, but also in BCNF. This suggests an alternative method of generating a BCNF design. First use the 3NF algorithm. Then, for any schema in the 3NF design that is not in BCNF, deco",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 431,
+        "snippet": "Some relation schemas, even though they are in BCNF, do not seem to be sufficiently normalized, in the sense that they still suffer from the problem of repetition of information. Consider a variation of the university organization where an instructor may be associated with multiple departments, and ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 425,
+        "snippet": ". There is an algorithm that can compute a BCNF decomposition in polynomial time; however, the algorithm may 'overnormalize, ' that is, decompose a relation unnecessarily.  As a longer example of the use of the BCNF decomposition algorithm, suppose we have a database design using the class relation,",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_checkpoint",
+    "hop": "single",
+    "question": "What is the purpose of a checkpoint in database recovery?",
+    "answer": "The purpose of a checkpoint in database recovery is to provide a      \n stable point in the transaction log that can be used to determine which       \n transactions need to be redone or undone during the recovery process. By      \n capturing the state of the database at a specific point, checkpoints allow    \n for a more efficient recovery process. Specifically, a checkpoint allows the  \n system to streamline its recovery procedure by only needing to apply redo or  \n undo operations to transactions that were active at the time of the           \n checkpoint. This reduces the amount of work needed during recovery and can    \n significantly speed up the process.<<</ANSWER>>",
+    "keyword_hit_rate": 0.6666666666666667,
+    "missing_keywords": [
+      "dirty pages",
+      "flush"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1230,
+        "snippet": "When a system crash occurs, we must consult the log to determine those transactions that need to be redone and those that need to be undone. In principle, we need to search the entire log to determine this information. There are two major difficulties with this approach:  1. The search process is ti",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1231,
+        "snippet": ".  Consider a transaction T i that completed prior to the checkpoint. For such a transaction, the &lt; T i commit &gt; record (or &lt; T i abort &gt; record) appears in the log before the &lt; checkpoint &gt; record. Any database modifications made by T i must have been written to the database eithe",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1235,
+        "snippet": "Recovery actions, when the database system is restarted after a crash, take place in two phases:  1. In the redo phase , the system replays updates of all transactions by scanning the log forward from the last checkpoint. The log records that are replayed include log records for transactions that we",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1232,
+        "snippet": ". Thus, only transactions  Page 922 T 67 , T 69 ,..., T 100 need to be considered during the recovery scheme. Each of them needs to be redone if it has completed (i.e., either committed or aborted); otherwise, it was incomplete and needs to be undone. Consider the set of transactions L in a checkpoi",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1248,
+        "snippet": "The checkpointing technique described in Section 19.3.6 requires that all updates to the database be temporarily suspended while the checkpoint is in progress. If the number of pages in the buffer is large, a checkpoint may take a long time to finish, which can result in an unacceptable interruption",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1222,
+        "snippet": "As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has c",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1207,
+        "snippet": ". Next, we must consider how these failure modes affect the contents of the database. We can then propose algorithms to ensure database consistency and transaction atomicity despite failures. These algorithms, known as recovery algorithms, have two parts: 1. Actions taken during normal transaction p",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1281,
+        "snippet": "Page 956 - a. If at the beginning of the analysis pass, a page is not in the checkpoint dirty page table, will we need to apply any redo records to it? Why? - b. What is RecLSN, and how is it used to minimize unnecessary redos?  3. 19.26 Explain the difference between a system crash and a 'disaster.",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1236,
+        "snippet": ".  2. In the undo phase , the system rolls back all transactions in the undo-list. It performs rollback by scanning the log backward from the end. - a. Whenever it finds a log record belonging to a transaction in the undo-list, it performs undo actions just as if the log record had been found during",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_phantom_read",
+    "hop": "single",
+    "question": "What is a phantom read?",
+    "answer": "A phantom read occurs when a transaction sees a set of tuples that are not     \nvisible to other transactions, leading to results that are not consistent with \nthe eventual serial execution of transactions. This phenomenon is particularly \nrelevant in the context of concurrency control in databases, where transactions\nmay see \"phantom\" data that was not present in the database when the           \ntransaction started, due to changes made by other transactions that occurred   \nconcurrently.                                                                  \n\nIn the context of the textbook excerpt provided, phantom reads can happen when \na transaction reads information about what tuples are in a relation, and the   \ninformation used to find those tuples can be updated by other transactions.    \nThis can lead to a situation where a transaction sees tuples that were not     \npresent when it started, causing inconsistency in the results.                 \n\nFor example, in the scenario described in the excerpt, if a transaction T30    \nreads tuples in the instructor relation and finds tuples with dept_name =      \n'Physics', it might see tuples that were added by another transaction T31 after\nT30 started. This is because T30 is not aware of the changes made by T31, and  \nthus sees \"phantom\" data.                                                      \n\nTo prevent phantom reads, various concurrency control mechanisms are employed, \nincluding locking, timestamp ordering, and other techniques to ensure that     \ntransactions see a consistent view of the database.<<>",
+    "keyword_hit_rate": 0.5,
+    "missing_keywords": [
+      "new rows",
+      "inserted",
+      "re-execute"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1107,
+        "snippet": ". This situation is referred to as the phantom phenomenon because a conflict may exist on 'phantom' data. Our simple model of transactions required that operations operate on a specific data item given as an argument to the operation. In our simple model, we can look at the read and write steps to s",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1143,
+        "snippet": ". This problem too is an instance of the phantom phenomenon. In general, the phantom phenomenon is rooted in predicate reads that conflict with inserts or updates that result in new/updated tuples that satisfy the predicate.  Page 860 We can prevent these problems by allowing transaction T 30 to pre",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1142,
+        "snippet": "30 that executes the following SQL Consider transaction T query on the university database: select count (*) from instructor where dept\\_name = 'Physics' ; Transaction T 30 requires access to all tuples of the instructor relation pertaining to the Physics department. Let T 31 be a transaction that e",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1106,
+        "snippet": "In Section 4.3, we presented the SQL syntax for specifying the beginning and end of transactions. Now that we have seen some of the issues in ensuring the ACID properties for transactions, we are ready to consider how those properties are ensured when transactions are specified as a sequence of SQL ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1176,
+        "snippet": ". This check is significantly cheaper than tracking all conflicts and looking for cycles, although it may result in some unnecessary rollbacks. It is also worth mentioning that the technique used by PostgreSQL to prevent phantoms uses index locking, but the locks are not held in a two-phase manner. ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1154,
+        "snippet": "In cases where a majority of transactions are read-only transactions, the rate of conflicts among transactions may be low. Thus, many of these transactions, if executed without the supervision of a concurrency-control scheme, would nevertheless leave the system in a consistent state. A concurrency-c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1172,
+        "snippet": ". Suppose the checking and savings balances for a customer are $100 and $200, respectively. Suppose that transaction T 36 withdraws $200 from the checking account, after verifying the integrity constraint by reading both balances. Suppose that concurrently transaction T 37 withdraws $200 from the sa",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1174,
+        "snippet": ". The impact of nonserializable execution due to snapshot isolation is not very severe for many applications. For example, consider a university application that implements enrollment limits for a course by counting the current enrollment before allowing registration. Snapshot isolation could allow ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1151,
+        "snippet": ". - Recoverability alone can be ensured by tracking uncommitted writes and allowing a transaction T i to commit only after the commit of any transaction that wrote a value that T i read. Commit dependencies, outlined in Section 18.1.5, can be used for this purpose. If the timestamp-ordering protocol",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1104,
+        "snippet": "By maintaining more than one version of a data item, it is possible to allow a transaction to read an old version of a data item rather than a newer version written by an uncommitted transaction or by a transaction that should come later in the serialization order. There are a variety of multiversio",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_clustered_vs_unclustered",
+    "hop": "single",
+    "question": "What is the difference between a clustered and an unclustered index?",
+    "answer": "The key difference between a clustered and an unclustered index lies  \n in how the records are stored in the underlying data file:                    \n                                                                               \n\n \u2022 Clustered Index:                                                            \n    \u2022 In a clustered index, the records are stored in the same order as the    \n      index. The index defines the physical order of the data in the file.     \n    \u2022 Only the first record with each unique search-key value is stored, and   \n      the rest are stored sequentially after it.                               \n    \u2022 A clustering index may be sparse, meaning it doesn't store every record  \n      with the same search-key value, but only the first record and the rest   \n      are stored sequentially.                                                 \n \u2022 Unclustered (Secondary) Index:                                              \n    \u2022 In an unclustered index, the records are not stored in the same order as \n      the index. Instead, each index entry contains a search-key value and a   \n      pointer to the first data record with that search-key value.             \n    \u2022 Each index entry can point to multiple records, and these records are not\n      necessarily stored sequentially in the file.                             \n    \u2022 A secondary index must store pointers to all records, even if they have  \n      the same search-key value, since the records may be scattered throughout \n      the file.                                                                \n\nIn summary, a clustered index stores the data in the same order as the index,  \nwhile an unclustered index stores the data in a different order and points to  \nthe records using pointers.",
+    "keyword_hit_rate": 0.33333333333333337,
+    "missing_keywords": [
+      "clustered",
+      "unclustered",
+      "range scan",
+      "I/O"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 832,
+        "snippet": "Secondary indices must be dense, with an index entry for every search-key value, and a pointer to every record in the file. A clustering index may be sparse, storing only some of the search-key values, since it is always possible to find records with intermediate search-key values by a sequential ac",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 820,
+        "snippet": ". We shall discuss several of these techniques in this chapter. There are two basic kinds of indices: - Ordered indices. Based on a sorted ordering of the values.  - Hash indices. Based on a uniform distribution of values across a range of buckets. The bucket to which a value is assigned is determin",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 919,
+        "snippet": ". Index structures are referred to as access paths , since they provide a path through which data can be located and accessed. In Chapter 14, we pointed out that it is efficient to read the records of a file in an order corresponding closely  - to physical order. Recall that a clustering index (also",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 821,
+        "snippet": ". An attribute or set of attributes used to look up records in a file is called a search key . Note that this definition of key differs from that used in primary key, candidate key, and superkey. This duplicate meaning for key is (unfortunately) well established in practice. Using our notion of a se",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1659,
+        "snippet": "We can tune the indices in a database system to improve performance. If queries are the bottleneck, we can often speed them up by creating appropriate indices on relations. If updates are the bottleneck, there may be too many indices, which have to be updated when the relations are updated. Removing",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 834,
+        "snippet": ". If a file has multiple indices, whenever the file is modified, every index must be updated. Secondary indices improve the performance of queries that use keys other than the search key of the clustering index. However, they impose a significant overhead on modification of the database. The designe",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 790,
+        "snippet": ". T o locate efficiently all tuples of the department relation within a particular block, we can chain together all the records of that relation using pointers; however, the number of blocks read does not get affected by using such chains. When multitable clustering is to be used depends on the type",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 922,
+        "snippet": "Consider a selection of the form \u03c3 A\u2264v ( r ). We can implement the selection either by using linear search or by using indices in one of the following ways: - A5 (clustering index, comparison) . A clustering ordered index (for example, a clustering B + -tree index) can be used when the selection con",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 819,
+        "snippet": "An index for a file in a database system works in much the same way as the index in this textbook. If we want to learn  Page 624 about a particular topic (specified by a word or a phrase) in this textbook, we can search for the topic in the index at the back of the book, find the pages where it occu",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 822,
+        "snippet": ". Such files, with a clustering index on the search key, are called index-sequential files . They represent one of the oldest index schemes used in database systems. They are designed for applications that require both sequential processing of the entire file and random access to individual records.",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_conflict_serializable",
+    "hop": "single",
+    "question": "What does it mean for a schedule to be conflict serializable?",
+    "answer": "For a schedule to be conflict serializable means it is conflict       \n equivalent to a serial schedule. In other words, it can be transformed into a \n serial schedule through a series of swaps of non-conflicting instructions.    \n This concept is important in database systems to ensure that concurrent       \n transactions do not produce inconsistent results, and it forms the basis for  \n ensuring isolation and consistency in concurrent environments.                \n                                                                               \n\nTo break it down further:                                                      \n\n \u2022 A schedule is conflict serializable if it can be made serial by swapping    \n   non-conflicting instructions.                                               \n \u2022 Conflict serializability is a stricter condition than just being conflict   \n   equivalent, as it requires the schedule to be equivalent to a serial        \n   schedule, not just any serial schedule.                                     \n \u2022 It ensures that the transactions can be executed in a serial order without  \n   violating any conflicts between read and write operations.                  \n\nThis concept is crucial for maintaining data integrity in concurrent database  \nsystems, as it helps to prevent situations where transactions might read or    \nwrite data in an order that could lead to inconsistent results.<<>",
+    "keyword_hit_rate": 0.6,
+    "missing_keywords": [
+      "conflict-equivalent",
+      "acyclic"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1089,
+        "snippet": ". Figure 17.8 Schedule 6-a serial schedule that is equivalent to schedule 3. If a schedule S can be transformed into a schedule S \u2032 by a series of swaps of non-conflicting instructions, we say that S and S\u2032 are conflict equivalent . 2 Page 816 Not all serial schedules are conflict equivalent to each",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1091,
+        "snippet": ". 3 Returning to our previous examples, note that the precedence graphs for schedules 1 and 2 (Figure 17.10) indeed do not contain cycles. The precedence graph for schedule 4 (Figure 17.11), on the other hand, contains a  Page 818 cycle, indicating that this schedule is not conflict serializable. It",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1086,
+        "snippet": "Page 813 Before we can consider how the concurrency-control component of the database system can ensure serializability, we consider how to determine when a schedule is serializable. Certainly, serial schedules are serializable, but if steps of multiple transactions are interleaved, it is harder to ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1088,
+        "snippet": ". The write( A ) instruction of T 1 conflicts with the read( A ) instruction of T 2 . However, the write( A ) instruction of T 2 does not conflict with the read( B ) instruction of T 1 because the two instructions access different data items. Let I and J be consecutive instructions of a schedule S .",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1090,
+        "snippet": ". For example, the precedence graph for schedule 1 in Figure 17.10a contains the single edge T 1 \u2192 T 2 , since all the instructions of T 1 are executed before the first instruction of T 2 is executed. Similarly, Figure 17.10b shows the precedence graph for schedule 2 with the single edge T 2 \u2192 T 1 ,",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1156,
+        "snippet": ". Condition 3, coupled with conditions 1 and 2, ensures that both schedules result in the same final system state. The concept of view equivalence leads to the concept of view serializability. We say that a schedule S is view serializable if it is view equivalent to a serial schedule. As an illustra",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1114,
+        "snippet": ". There are ways to avoid deadlock in some situations, as we shall see in Section 18.1.5. However, in general, deadlocks are a necessary evil associated with locking, if we want to avoid inconsistent states. Deadlocks are definitely preferable to inconsistent states, since they can be handled by rol",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1092,
+        "snippet": ". In general, such analysis is hard to implement and is computationally expensive. In our example, the final result is the same as that of a serial schedule because of the mathematical fact that the increment and decrement operations are commutative. While this may be easy to see in our simple examp",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1175,
+        "snippet": ". The intuition behind the serializable snapshot isolation ( SSI ) protocol is as follows: Suppose we track all conflicts (i.e., write-write, read-write, and write-read conflicts) between transactions. Recall from Section 17.6 that we can construct a transaction precedence graph which has a directed",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1171,
+        "snippet": ". T wo concurrent transactions T i and T j both read data items A and B. T i sets A = B and writes A , while T j sets B = A and writes B . Since T i and T j are concurrent, under snapshot isolation neither transaction sees the update by the other in its snapshot. But, since they update different dat",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_aries_overview",
+    "hop": "single",
+    "question": "What is the ARIES recovery algorithm?",
+    "answer": "The ARIES recovery algorithm is a sophisticated method designed to improve the \nrecovery process in database systems. It incorporates several key optimizations\nto reduce recovery time and logging overhead. Here are the main features of    \nARIES:                                                                         \n\n  1 Log Sequence Number (LSN) for Log Records: ARIES uses LSNs to uniquely     \n    identify log records and store them in database pages, allowing for        \n    efficient identification of which operations have been applied to a        \n    database page.                                                             \n  2 Physiological Redo Operations: ARIES supports redo operations that are     \n    physical in nature, meaning the affected page is identified but can be     \n    logical within the page. This allows for more efficient logging, as only   \n    the necessary changes need to be recorded.                                 \n  3 Dirty Page Table: ARIES employs a dirty page table to minimize unnecessary \n    redo operations during recovery. This table keeps track of pages that have \n    been updated but not yet written to disk, allowing for efficient recovery. \n  4 Fuzzy Checkpointing: ARIES uses a fuzzy-checkpointing scheme that records  \n    only information about dirty pages and associated metadata, reducing the   \n    overhead of checkpointing.                                                 \n  5 Nested Top Actions: ARIES allows for the logging of operations that should \n    not be undone even if a transaction gets rolled back, such as page         \n    allocations, ensuring that these operations are not lost during recovery.  \n  6 Recovery Independence: Some pages can be recovered independently from      \n    others, allowing for concurrent recovery and processing of transactions.   \n  7 Savepoints: Transactions can record savepoints and be rolled back partially\n    up to a savepoint, which can be useful for handling deadlocks and errors   \n    during transaction execution.                                              \n  8 Fine-Grained Locking: The algorithm can be used with index                 \n    concurrency-control algorithms that permit tuple-level locking, improving  \n    concurrency.                                                               \n  9 Redo Pass: ARIES recovers from a system crash in three passes: an analysis \n    pass, a redo pass, and an undo pass. The redo pass starts from a position  \n    determined during the analysis pass and performs a redo",
+    "keyword_hit_rate": 0.6666666666666667,
+    "missing_keywords": [
+      "write-ahead log",
+      "crash recovery"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1277,
+        "snippet": "Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocati",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1278,
+        "snippet": ". - Recovery optimizations : The DirtyPageTable can be used to prefetch pages during redo, instead of fetching a page only when the system finds a log record to be applied to the page. Out-of-order redo is also possible: Redo can be postponed on a page being fetched from  - disk and performed when t",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1272,
+        "snippet": "ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and pe",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1233,
+        "snippet": "Until now, in discussing recovery, we have identified transactions that need to be redone and those that need to be undone, but we have not given a precise algorithm for performing these actions. We are now ready to present the full recovery algorithm using log records for recovery from transaction ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1230,
+        "snippet": "When a system crash occurs, we must consult the log to determine those transactions that need to be redone and those that need to be undone. In principle, we need to search the entire log to determine this information. There are two major difficulties with this approach:  1. The search process is ti",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1207,
+        "snippet": ". Next, we must consider how these failure modes affect the contents of the database. We can then propose algorithms to ensure database consistency and transaction atomicity despite failures. These algorithms, known as recovery algorithms, have two parts: 1. Actions taken during normal transaction p",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1235,
+        "snippet": "Recovery actions, when the database system is restarted after a crash, take place in two phases:  1. In the redo phase , the system replays updates of all transactions by scanning the log forward from the last checkpoint. The log records that are replayed include log records for transactions that we",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1222,
+        "snippet": "As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has c",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_query_optimization",
+    "hop": "single",
+    "question": "What is the goal of query optimization?",
+    "answer": "The goal of query optimization is to construct an efficient query-evaluation   \nplan that minimizes the cost of query evaluation. This involves selecting the  \nmost effective sequence of operations to process the query and estimating the  \ncost of each operation to choose the plan with the lowest overall cost.        \n\nThe process of query optimization is not something users typically need to     \nperform directly. Instead, it is the responsibility of the database system to  \noptimize the query automatically, based on the structure and content of the    \nquery, the available data, and the capabilities of the database system.        \n\nThe optimization process aims to reduce the time and resources required to     \nexecute a query, such as by minimizing disk accesses and avoiding redundant    \ncomputations. By doing so, the system can provide faster query results, which  \nis crucial for applications that require frequent and timely access to data.<<>",
+    "keyword_hit_rate": 0.4,
+    "missing_keywords": [
+      "execution plan",
+      "statistics",
+      "relational algebra"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1669,
+        "snippet": "In the past, optimizers on many database systems were not particularly good, so how a query was written would have a big influence on how it was executed, and therefore on the performance. Today's advanced optimizers can transform even badly written queries and execute them efficiently, so the need ",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 910,
+        "snippet": ". Figure 15.2 A query-evaluation plan. The different evaluation plans for a given query can have different costs. We do not expect users to write their queries in a way that suggests the most efficient evaluation plan. Rather, it is the responsibility of the system to construct a query-evaluation pl",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1034,
+        "snippet": ". Whenever the query is executed again, perhaps with new values for constants, the cached query plan is reused (using new values for the constants). The optimal plan for the new constants may differ from the optimal plan for the initial values, but as a heuristic the cached plan is reused. 4 Caching",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1056,
+        "snippet": "When a batch of queries are submitted together, a query optimizer can potentially exploit common subexpressions between the different queries, evaluating them once and reusing them where required. Complex queries may in fact have subexpressions repeated in different parts of the query, which can be ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1021,
+        "snippet": "Generation of expressions is only part of the queryoptimization process, since each operation in the expression can be implemented with different algorithms. An evaluation plan defines exactly what algorithm should be used for each operation, and how the execution of the operations should be coordin",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1022,
+        "snippet": "The most common type of query in SQL consists of a join of a few relations, with join predicates and selections specified in the where clause. In this section we consider the problem of choosing the optimal join order for such a query. For a complex join query, the number of different query plans th",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 908,
+        "snippet": "The steps involved in processing a query appear in Figure 15.1. The basic steps are:  Figure 15.1 Steps in query processing. 1. Parsing and translation. 2. Optimization. 3. Evaluation. Before query processing can begin, the system must translate the query into a usable form. A language such as SQL i",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1028,
+        "snippet": "The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be ha",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_aries_steal_wal",
+    "hop": "multi",
+    "question": "What logging strategy does the buffer management policy that ARIES adopts require, and why?",
+    "answer": "The buffer management policy that ARIES adopts requires a logging     \n strategy that involves using latches on buffer pages to prevent them from     \n being written to disk while they are being updated. This is necessary         \n because:                                                                      \n                                                                               \n\n 1 Preventing Dirty Pages: When a page is updated, it is marked as \"dirty\" in  \n   the DirtyPageTable. The buffer page latch is used to prevent the page from  \n   being written to disk until the update is completed and the log record for  \n   the update has been written to the log. This ensures that the page is not   \n   written to disk with an incomplete update, which could lead to              \n   inconsistencies.                                                            \n 2 Ensuring Consistency: By keeping the buffer page latch on until the update  \n   is fully logged and committed, ARIES ensures that the page on disk always   \n   reflects the most up-to-date state of the data. This is crucial for         \n   maintaining data consistency, especially during transaction rollbacks or    \n   partial rollbacks.                                                          \n 3 Reducing Redo Operations: Once the log record is written to the log, the    \n   buffer page latch is released. This allows the page to be flushed to disk,  \n   ensuring that the updated version of the page is permanently saved. This    \n   process minimizes the need for redo operations, as the log records are now  \n   part of the permanent log and can be used to recover the state of the       \n   database.                                                                   \n 4 Efficiency: The use of latches and the log ensures that updates are logged  \n   efficiently, reducing the overhead associated with logging operations. This \n   is particularly important in a transactional database system where frequent \n   updates are common.                                                         \n\nIn summary, the use of latches on buffer pages in ARIES ensures that updates   \nare logged and committed before the page is flushed to disk, thereby           \nmaintaining data consistency and reducing the need for redo operations, which  \nare costly in terms of both time and resources.",
+    "keyword_hit_rate": 0.4285714285714286,
+    "missing_keywords": [
+      "steal",
+      "no-force",
+      "write-ahead logging",
+      "dirty pages"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1243,
+        "snippet": "In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1222,
+        "snippet": "As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has c",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1277,
+        "snippet": "Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocati",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1270,
+        "snippet": ". Therefore, ARIES uses latches on buffer pages to prevent them from being written to disk while they are being updated. It releases the buffer page latch only after the update is completed and the log record for the update has been written to the log. Each log record also contains the LSN of the pr",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1241,
+        "snippet": "So far, we have assumed that every log record is output to stable storage at the time it is created. This assumption imposes a high overhead on system execution for several reasons: Typically, output to stable storage is in units of blocks. In most cases, a log record is much smaller than a block. T",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1278,
+        "snippet": ". - Recovery optimizations : The DirtyPageTable can be used to prefetch pages during redo, instead of fetching a page only when the system finds a log record to be applied to the page. Out-of-order redo is also possible: Redo can be postponed on a page being fetched from  - disk and performed when t",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1230,
+        "snippet": "When a system crash occurs, we must consult the log to determine those transactions that need to be redone and those that need to be undone. In principle, we need to search the entire log to determine this information. There are two major difficulties with this approach:  1. The search process is ti",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1217,
+        "snippet": "The most widely used structure for recording database modifications is the log . The log is a sequence of log records , recording all the update activities in the database. There are several types of log records. An update log record describes a single database write. It has these fields: - Transact",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_strict2pl_cascading",
+    "hop": "multi",
+    "question": "Why does strict two-phase locking prevent cascading aborts while basic two-phase locking does not?",
+    "answer": "Strict two-phase locking prevents cascading aborts while basic        \n two-phase locking does not because of the stricter requirement that all       \n exclusive-mode locks taken by a transaction must be held until the            \n transaction commits. This ensures that any data written by an uncommitted     \n transaction are locked in exclusive mode until the transaction commits,       \n preventing other transactions from reading the data.                          \n                                                                               \n\nIn contrast, basic two-phase locking does not enforce this requirement.        \nTherefore, if a transaction fails after acquiring an exclusive lock but before \ncommitting, the locks it acquired can be released, allowing other transactions \nto read the data that was written by the failed transaction. This can lead to  \ncascading aborts where the failure of one transaction causes the failure of    \nsubsequent transactions that depend on the data written by the first           \ntransaction.                                                                   \n\n<<>>=",
+    "keyword_hit_rate": 0.33333333333333337,
+    "missing_keywords": [
+      "strict 2PL",
+      "write locks",
+      "uncommitted",
+      "commit"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1116,
+        "snippet": "One protocol that ensures serializability is the two-phase locking protocol . This protocol requires that each transaction issue lock and unlock requests in two phases: 1. Growing phase . A transaction may obtain locks, but may not release any lock. 2. Shrinking phase . A transaction may release loc",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1117,
+        "snippet": ". Cascading rollback may occur under two-phase locking. As an illustration, consider the partial schedule of Figure 18.8. Each transaction observes the two-phase locking protocol, but the failure of T 5 after the read(A) step of T 7 leads to cascading rollback of T 6 and T 7 . Figure 18.8 Partial sc",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1126,
+        "snippet": "There are two approaches to deadlock prevention. One approach ensures that no cyclic waits can occur by ordering the requests for locks, or requiring all locks to be acquired together. The other approach is closer to deadlock recovery, and it performs transaction rollback instead of waiting for a  P",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1125,
+        "snippet": "A system is in a deadlock state if there exists a set of transactions such that every transaction in the set is waiting for another transaction in the set. More precisely, there exists a set of waiting transactions { T 0 , T 1 ,..., T n } such that T 0 is waiting for a data item that T 1 holds, and ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1178,
+        "snippet": "The purpose of degree-two consistency is to avoid cascading aborts without necessarily ensuring serializability. The locking protocol for degree-two consistency uses the same two lock modes that we used for the two-phase locking protocol: shared (S) and exclusive (X). A transaction must hold the app",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1154,
+        "snippet": "In cases where a majority of transactions are read-only transactions, the rate of conflicts among transactions may be low. Thus, many of these transactions, if executed without the supervision of a concurrency-control scheme, would nevertheless leave the system in a consistent state. A concurrency-c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1127,
+        "snippet": ". The second approach for preventing deadlocks is to use preemption and transaction rollbacks. In preemption, when a transaction T j requests a lock that transaction T i holds, the lock granted to T i may be preempted by rolling back of T i , and granting of the lock to T j . T o control the preempt",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1095,
+        "snippet": "Even if a schedule is recoverable, to recover correctly from the failure of a transaction T i , we may have to roll back several transactions. Such situations occur if transactions have read data written by T i . As an illustration, consider the partial schedule of Figure 17.15. Transaction T 8 writ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1540,
+        "snippet": "The multiversion two-phase locking (MV2PL) protocol, described in Section 18.7.2, combines the benefits of lockfree read-only transactions with the serializability guarantees of two-phase locking. Read-only transactions see a snapshot at a point in time, while update transactions use two-phase locki",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1122,
+        "snippet": "As noted in Section 18.1.3, if we wish to develop protocols that are not two phase, we need additional information on how each transaction will access the database. There are various models that can give us the additional information, each differing in the amount of information provided. The simples",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_dpt_redo_scope",
+    "hop": "multi",
+    "question": "How does the dirty page table in ARIES limit the amount of work done during the redo pass?",
+    "answer": "The dirty page table in ARIES helps limit the amount of work done     \n during the redo pass by identifying pages that have been updated but not yet  \n written to disk. During the analysis pass, the dirty page table is populated  \n with pages that are dirty at the time of the crash.                           \n                                                                               \n\nDuring the redo pass, the redo pass only needs to redo the log records that    \naffect these dirty pages. This means that it doesn't need to fetch and check   \nevery page in the database, but only those that are marked as dirty in the     \ndirty page table. This significantly reduces the amount of work needed during  \nthe redo pass, as it avoids unnecessary fetches and redos of pages that are    \nalready up-to-date.                                                            \n\nSo, the dirty page table in ARIES allows the redo pass to focus on the pages   \nthat actually need to be updated, thereby minimizing the work done and speeding\nup the recovery process.<<>",
+    "keyword_hit_rate": 0.6666666666666667,
+    "missing_keywords": [
+      "pageLSN",
+      "skip"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1278,
+        "snippet": ". - Recovery optimizations : The DirtyPageTable can be used to prefetch pages during redo, instead of fetching a page only when the system finds a log record to be applied to the page. Out-of-order redo is also possible: Redo can be postponed on a page being fetched from  - disk and performed when t",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1274,
+        "snippet": "The redo pass repeats history by replaying every action that is not already reflected in the page on disk. The redo pass scans the log forward from RedoLSN. Whenever it finds an update log record, it takes this action: - Page 945 If the page is not in DirtyPageT able or if the LSN of the update log ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1276,
+        "snippet": ". Thus, the redo pass must start at the log record with LSN 7564. Note that this LSN is less than the LSN of the checkpoint log record, since the ARIES checkpointing algorithm does not flush modified pages to stable storage. The DirtyPageTable at the end of analysis would include pages 4894, 7200 fr",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1277,
+        "snippet": "Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocati",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1272,
+        "snippet": "ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and pe",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1268,
+        "snippet": ". As mentioned earlier, dirty pages are those that have been updated in memory, and the disk version is not up-to-date. 4. Uses a fuzzy-checkpointing scheme that records only information about dirty pages and associated information and does not even require writing of dirty pages to disk. It flushes",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1281,
+        "snippet": "Page 956 - a. If at the beginning of the analysis pass, a page is not in the checkpoint dirty page table, will we need to apply any redo records to it? Why? - b. What is RecLSN, and how is it used to minimize unnecessary redos?  3. 19.26 Explain the difference between a system crash and a 'disaster.",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1270,
+        "snippet": ". Therefore, ARIES uses latches on buffer pages to prevent them from being written to disk while they are being updated. It releases the buffer page latch only after the update is completed and the log record for the update has been written to the log. Each log record also contains the LSN of the pr",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_steal_atomicity",
+    "hop": "multi",
+    "question": "How does write-ahead logging ensure atomicity even when the steal buffer policy allows uncommitted pages to reach disk?",
+    "answer": "Write-ahead logging (WAL) ensures atomicity even when the steal       \n buffer policy allows uncommitted pages to reach disk by imposing specific     \n requirements on the recovery techniques. Specifically, the three rules of     \n write-ahead logging ensure that certain log records must be output to stable  \n storage before a transaction can commit:                                      \n                                                                               \n\n 1 Transaction T_i enters the commit state after the < T_i commit > log record \n   has been output to stable storage.                                          \n 2 Before the < T_i commit > log record can be output to stable storage, all   \n   log records pertaining to transaction T_i must have been output to stable   \n   storage.                                                                    \n 3 Before a block of data in main memory can be output to the database (in     \n   nonvolatile storage), all log records pertaining to data in that block must \n   have been output to stable storage.                                         \n\nThese rules ensure that the database state is consistent even if some          \ntransactions have not yet committed and their changes are still in memory. If a\ncrash occurs, the log records ensure that the database can be restored to a    \nconsistent state by replaying the committed transactions from the log. This    \napproach allows for the steal policy, which allows modified blocks to be       \nwritten to disk even if the transactions that made those modifications have not\nyet committed. However, it requires that all log records pertaining to a       \ntransaction be written to stable storage before the transaction can commit,    \nensuring that the database remains consistent across crashes.                  \n\n<<>>",
+    "keyword_hit_rate": 0.7142857142857143,
+    "missing_keywords": [
+      "atomicity",
+      "uncommitted"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1244,
+        "snippet": ". Further, the no-steal policy does not work with transactions that perform a large number of updates, since the buffer may get filled with updated pages that cannot be evicted to disk, and the transaction cannot then proceed. As a result, the standard approach taken by most systems is the steal pol",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1243,
+        "snippet": "In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1241,
+        "snippet": "So far, we have assumed that every log record is output to stable storage at the time it is created. This assumption imposes a high overhead on system execution for several reasons: Typically, output to stable storage is in units of blocks. In most cases, a log record is much smaller than a block. T",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1222,
+        "snippet": "As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has c",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1242,
+        "snippet": ". - Before a block of data in main memory can be output to the database (in nonvolatile storage), all log records pertaining to data in that block must have been output to stable storage.  Page 927 This rule is called the write-ahead logging (WAL) rule. (Strictly speaking, the WAL rule requires only",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1217,
+        "snippet": "The most widely used structure for recording database modifications is the log . The log is a sequence of log records , recording all the update activities in the database. There are several types of log records. An update log record describes a single database write. It has these fields: - Transact",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 807,
+        "snippet": "Page 610 Database buffers allow writes to be performed in-memory and output to disk at a later time, possibly in an order different from the order in which the writes were performed. File systems, too, routinely reorder write operations. However, such reordering can lead to inconsistent data on disk",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1230,
+        "snippet": "When a system crash occurs, we must consult the log to determine those transactions that need to be redone and those that need to be undone. In principle, we need to search the entire log to determine this information. There are two major difficulties with this approach:  1. The search process is ti",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_repeatable_read_phantom",
+    "hop": "multi",
+    "question": "Why does the repeatable read isolation level fail to prevent phantom reads even though it prevents non-repeatable reads?",
+    "answer": "The repeatable read isolation level prevents non-repeatable reads by ensuring  \nthat between two reads of a data item by a transaction, no other transaction is\nallowed to update that data item. However, it does not prevent phantom reads.  \n\nPhantom reads occur when a transaction reads the same data multiple times and  \nsees different data due to changes made by other transactions that have        \ncommitted between the reads. Repeatable read isolation does not address this   \nissue because it does not control the visibility of changes made by other      \ntransactions that have not yet committed.                                      \n\nIn contrast, read committed isolation, which is a lower isolation level, does  \nnot prevent non-repeatable reads or phantom reads. It only ensures that the    \ndata read by a transaction is consistent with the state of the database at the \nstart of the transaction, but it does not guarantee that the data will not     \nchange between reads.                                                          \n\nTherefore, while repeatable read provides stronger consistency guarantees than \nread committed, it still does not prevent phantom reads, which can lead to     \ninconsistent results for transactions that read the same data multiple         \ntimes.<<>",
+    "keyword_hit_rate": 0.5,
+    "missing_keywords": [
+      "predicate locking",
+      "shared locks",
+      "non-repeatable"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1174,
+        "snippet": ". The impact of nonserializable execution due to snapshot isolation is not very severe for many applications. For example, consider a university application that implements enrollment limits for a course by counting the current enrollment before allowing registration. Snapshot isolation could allow ",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1176,
+        "snippet": ". This check is significantly cheaper than tracking all conflicts and looking for cycles, although it may result in some unnecessary rollbacks. It is also worth mentioning that the technique used by PostgreSQL to prevent phantoms uses index locking, but the locks are not held in a two-phase manner. ",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1097,
+        "snippet": ". - Repeatable read allows only committed data to be read and further requires that, between two reads of a data item by a transaction, no other transaction is allowed to update it. However, the transaction may not be serializable with respect to other transactions. For instance, when it is searchin",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1107,
+        "snippet": ". This situation is referred to as the phantom phenomenon because a conflict may exist on 'phantom' data. Our simple model of transactions required that operations operate on a specific data item given as an argument to the operation. In our simple model, we can look at the read and write steps to s",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1096,
+        "snippet": "Serializability is a useful concept because it allows programmers to ignore issues related to concurrency when they code transactions. If every transaction has the property that it maintains database consistency if executed alone, then serializability ensures that concurrent executions maintain cons",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1143,
+        "snippet": ". This problem too is an instance of the phantom phenomenon. In general, the phantom phenomenon is rooted in predicate reads that conflict with inserts or updates that result in new/updated tuples that satisfy the predicate.  Page 860 We can prevent these problems by allowing transaction T 30 to pre",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1105,
+        "snippet": ". Since most transactions are read-only (and most others read more data than they update), this is often a major source of performance improvement as compared to locking. The problem with snapshot isolation is that, paradoxically, it provides too much isolation. Consider two transactions T and T \u2032. ",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1172,
+        "snippet": ". Suppose the checking and savings balances for a customer are $100 and $200, respectively. Suppose that transaction T 36 withdraws $200 from the checking account, after verifying the integrity constraint by reading both balances. Suppose that concurrently transaction T 37 withdraws $200 from the sa",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1175,
+        "snippet": ". The intuition behind the serializable snapshot isolation ( SSI ) protocol is as follows: Suppose we track all conflicts (i.e., write-write, read-write, and write-read conflicts) between transactions. Recall from Section 17.6 that we can construct a transaction precedence graph which has a directed",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1142,
+        "snippet": "30 that executes the following SQL Consider transaction T query on the university database: select count (*) from instructor where dept\\_name = 'Physics' ; Transaction T 30 requires access to all tuples of the instructor relation pertaining to the Physics department. Let T 31 be a transaction that e",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_no_force_commit",
+    "hop": "multi",
+    "question": "What mechanism allows a database to commit a transaction without forcing its dirty pages to disk at commit time?",
+    "answer": "The mechanism that allows a database to commit a transaction without  \n forcing its dirty pages to disk at commit time is the no-force policy. This   \n policy allows a transaction to commit even if it has modified some blocks     \n that have not yet been written back to disk. This can result in faster commit \n of transactions and can reduce the number of output operations, especially    \n for frequently updated blocks.                                                \n                                                                               \n         <<<END_ANSWER>>>                                                      \n                                                                               \n         This answer directly addresses the question by referring to the       \n information provided in the given text excerpt.",
+    "keyword_hit_rate": 0.2857142857142857,
+    "missing_keywords": [
+      "no-force",
+      "redo log",
+      "durability",
+      "crash",
+      "buffer"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1243,
+        "snippet": "In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1222,
+        "snippet": "As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has c",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1238,
+        "snippet": "Committing a transaction requires that its log records have been forced to disk. If a separate log flush is done for each transaction, each commit incurs a significant log write overhead. The rate of transaction commit can be increased using the group-commit technique. With this technique, instead o",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1225,
+        "snippet": ". Similarly, immediate modification of the database is a natural fit with two-phase locking, but deferred modification can also be used with two-phase locking. ## Page 917 19.3.4 Transaction Commit We say that a transaction has committed when its commit log record, which is the last log record of th",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1219,
+        "snippet": ". The old copy of the database is then deleted. The transaction is said to have been committed at the point where the updated db-pointer is written to disk. The implementation actually depends on the write to db- pointer being atomic; that is, either all its bytes are written or none of its bytes ar",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1268,
+        "snippet": ". As mentioned earlier, dirty pages are those that have been updated in memory, and the disk version is not up-to-date. 4. Uses a fuzzy-checkpointing scheme that records only information about dirty pages and associated information and does not even require writing of dirty pages to disk. It flushes",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1070,
+        "snippet": "Because SQL is a powerful and complex language, we begin our study of transactions with a simple database language that focuses on when data are moved from disk to main memory and from main memory to disk. In doing this, we ignore SQL insert and delete operations and defer considering them until Sec",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1218,
+        "snippet": ". Also, we have the ability to undo a modification that has already been output to the database. We undo it by using the old-value field in log records. For log records to be useful for recovery from system and disk failures, the log must reside in stable storage. For now, we assume that every log r",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1221,
+        "snippet": ". Shadow-copy schemes are commonly used by text editors (saving the file is equivalent to transaction commit, while quitting without saving the file is equivalent to transaction abort). Shadow copying can be used for small databases, but copying a large database would be extremely expensive. A varia",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1080,
+        "snippet": ". One way to implement such a scheme is for the database system to store any value associated with such external writes temporarily in a special relation in the database, and to perform the actual writes only after the transaction enters the committed state. If the system should fail after the trans",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_clr_crash_during_undo",
+    "hop": "multi",
+    "question": "How do compensation log records in ARIES prevent repeated undo operations if the system crashes during the undo pass?",
+    "answer": "Compensation log records in ARIES prevent repeated undo operations if \n the system crashes during the undo pass by ensuring that the undo actions     \n performed are recorded in the log. Specifically, these records contain        \n information about the values that were restored to data items during the      \n rollback process.                                                             \n                                                                               \n\nWhen a transaction is rolled back, the undo actions (such as writing the       \noriginal values back to the data items) are recorded in the log as special     \nredo-only log records. These records do not require undo information because   \nthey are redo-only, meaning they are only used to undo the rollback actions.   \n\nIf the system crashes during the undo pass, the redo pass will start from the  \nlast checkpoint and replay all the redo-only log records, including the        \ncompensation log records. This ensures that the undo actions are performed only\nonce, preventing repeated undo operations.                                     \n\nIn essence, the compensation log records act as a marker that the undo actions \nhave been taken, and they are used to prevent the redo pass from reapplying    \nthese undo actions, thus maintaining the integrity of the database state.",
+    "keyword_hit_rate": 0.16666666666666663,
+    "missing_keywords": [
+      "CLR",
+      "compensation log record",
+      "undoNextLSN",
+      "redo-only",
+      "crash during undo"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1272,
+        "snippet": "ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and pe",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1275,
+        "snippet": "The undo pass is relatively straightforward. It performs a single backward scan of the log, undoing all transactions in undo-list. The undo pass examines only log records of transactions in undo-list; the last LSN recorded during the analysis pass is used to find the last log record for each transac",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1277,
+        "snippet": "Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocati",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1234,
+        "snippet": "First consider transaction rollback during normal operation (i.e., not during recovery from a system crash). Rollback of a transaction T i is performed as follows: 1. The log is scanned backward, and for each log record of T i of the form &lt; T i , X j , V 1 , V 2 &gt; that is found: - a. The value",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1077,
+        "snippet": "As we noted earlier, a transaction may not always complete its execution successfully. Such a transaction is termed aborted . If we are to ensure the atomicity property, an aborted transaction must have no effect on the state of the database. Thus, any changes that the aborted transaction made to th",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1235,
+        "snippet": "Recovery actions, when the database system is restarted after a crash, take place in two phases:  1. In the redo phase , the system replays updates of all transactions by scanning the log forward from the last checkpoint. The log records that are replayed include log records for transactions that we",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1270,
+        "snippet": ". Therefore, ARIES uses latches on buffer pages to prevent them from being written to disk while they are being updated. It releases the buffer page latch only after the update is completed and the log record for the update has been written to the log. Each log record also contains the LSN of the pr",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1230,
+        "snippet": "When a system crash occurs, we must consult the log to determine those transactions that need to be redone and those that need to be undone. In principle, we need to search the entire log to determine this information. There are two major difficulties with this approach:  1. The search process is ti",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_bcnf_fd_preservation",
+    "hop": "multi",
+    "question": "Why does decomposing a relation into BCNF not always preserve all functional dependencies?",
+    "answer": "Decomposing a relation into BCNF does not always preserve all functional       \ndependencies because BCNF requires that all nontrivial functional dependencies \nhave a superkey as their left side. This can lead to loss of dependencies that \ndo not meet this criterion. Specifically, BCNF allows certain nontrivial       \nfunctional dependencies whose left side is not a superkey, which are not       \nallowed in BCNF. This relaxation is necessary to ensure that the resulting BCNF\nschemas can still be decomposed into 3NF, which is a more relaxed normal form  \nthat allows for some nontrivial dependencies with non-superkey left sides.     \n\nIn simpler terms, BCNF decomposes the relation into schemas where each         \nnontrivial dependency has a superkey as its left side. This can sometimes      \nresult in losing some dependencies that do not meet this stricter criterion, as\nthey would not be preserved in the BCNF decomposition. This is why BCNF is not \nalways able to preserve all functional dependencies, but it does ensure that   \nthe resulting schemas can be further decomposed into 3NF, which is a more      \nflexible normal form.",
+    "keyword_hit_rate": 1.0,
+    "missing_keywords": [],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 421,
+        "snippet": "The definition of BCNF can be used directly to test if a relation is in BCNF . However, computation of F + can be a tedious task. We first describe simplified tests for verifying if a relation is in BCNF . If a relation is not in BCNF, it can be decomposed to create relations that are in BCNF. Later",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 395,
+        "snippet": "A relation schema R is in BCNF with respect to a set F of functional dependencies if, for all functional dependencies in F + of the form \u03b1 \u2192 \u03b2, where \u03b1 \u2286 R and \u03b2 \u2286 R , at least one of the following holds: - Page 314 \u03b1 \u2192 \u03b2 is a trivial functional dependency (i.e., \u03b2 \u2286 \u03b1). - \u03b1 is a superkey for schema",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 422,
+        "snippet": "Testing of a relation schema R to see if it satisfies BCNF can be simplified in some cases: - To check if a nontrivial dependency \u03b1 \u2192 \u03b2 causes a violation of BCNF, compute \u03b1 + (the attribute closure of \u03b1), and verify that it includes all attributes of R ; that is, it is a superkey for R . - To check",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 424,
+        "snippet": "We are now able to state a general method to decompose a relation schema so as to satisfy BCNF. Figure 7.11 shows an algorithm for this task. If R is not in BCNF, we can decompose R into a collection of BCNF schemas R 1 , R 2 ,..., Rn by the algorithm.  Figure 7.11 BCNF decomposition algorithm. The ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 402,
+        "snippet": "Of the two normal forms for relational database schemas, 3NF and BCNF there are advantages to 3NF in that we know that it is always possible to obtain a 3NF design without sacrificing losslessness or dependency preservation. Nevertheless, there are disadvantages to 3NF: We may have to use null value",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 425,
+        "snippet": ". There is an algorithm that can compute a BCNF decomposition in polynomial time; however, the algorithm may 'overnormalize, ' that is, decompose a relation unnecessarily.  As a longer example of the use of the BCNF decomposition algorithm, suppose we have a database design using the class relation,",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 400,
+        "snippet": "BCNF requires that all nontrivial dependencies be of the form \u03b1 \u2192 \u03b2, where \u03b1 is a superkey. Third normal form (3NF) relaxes this constraint slightly by allowing certain nontrivial functional dependencies whose left side is not a superkey. Before we define 3NF, we recall that a candidate key is a min",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 396,
+        "snippet": ". Thus, department is in BCNF . We now state a general rule for decomposing schemas that are not in BCNF. Let R be a schema that is not in BCNF. Then there is at least one nontrivial functional dependency \u03b1 \u2192 \u03b2 such that \u03b1 is not a superkey for R . We replace R in our design with two schemas: (\u03b1 \u222a \u03b2",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 423,
+        "snippet": ". T o check if a relation schema Ri in a decomposition of R is in BCNF, we apply this test: - For every subset \u03b1 of attributes in Ri , check that \u03b1 + (the attribute closure of \u03b1 under F ) either includes no attribute of Ri - \u03b1, or includes all attributes of Ri . If the condition is violated by some ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 391,
+        "snippet": "We can use functional dependencies to show when certain decompositions are lossless. Let R , R 1 , R 2 , and F be as above. R 1 and R 2 form a lossless decomposition of R if at least one of the following functional dependencies is in F + : - R 1 \u2229 R 2 \u2192 R 1 - R 1 \u2229 R 2 \u2192 R 2 In other words, if R 1 \u2229",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_lsn_redo_undo",
+    "hop": "multi",
+    "question": "How does the log sequence number serve both the redo pass and the undo pass in ARIES?",
+    "answer": "In ARIES, the log sequence number (LSN) serves both the redo pass and \n the undo pass in the following ways:                                          \n                                                                               \n\n 1 Redo Pass:                                                                  \n    \u2022 The LSN uniquely identifies each log record, allowing the redo pass to   \n      determine which actions need to be replayed.                             \n    \u2022 The LSN helps the redo pass to identify and execute log records that have\n      not yet been applied to the database pages. Specifically, it ensures that\n      log records with LSNs less than or equal to the PageLSN of a page are not\n      executed on that page, as their effects are already reflected there.     \n 2 Undo Pass:                                                                  \n    \u2022 The LSN helps the undo pass to identify and roll back transactions that  \n      were incomplete at the time of the crash.                                \n    \u2022 The LSN is used to determine the order in which transactions should be   \n      undone. The last LSN recorded during the analysis pass is used to find   \n      the last log record for each transaction in the undo list. This ensures  \n      that transactions are undone in the correct order.                       \n\nIn both passes, the LSN is crucial for maintaining the integrity of the        \ndatabase state and ensuring that the correct actions are taken to either       \nrecover from a crash or to undo transactions that were not completed at the    \ntime of the crash. The LSNs help in tracking the sequence of operations and in \ndetermining which operations need to be applied or undone.",
+    "keyword_hit_rate": 0.5,
+    "missing_keywords": [
+      "pageLSN",
+      "CLR",
+      "undoNextLSN",
+      "prevLSN"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1267,
+        "snippet": "The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1269,
+        "snippet": "Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate th",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1275,
+        "snippet": "The undo pass is relatively straightforward. It performs a single backward scan of the log, undoing all transactions in undo-list. The undo pass examines only log records of transactions in undo-list; the last LSN recorded during the analysis pass is used to find the last log record for each transac",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1274,
+        "snippet": "The redo pass repeats history by replaying every action that is not already reflected in the page on disk. The redo pass scans the log forward from RedoLSN. Whenever it finds an update log record, it takes this action: - Page 945 If the page is not in DirtyPageT able or if the LSN of the update log ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1272,
+        "snippet": "ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and pe",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1276,
+        "snippet": ". Thus, the redo pass must start at the log record with LSN 7564. Note that this LSN is less than the LSN of the checkpoint log record, since the ARIES checkpointing algorithm does not flush modified pages to stable storage. The DirtyPageTable at the end of analysis would include pages 4894, 7200 fr",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1277,
+        "snippet": "Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocati",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1270,
+        "snippet": ". Therefore, ARIES uses latches on buffer pages to prevent them from being written to disk while they are being updated. It releases the buffer page latch only after the update is completed and the log record for the update has been written to the log. Each log record also contains the LSN of the pr",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1278,
+        "snippet": ". - Recovery optimizations : The DirtyPageTable can be used to prefetch pages during redo, instead of fetching a page only when the system finds a log record to be applied to the page. Out-of-order redo is also possible: Redo can be postponed on a page being fetched from  - disk and performed when t",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1226,
+        "snippet": "We now provide an overview of how the log can be used to recover from a system crash and to roll back transactions during normal operation. However, we postpone details of the procedures for failure recovery and rollback to Section 19.4. Consider our simplified banking system. Let T 0 be a transacti",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_bptree_fanout_io",
+    "hop": "multi",
+    "question": "How does the fan-out of a B+ tree relate to the number of I/Os required to answer a range query?",
+    "answer": "The fan-out of a B+ tree does not directly determine the number of    \n I/Os required to answer a range query. The number of I/Os required for a      \n range query is proportional to the height of the B+ tree, which is determined \n by the number of log \u2308n/2\u2309 (N) operations, where N is the number of records   \n in the file and n is the maximum number of pointers in a node.                \n                                                                               \n\nThe fan-out (number of pointers per node) affects the structure and balance of \nthe tree, which in turn influences the height of the tree. A higher fan-out can\nlead to a more balanced tree, potentially reducing the height and thus the     \nnumber of I/Os required for a range query. However, the direct relationship    \nbetween fan-out and the number of I/Os for a range query is not linear and is  \nmore complex than a simple proportional relationship.                          \n\nIn summary, while a higher fan-out can help reduce the height of the tree,     \nleading to fewer I/Os, the exact number of I/Os required for a range query is  \nprimarily determined by the height of the tree, which is log \u2308n/2\u2309 (N).",
+    "keyword_hit_rate": 0.5714285714285714,
+    "missing_keywords": [
+      "fan-out",
+      "B+ tree",
+      "range query"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 855,
+        "snippet": "Although insertion and deletion operations on B + -trees are complicated, they require relatively few I/O operations, which is an important benefit since I/O operations are expensive. It can be shown that the number of I/O operations needed in the worst case for an insertion is proportional to log \u2308",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 842,
+        "snippet": ". If no search key with value v is found in the leaf node, no record with key value v exists in the relation, and function find returns null, to indicate failure. B + -trees can also be used to find all records with search key values in a specified range [ lb, ub ]. For example, with a B + -tree on ",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 843,
+        "snippet": ". We now consider the cost of querying on a B + -tree index. In processing a query, we traverse a path in the tree from the root to some leaf node. If there are N records in the file, the path is no longer than \u2308log \u2308 n /2\u2309 ( N )\u2309. Typically, the node size is chosen to be the same as the size of a d",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 866,
+        "snippet": "Page 654 As we saw earlier, insertion of a record in a B + -tree requires a number of I/O operations that in the worst case is proportional to the height of the tree, which is usually fairly small (typically five or less, even for large relations). Now consider the case where a B + -tree is being bu",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 836,
+        "snippet": "The main disadvantage of the index-sequential file organization is that performance degrades as the file grows, both for index lookups and for sequential scans through the data. Although this degradation can be remedied by reorganization of the file, frequent reorganizations are undesirable. The B +",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 865,
+        "snippet": "Creating B + -tree indices on string-valued attributes raises two problems. The first problem is that strings can be of variable length. The second problem is that strings can be long, leading to a low fanout and a correspondingly increased tree height. With variable-length search keys, different no",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 870,
+        "snippet": ". A generalized B-tree leaf node appears in Figure 14.24a; a nonleaf node appears in Figure 14.24b. Leaf nodes are the same as in B + -trees. In nonleaf nodes, the pointers P i are the tree pointers that we used also for B + -trees, while the pointers B i are bucket or file-record pointers. In the g",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 856,
+        "snippet": ". For updates, the probability of a node split occurring is correspondingly very small. Depending on the ordering of inserts, with a fanout of 100, only from 1 in 100 to 1 in 50 insertions will result in a node split, requiring more than one block to be written. As a result, on an average an insert ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 838,
+        "snippet": ". Now we can explain the use of the pointer P n . Since there is a linear order on the leaves based on the search-key values that they contain, we use P n to chain together the leaf nodes in search-key order. This ordering allows for efficient sequential processing of the file.  Page 636 The nonleaf",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 860,
+        "snippet": "Page 651 As mentioned in Section 14.3, the main drawback of indexsequential file organization is the degradation of performance as the file grows: With growth, an increasing percentage of index entries and actual records become out of order and are stored in overflow blocks. We solve the degradation",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_mvcc_readers",
+    "hop": "multi",
+    "question": "What allows multi-version concurrency control to serve readers without acquiring read locks?",
+    "answer": "Multi-version concurrency control (MVCC) allows readers to serve      \n without acquiring read locks by maintaining multiple versions of a data item. \n When a read-only transaction issues a read operation, it can read the latest  \n version of the data item. This latest version is chosen based on the          \n timestamp ordering protocol, ensuring that the transaction sees the most      \n up-to-date data available at the time of the read operation. Since the        \n transaction does not acquire a lock to read the data, it does not interfere   \n with other transactions that may be updating the same data item. This         \n mechanism enables concurrent reads without the need for read locks, improving \n concurrency and performance, especially for read-heavy workloads.             \n                                                                               \n\n<<>> Multi-version concurrency control (MVCC) allows readers to serve without  \nacquiring read locks by maintaining multiple versions of a data item. When a   \nread-only transaction issues a read operation, it can read the latest version  \nof the data item. This latest version is chosen based on the timestamp ordering\nprotocol, ensuring that the transaction sees the most up-to-date data available\nat the time of the read operation. Since the transaction does not acquire a    \nlock to read the data, it does not interfere with other transactions that may  \nbe updating the same data item. This mechanism enables concurrent reads without\nthe need for read locks, improving concurrency and performance, especially for \nread-heavy workloads.",
+    "keyword_hit_rate": 0.4285714285714286,
+    "missing_keywords": [
+      "MVCC",
+      "read lock",
+      "writer",
+      "reader"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1160,
+        "snippet": "The timestamp-ordering protocol can be extended to a multiversion protocol. With each transaction T i in the system, we associate a unique static timestamp, denoted by TS( T i ). The database system assigns this timestamp before the transaction starts execution, as described in Section 18.5. With ea",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1159,
+        "snippet": "The concurrency-control schemes discussed thus far ensure serializability by either delaying an operation or aborting the transaction that issued the operation. For example, a read operation may be delayed because the appropriate value has not been written yet; or it may be rejected (that is, the is",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1162,
+        "snippet": "The multiversion two-phase locking protocol attempts to combine the advantages of multiversion concurrency control with the advantages of two-phase locking. This protocol differentiates between read-only transactions and update transactions . Update transactions perform rigorous two-phase locking; t",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1104,
+        "snippet": "By maintaining more than one version of a data item, it is possible to allow a transaction to read an old version of a data item rather than a newer version written by an uncommitted transaction or by a transaction that should come later in the serialization order. There are a variety of multiversio",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1540,
+        "snippet": "The multiversion two-phase locking (MV2PL) protocol, described in Section 18.7.2, combines the benefits of lockfree read-only transactions with the serializability guarantees of two-phase locking. Read-only transactions see a snapshot at a point in time, while update transactions use two-phase locki",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1183,
+        "snippet": ". - If the version number check succeeds for all updated tuples, the transaction commits. It is worth noting that a  timestamp could be used instead of the version number without impacting the scheme in any way. Page 883 Observe the close similarity between the preceding scheme and snapshot isolatio",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1166,
+        "snippet": "To implement snapshot isolation, transactions are given two timestamps. The first timestamp, StartTS ( T i ), is the time at which transaction T i started. The second timestamp, CommitTS ( T i ) is the time when the transaction T i requested validation. Note that timestamps can be wall clock time, a",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1224,
+        "snippet": "If the concurrency control scheme allows a data item X that has been modified by a transaction T 1 to be further modified by another transaction T 2 before T 1 commits, then undoing the effects of T 1 by restoring the old value of X (before T 1 updated X ) would also undo the effects of T 2 . T o av",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1554,
+        "snippet": ". A transaction may then request a version with required freshness properties, for example not more than 10 minutes old. If a local replica has a version of the data item satisfying the freshness criterion, it can be used; otherwise, the read may have to be sent to the primary node. Consider, for ex",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1161,
+        "snippet": ". The justification for rule 1 is clear. A transaction reads the most recent version that comes before it in time. The second rule forces a transaction to abort if it is 'too late' in doing a write. More precisely, if T i attempts to write a version that some other transaction would have read, then ",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_hash_join_memory",
+    "hop": "multi",
+    "question": "What makes a hash join faster than a nested-loop join, and when does this advantage disappear?",
+    "answer": "A hash join can be faster than a nested-loop join in scenarios where  \n the outer relation is significantly smaller and the index lookups fetch only  \n a few tuples from the inner relation. This is because the hash join algorithm \n can process multiple tuples in parallel by partitioning the outer relation    \n and using an index on the inner relation to quickly find matching tuples.     \n                                                                               \n\nHowever, this advantage can disappear in cases where a secondary index is used \non the outer relation, and the number of tuples in the outer relation is large.\nIn such cases, the nested-loop join can become more efficient because it only  \nneeds to compare a few tuples from the outer relation with all tuples in the   \ninner relation, which can be less costly than the hash join's overhead of      \npartitioning and index building.                                               \n\nThe key factor is the number of tuples in the outer relation. If the outer     \nrelation is large, the nested-loop join can outperform the hash join. This is  \nalso influenced by the size of memory available; if the build relation is much \nlarger than memory, the hybrid hash-join algorithm might be more beneficial.   \n\nIn summary, the hash join is faster when the outer relation is small and the   \nindex lookups fetch a few tuples, but this advantage diminishes when the outer \nrelation is large and a secondary index is used. The performance can also be   \ninfluenced by the size of memory available to the system.",
+    "keyword_hit_rate": 0.7142857142857143,
+    "missing_keywords": [
+      "hash table",
+      "I/O"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 947,
+        "snippet": "Page 713 The idea behind the hash-join algorithm is this: Suppose that an r tuple and an s tuple satisfy the join condition; then, they have the same value for the join attributes. If that value is hashed to some value i , the r tuple has to be in r i and the s tuple in s i . Therefore, r tuples in ",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 954,
+        "snippet": ". The cost estimate goes down to b r + b s block transfers and two seeks. Indexed nested loops join can have a much lower cost than hash join in case the outer relation is small, and the index lookups fetch only a few tuples from the inner (indexed) relation. However, in case a secondary index is us",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 938,
+        "snippet": "In a nested-loop join (Figure 15.5), if an index is available on the inner loop's join attribute, index lookups can replace file scans. For each tuple t r in the outer relation r , the index is used to look up tuples in s that will satisfy the join condition with tuple t r . This join method is call",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 948,
+        "snippet": ". In the course of the indexed nested-loop  Page 714 join, the system uses this hash index to retrieve records that match records in the probe input. The build and probe phases require only a single pass through both the build and probe inputs. It is straightforward to extend the hash-join algorithm",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 935,
+        "snippet": ". We need only one seek for each scan on the inner relation s since it is read sequentially, and a total of b r seeks to read r , leading to a total of n r + b r seeks. In the best case, there is enough space for both relations to fit simultaneously in memory, so each block would have to be read onl",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 946,
+        "snippet": "Like the merge-join algorithm, the hash-join algorithm can be used to implement natural joins and equi-joins. In the hash-join algorithm, a hash function h is used to partition tuples of both relations. The basic idea is to partition the tuples of each of the relations into sets that have the same h",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 939,
+        "snippet": ". The cost formula indicates that, if indices are available on both relations r and s , it is generally most efficient to use the one with fewer tuples as the outer relation. For example, consider an indexed nested-loop join of student \u22c8 takes, with student as the outer relation. Suppose also that t",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 934,
+        "snippet": "Figure 15.5 shows a simple algorithm to compute the theta join, r \u22c8 \u03b8 s , of two relations r and s . This algorithm is called the nested-loop join algorithm, since it basically consists of a pair of nested for loops. Relation r is called the outer relation and relation s the inner relation of the jo",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 953,
+        "snippet": ". Each pass then reduces the size of each of the partitions by an expected factor of \u230a M /b b \u230b - 1; and passes are repeated until each partition is of size at most M blocks. The expected number of passes required for partitioning s is therefore \u2308log \u230a M/b b \u230b-1 ( b s /M )\u2309. - Since, in each pass, e",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 955,
+        "snippet": "The hybrid hash-join algorithm performs another optimization; it is useful when memory sizes are relatively large but not all of the build relation fits in memory. The partitioning phase of the hash-join algorithm needs a minimum of one block of memory as a buffer for each partition that is created,",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_deadlock_granularity",
+    "hop": "multi",
+    "question": "How does lock granularity in two-phase locking affect the likelihood of deadlock?",
+    "answer": "In two-phase locking, lock granularity refers to the level of detail at which  \nlocks are acquired. In the basic two-phase locking protocol, locks are acquired\nat the level of individual data items or records. This can lead to a higher    \nlikelihood of deadlock because it allows for more opportunities for cyclic     \nwaits to occur.                                                                \n\nIn contrast, the multiple-granularity protocol, which is a variant of two-phase\nlocking, requires locks to be acquired in a top-down (root-to-leaf) order and  \nreleased in a bottom-up (leaf-to-root) order. This approach can reduce the     \nlikelihood of deadlock because it enforces a strict order in which locks are   \nacquired and released, making it harder for cyclic waits to form.              \n\nTherefore, while the basic two-phase locking protocol allows for more granular \nlocking, which can lead to more opportunities for deadlock, the                \nmultiple-granularity protocol, by enforcing a specific lock acquisition and    \nrelease order, can help mitigate the risk of deadlock. However, it's important \nto note that the multiple-granularity protocol can still lead to deadlock under\ncertain conditions, and it may not be as flexible as the basic two-phase       \nlocking protocol in terms of accommodating different types of transactions and \ndata structures.",
+    "keyword_hit_rate": 0.4285714285714286,
+    "missing_keywords": [
+      "lock granularity",
+      "waits-for graph",
+      "tuple",
+      "table"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1126,
+        "snippet": "There are two approaches to deadlock prevention. One approach ensures that no cyclic waits can occur by ordering the requests for locks, or requiring all locks to be acquired together. The other approach is closer to deadlock recovery, and it performs transaction rollback instead of waiting for a  P",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1116,
+        "snippet": "One protocol that ensures serializability is the two-phase locking protocol . This protocol requires that each transaction issue lock and unlock requests in two phases: 1. Growing phase . A transaction may obtain locks, but may not release any lock. 2. Shrinking phase . A transaction may release loc",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1125,
+        "snippet": "A system is in a deadlock state if there exists a set of transactions such that every transaction in the set is waiting for another transaction in the set. More precisely, there exists a set of waiting transactions { T 0 , T 1 ,..., T n } such that T 0 is waiting for a data item that T 1 holds, and ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1137,
+        "snippet": ". It requires that a transaction T i that attempts to lock a node Q must follow these rules: - Transaction T i must observe the lock-compatibility function of Figure 18.16. - Transaction T i must lock the root of the tree first and can lock it in any mode. - Transaction T i can lock a node Q in S or",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1127,
+        "snippet": ". The second approach for preventing deadlocks is to use preemption and transaction rollbacks. In preemption, when a transaction T j requests a lock that transaction T i holds, the lock granted to T i may be preempted by rolling back of T i , and granting of the lock to T j . T o control the preempt",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1134,
+        "snippet": "In the concurrency-control schemes described thus far, we have used each individual data item as the unit on which synchronization is performed.  There are circumstances, however, where it would be advantageous to group several data items, and to treat them as one individual synchronization unit. Fo",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1117,
+        "snippet": ". Cascading rollback may occur under two-phase locking. As an illustration, consider the partial schedule of Figure 18.8. Each transaction observes the two-phase locking protocol, but the failure of T 5 after the read(A) step of T 7 leads to cascading rollback of T 6 and T 7 . Figure 18.8 Partial sc",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1122,
+        "snippet": "As noted in Section 18.1.3, if we wish to develop protocols that are not two phase, we need additional information on how each transaction will access the database. There are various models that can give us the additional information, each differing in the amount of information provided. The simples",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1132,
+        "snippet": "When a detection algorithm determines that a deadlock exists, the system must recover from the deadlock. The most common solution is to roll back one or more transactions to break the deadlock. Three actions need to be taken: 1. Selection of a victim . Given a set of deadlocked transactions, we must",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1114,
+        "snippet": ". There are ways to avoid deadlock in some situations, as we shall see in Section 18.1.5. However, in general, deadlocks are a necessary evil associated with locking, if we want to avoid inconsistent states. Deadlocks are definitely preferable to inconsistent states, since they can be handled by rol",
+        "score": 0.014285714285714285
+      }
+    ]
+  }
+]

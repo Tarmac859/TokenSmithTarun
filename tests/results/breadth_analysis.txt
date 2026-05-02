@@ -1,0 +1,606 @@
+====================================================================================================
+BREADTH vs DEPTH ANALYSIS  —  FAISS  |  FAISS+Graph  |  Graph-only
+top_k=5, no reranking, exact keyword match
+
+Spread   = max_chunk_id - min_chunk_id in top-5 retrieved chunks
+           Chunks are ordered by textbook position (0=start, 1779=end).
+           Higher spread means chunks come from further apart in the book.
+Sections = number of distinct 50-chunk windows covered by top-5.
+           The textbook has ~36 sections. More sections = more breadth.
+KHR      = fraction of expected keywords found in retrieved chunks.
+====================================================================================================
+
+ID                                     Hop           ---Spread---            --Sections--            -----KHR-----     
+                                                    F      F+G        G      F     F+G       G       F      F+G       G
+----------------------------------------------------------------------------------------------------
+sh_wal_rule                            single      27     1207     1533      1       3       3    1.00     1.00    0.17
+sh_dirty_read                          single      87     1068     1040      3       3       2    0.80     0.80    0.00
+sh_2pl                                 single      53       16     1054      2       1       3    1.00     1.00    0.00
+sh_bptree_search                       single      30       28     1032      2       2       2    0.67     0.83    0.00
+sh_functional_dependency               single      25       17     1406      2       1       5    0.80     0.80    0.80
+sh_bcnf                                single      28       27     1024      2       2       3    0.80     0.80    0.00
+sh_checkpoint                          single      37     1230     1030      2       3       2    0.83     0.83    0.00
+sh_phantom_read                        single      70       76     1020      2       3       2    0.50     0.50    0.33
+sh_clustered_vs_unclustered            single     839      712     1042      3       3       2    0.50     0.50    0.17
+sh_conflict_serializable               single       5       30     1286      1       2       3    0.60     0.60    0.00
+sh_aries_overview                      single      11     1241      519      1       3       2    0.67     0.50    0.00
+sh_query_optimization                  single     759       28     1538      3       2       3    0.60     0.40    0.20
+mh_aries_steal_wal                     multi       55       47       19      2       2       1    1.00     1.00    0.00
+mh_strict2pl_cascading                 multi       62       10     1040      2       1       2    0.67     0.17    0.00
+mh_dpt_redo_scope                      multi       11      205     1033      1       2       2    1.00     1.00    0.17
+mh_steal_atomicity                     multi       22      171     1024      1       2       3    0.86     0.71    0.14
+mh_repeatable_read_phantom             multi       80       76     1041      3       3       2    0.50     0.50    0.17
+mh_no_force_commit                     multi       24     1207        7      1       2       1    0.71     0.86    0.00
+mh_clr_crash_during_undo               multi       43      200        9      2       3       1    0.83     0.83    0.17
+mh_bcnf_fd_preservation                multi       29       34       24      2       2       1    1.00     1.00    0.00
+mh_lsn_redo_undo                       multi        8      200       24      1       2       2    1.00     0.75    0.00
+mh_bptree_fanout_io                    multi       30       30     1028      2       2       2    0.71     0.71    0.14
+mh_mvcc_readers                        multi      436       79     1052      3       2       3    0.43     0.43    0.00
+mh_hash_join_memory                    multi       19       90     1027      2       3       2    0.86     0.86    0.43
+mh_deadlock_granularity                multi       21       16     1054      1       1       3    0.43     0.43    0.29
+----------------------------------------------------------------------------------------------------
+Single-hop avg (n=12)                             164      473     1127    2.0     2.3     2.7    0.73     0.71    0.14
+Multi-hop avg  (n=13)                              65      182      645    1.8     2.1     1.9    0.77     0.71    0.12
+
+====================================================================================================
+
+INTERPRETATION
+----------------------------------------------------------------------------------------------------
+FAISS      low spread, high KHR. Clusters tightly around the most semantically
+           similar passage. Great precision, low breadth.
+
+Graph-only very high spread (avg 1127 single / 645 multi), low KHR. BFS traversal
+           roams across the whole textbook via entity links but loses precision.
+           Without FAISS to anchor it, too many tangentially related chunks surface.
+
+FAISS+G    intermediate spread (avg 473 single / 182 multi), KHR close to FAISS.
+           The 0.7/0.3 fusion adds targeted breadth without killing precision.
+           For multi-hop questions spread nearly triples (65 -> 182) while
+           maintaining keyword coverage — the graph pulls in the second section
+           needed to construct a complete answer.
+
+====================================================================================================
+
+====================================================================================================
+MULTI-HOP DEEP DIVES — concrete examples of breadth difference
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+  mh_no_force_commit
+  Q:  What mechanism allows a database to commit a transaction without forcing its dirty pages to disk at commit time?
+  KW: ['no-force', 'commit', 'redo log', 'stable storage', 'durability', 'crash', 'buffer']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 24               1207               7        
+  Sections covered                       1                 2                 1        
+  KHR                                   0.71              0.86              0.00      
+  Chunk IDs                       [1243, 1222, 1238, 1225, 1219]  [1243, 36, 1219, 1222, 1238]  [0, 1, 3, 5, 7]
+
+  -- FAISS top-5  (spread=24, clustered) --
+  [chunk 1243 | sec~24]
+    In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block B 1 in main memory when another block B 2 needs to be brought into memory. If B 1 has been modified
+
+  [chunk 1222 | sec~24]
+    As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has committed but the system crashed before those changes could be stored in the database on disk. In ord
+
+  [chunk 1238 | sec~24]
+    Committing a transaction requires that its log records have been forced to disk. If a separate log flush is done for each transaction, each commit incurs a significant log write overhead. The rate of transaction commit can be increased using the group-commit technique. With this technique, instead of attempting to force the log as soon as a transaction completes, the system waits until several tra
+
+  [chunk 1225 | sec~24]
+    . Similarly, immediate modification of the database is a natural fit with two-phase locking, but deferred modification can also be used with two-phase locking. ## Page 917 19.3.4 Transaction Commit We say that a transaction has committed when its commit log record, which is the last log record of the transaction, has been output to stable storage; at that point all earlier log records have already
+
+  [chunk 1219 | sec~24]
+    . The old copy of the database is then deleted. The transaction is said to have been committed at the point where the updated db-pointer is written to disk. The implementation actually depends on the write to db- pointer being atomic; that is, either all its bytes are written or none of its bytes are written. Disk systems provide atomic updates to entire blocks, or at least to a disk sector
+
+  -- FAISS+Graph top-5  (spread=1207) --
+  [chunk 1243 | sec~24]
+    In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block B 1 in main memory when another block B 2 needs to be brought into memory. If B 1 has been modified
+
+  [chunk   36 | sec~0]  <<ADDED BY GRAPH>>
+    Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, the funds transfer must happen in its entirety or not at all. This all-or-none requirement is called
+
+  [chunk 1219 | sec~24]
+    . The old copy of the database is then deleted. The transaction is said to have been committed at the point where the updated db-pointer is written to disk. The implementation actually depends on the write to db- pointer being atomic; that is, either all its bytes are written or none of its bytes are written. Disk systems provide atomic updates to entire blocks, or at least to a disk sector
+
+  [chunk 1222 | sec~24]
+    As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has committed but the system crashed before those changes could be stored in the database on disk. In ord
+
+  [chunk 1238 | sec~24]
+    Committing a transaction requires that its log records have been forced to disk. If a separate log flush is done for each transaction, each commit incurs a significant log write overhead. The rate of transaction commit can be increased using the group-commit technique. With this technique, instead of attempting to force the log as soon as a transaction completes, the system waits until several tra
+
+  -- Graph-only top-5  (spread=7) --
+  [chunk    0 | sec~0]
+    Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database applications, old and new, share important common elements. The central aspect of the application is no
+
+  [chunk    1 | sec~0]
+    . Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselves ranging from simple items such as name or date of birth, to complex posts consisting of text, imag
+
+  [chunk    3 | sec~0]
+    . - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for tracking a user's product views, search terms, etc., for the purpose of identifying the best items to rec
+
+  [chunk    5 | sec~0]
+    . - The second mode is to support data analytics , that is, the processing of data to draw conclusions, and infer rules or decision procedures, which are then used to drive business decisions. Page 5 For example, banks need to decide whether to give a loan to a loan applicant, online advertisers need to decide which advertisement to show to a particular user. These tasks are addressed in two steps
+
+  [chunk    7 | sec~0]
+    . Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and the programs may be written in several programming languages. Moreover, the same information may be 
+
+
+----------------------------------------------------------------------------------------------------
+  mh_dpt_redo_scope
+  Q:  How does the dirty page table in ARIES limit the amount of work done during the redo pass?
+  KW: ['dirty page table', 'recLSN', 'pageLSN', 'redo pass', 'skip', 'ARIES']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 11               205               1033      
+  Sections covered                       1                 2                 2        
+  KHR                                   1.00              1.00              0.17      
+  Chunk IDs                       [1278, 1267, 1274, 1269, 1276]  [1267, 1274, 1269, 1277, 1072]  [0, 1, 3, 1032, 1033]
+
+  -- FAISS top-5  (spread=11, clustered) --
+  [chunk 1278 | sec~25]
+    . - Recovery optimizations : The DirtyPageTable can be used to prefetch pages during redo, instead of fetching a page only when the system finds a log record to be applied to the page. Out-of-order redo is also possible: Redo can be postponed on a page being fetched from  - disk and performed when the page is fetched. Meanwhile, other log records can continue to be processed. designed to improve c
+
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1274 | sec~25]
+    The redo pass repeats history by replaying every action that is not already reflected in the page on disk. The redo pass scans the log forward from RedoLSN. Whenever it finds an update log record, it takes this action: - Page 945 If the page is not in DirtyPageT able or if the LSN of the update log record is less than the RecLSN of the page in DirtyPageTable, then the redo pass skips the log recor
+
+  [chunk 1269 | sec~25]
+    Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate the log record on disk. Typically, ARIES splits a log into multiple log files, each of which has a fil
+
+  [chunk 1276 | sec~25]
+    . Thus, the redo pass must start at the log record with LSN 7564. Note that this LSN is less than the LSN of the checkpoint log record, since the ARIES checkpointing algorithm does not flush modified pages to stable storage. The DirtyPageTable at the end of analysis would include pages 4894, 7200 from the checkpoint log record, and 2390 which is updated by the log record with LSN 7570. At the end 
+
+  -- FAISS+Graph top-5  (spread=205) --
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1274 | sec~25]
+    The redo pass repeats history by replaying every action that is not already reflected in the page on disk. The redo pass scans the log forward from RedoLSN. Whenever it finds an update log record, it takes this action: - Page 945 If the page is not in DirtyPageT able or if the LSN of the update log record is less than the RecLSN of the page in DirtyPageTable, then the redo pass skips the log recor
+
+  [chunk 1269 | sec~25]
+    Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate the log record on disk. Typically, ARIES splits a log into multiple log files, each of which has a fil
+
+  [chunk 1277 | sec~25]  <<ADDED BY GRAPH>>
+    Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocation should not be undone since other transactions may have stored records in the page. Such operation
+
+  [chunk 1072 | sec~21]  <<ADDED BY GRAPH>>
+    .  Page 803 Thus, because of the failure, the state of the system no longer reflects a real state of the world that the database is supposed to capture. We term such a state an inconsistent state . We must ensure that such inconsistencies are not visible in a database system. Note, however, that the system must at some point be in an inconsistent state. Even if transaction T i is executed to compl
+
+  -- Graph-only top-5  (spread=1033) --
+  [chunk    0 | sec~0]
+    Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database applications, old and new, share important common elements. The central aspect of the application is no
+
+  [chunk    1 | sec~0]
+    . Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselves ranging from simple items such as name or date of birth, to complex posts consisting of text, imag
+
+  [chunk    3 | sec~0]
+    . - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for tracking a user's product views, search terms, etc., for the purpose of identifying the best items to rec
+
+  [chunk 1032 | sec~20]
+    . The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time required to find the best overall join order. The System R optimizer uses heuristics to push selectio
+
+  [chunk 1033 | sec~20]
+    . The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries (using the ∪, ∩, or - operation), the optimizer processes each component separately and combines the
+
+
+----------------------------------------------------------------------------------------------------
+  mh_lsn_redo_undo
+  Q:  How does the log sequence number serve both the redo pass and the undo pass in ARIES?
+  KW: ['LSN', 'pageLSN', 'redo pass', 'undo pass', 'CLR', 'undoNextLSN', 'prevLSN', 'ARIES']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 8                200                24       
+  Sections covered                       1                 2                 2        
+  KHR                                   1.00              0.75              0.00      
+  Chunk IDs                       [1267, 1269, 1275, 1274, 1272]  [1267, 1269, 1274, 1277, 1077]  [1026, 1033, 1035, 1042, 1050]
+
+  -- FAISS top-5  (spread=8, clustered) --
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1269 | sec~25]
+    Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate the log record on disk. Typically, ARIES splits a log into multiple log files, each of which has a fil
+
+  [chunk 1275 | sec~25]
+    The undo pass is relatively straightforward. It performs a single backward scan of the log, undoing all transactions in undo-list. The undo pass examines only log records of transactions in undo-list; the last LSN recorded during the analysis pass is used to find the last log record for each transaction in undo-list. Whenever an update log record is found, it is used to perform an undo (whether fo
+
+  [chunk 1274 | sec~25]
+    The redo pass repeats history by replaying every action that is not already reflected in the page on disk. The redo pass scans the log forward from RedoLSN. Whenever it finds an update log record, it takes this action: - Page 945 If the page is not in DirtyPageT able or if the LSN of the update log record is less than the RecLSN of the page in DirtyPageTable, then the redo pass skips the log recor
+
+  [chunk 1272 | sec~25]
+    ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and performs a redo, repeating history, to bring the database to a state it was in before the crash. - Und
+
+  -- FAISS+Graph top-5  (spread=200) --
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1269 | sec~25]
+    Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate the log record on disk. Typically, ARIES splits a log into multiple log files, each of which has a fil
+
+  [chunk 1274 | sec~25]
+    The redo pass repeats history by replaying every action that is not already reflected in the page on disk. The redo pass scans the log forward from RedoLSN. Whenever it finds an update log record, it takes this action: - Page 945 If the page is not in DirtyPageT able or if the LSN of the update log record is less than the RecLSN of the page in DirtyPageTable, then the redo pass skips the log recor
+
+  [chunk 1277 | sec~25]  <<ADDED BY GRAPH>>
+    Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocation should not be undone since other transactions may have stored records in the page. Such operation
+
+  [chunk 1077 | sec~21]  <<ADDED BY GRAPH>>
+    As we noted earlier, a transaction may not always complete its execution successfully. Such a transaction is termed aborted . If we are to ensure the atomicity property, an aborted transaction must have no effect on the state of the database. Thus, any changes that the aborted transaction made to the database must be undone. Once the changes caused by an aborted transaction have been undone, we sa
+
+  -- Graph-only top-5  (spread=24) --
+  [chunk 1026 | sec~20]
+    . Hence, it is not sufficient to find the best join order for each subset of the set of n given relations. Instead, we have to find the best join order for each subset, for each interesting sort order of the join result for that subset. The bestplan array can now be indexed by [ S , o ], where S is a set of relations, and o is an interesting sort order. The  FindBestPlan function can then be modif
+
+  [chunk 1033 | sec~20]
+    . The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries (using the ∪, ∩, or - operation), the optimizer processes each component separately and combines the
+
+  [chunk 1035 | sec~20]
+    Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are called correlation variables ). For instance, suppose we have the following query, to find the names 
+
+  [chunk 1042 | sec~20]
+    Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To simplify our description, we replace updates to a tuple by deletion of the tuple followed by insertion
+
+  [chunk 1050 | sec~21]
+    Another related optimization problem is that of materialized view selection , namely, 'What is the best set of views to materialize?' This decision must be made on the basis of the system workload , which is a sequence of queries and updates that reflects the typical load on the system. One simple criterion would be to select a set of materialized views that minimizes the overall execution time of
+
+
+----------------------------------------------------------------------------------------------------
+  mh_clr_crash_during_undo
+  Q:  How do compensation log records in ARIES prevent repeated undo operations if the system crashes during the undo pass?
+  KW: ['CLR', 'compensation log record', 'undoNextLSN', 'redo-only', 'crash during undo', 'ARIES']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 43               200                9        
+  Sections covered                       2                 3                 1        
+  KHR                                   0.83              0.83              0.17      
+  Chunk IDs                       [1267, 1272, 1275, 1277, 1234]  [1267, 1277, 1234, 1077, 1272]  [0, 1, 3, 7, 9]
+
+  -- FAISS top-5  (spread=43, clustered) --
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1272 | sec~25]
+    ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and performs a redo, repeating history, to bring the database to a state it was in before the crash. - Und
+
+  [chunk 1275 | sec~25]
+    The undo pass is relatively straightforward. It performs a single backward scan of the log, undoing all transactions in undo-list. The undo pass examines only log records of transactions in undo-list; the last LSN recorded during the analysis pass is used to find the last log record for each transaction in undo-list. Whenever an update log record is found, it is used to perform an undo (whether fo
+
+  [chunk 1277 | sec~25]
+    Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocation should not be undone since other transactions may have stored records in the page. Such operation
+
+  [chunk 1234 | sec~24]
+    First consider transaction rollback during normal operation (i.e., not during recovery from a system crash). Rollback of a transaction T i is performed as follows: 1. The log is scanned backward, and for each log record of T i of the form &lt; T i , X j , V 1 , V 2 &gt; that is found: - a. The value V 1 is written to data item Xj , and - b. A special redo-only log record &lt; T i , X j , V 1 &gt; 
+
+  -- FAISS+Graph top-5  (spread=200) --
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1277 | sec~25]
+    Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocation should not be undone since other transactions may have stored records in the page. Such operation
+
+  [chunk 1234 | sec~24]
+    First consider transaction rollback during normal operation (i.e., not during recovery from a system crash). Rollback of a transaction T i is performed as follows: 1. The log is scanned backward, and for each log record of T i of the form &lt; T i , X j , V 1 , V 2 &gt; that is found: - a. The value V 1 is written to data item Xj , and - b. A special redo-only log record &lt; T i , X j , V 1 &gt; 
+
+  [chunk 1077 | sec~21]  <<ADDED BY GRAPH>>
+    As we noted earlier, a transaction may not always complete its execution successfully. Such a transaction is termed aborted . If we are to ensure the atomicity property, an aborted transaction must have no effect on the state of the database. Thus, any changes that the aborted transaction made to the database must be undone. Once the changes caused by an aborted transaction have been undone, we sa
+
+  [chunk 1272 | sec~25]
+    ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and performs a redo, repeating history, to bring the database to a state it was in before the crash. - Und
+
+  -- Graph-only top-5  (spread=9) --
+  [chunk    0 | sec~0]
+    Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database applications, old and new, share important common elements. The central aspect of the application is no
+
+  [chunk    1 | sec~0]
+    . Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselves ranging from simple items such as name or date of birth, to complex posts consisting of text, imag
+
+  [chunk    3 | sec~0]
+    . - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for tracking a user's product views, search terms, etc., for the purpose of identifying the best items to rec
+
+  [chunk    7 | sec~0]
+    . Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and the programs may be written in several programming languages. Moreover, the same information may be 
+
+  [chunk    9 | sec~0]
+    . If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both the credit and debit occur, or that neither occur. That is, the funds transfer must be atomic -it mus
+
+
+----------------------------------------------------------------------------------------------------
+  mh_steal_atomicity
+  Q:  How does write-ahead logging ensure atomicity even when the steal buffer policy allows uncommitted pages to reach disk?
+  KW: ['write-ahead logging', 'steal', 'atomicity', 'undo', 'stable storage', 'crash', 'uncommitted']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 22               171               1024      
+  Sections covered                       1                 2                 3        
+  KHR                                   0.86              0.71              0.14      
+  Chunk IDs                       [1244, 1243, 1241, 1222, 1242]  [1072, 1077, 1243, 1242, 1073]  [1042, 1054, 30, 36, 37]
+
+  -- FAISS top-5  (spread=22, clustered) --
+  [chunk 1244 | sec~24]
+    . Further, the no-steal policy does not work with transactions that perform a large number of updates, since the buffer may get filled with updated pages that cannot be evicted to disk, and the transaction cannot then proceed. As a result, the standard approach taken by most systems is the steal policy. To illustrate the need for the write-ahead logging requirement, consider our banking example wi
+
+  [chunk 1243 | sec~24]
+    In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block B 1 in main memory when another block B 2 needs to be brought into memory. If B 1 has been modified
+
+  [chunk 1241 | sec~24]
+    So far, we have assumed that every log record is output to stable storage at the time it is created. This assumption imposes a high overhead on system execution for several reasons: Typically, output to stable storage is in units of blocks. In most cases, a log record is much smaller than a block. Thus, the output of each log record translates to a much larger output at the physical level. Further
+
+  [chunk 1222 | sec~24]
+    As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has committed but the system crashed before those changes could be stored in the database on disk. In ord
+
+  [chunk 1242 | sec~24]
+    . - Before a block of data in main memory can be output to the database (in nonvolatile storage), all log records pertaining to data in that block must have been output to stable storage.  Page 927 This rule is called the write-ahead logging (WAL) rule. (Strictly speaking, the WAL rule requires only that the undo information in the log has been output to stable storage, and it permits the redo inf
+
+  -- FAISS+Graph top-5  (spread=171) --
+  [chunk 1072 | sec~21]  <<ADDED BY GRAPH>>
+    .  Page 803 Thus, because of the failure, the state of the system no longer reflects a real state of the world that the database is supposed to capture. We term such a state an inconsistent state . We must ensure that such inconsistencies are not visible in a database system. Note, however, that the system must at some point be in an inconsistent state. Even if transaction T i is executed to compl
+
+  [chunk 1077 | sec~21]  <<ADDED BY GRAPH>>
+    As we noted earlier, a transaction may not always complete its execution successfully. Such a transaction is termed aborted . If we are to ensure the atomicity property, an aborted transaction must have no effect on the state of the database. Thus, any changes that the aborted transaction made to the database must be undone. Once the changes caused by an aborted transaction have been undone, we sa
+
+  [chunk 1243 | sec~24]
+    In Section 19.2.2, we described the use of a two-level storage hierarchy. The system stores the database in nonvolatile storage (disk), and brings blocks of data into main memory as needed. Since main memory is typically much smaller than the entire database, it may be necessary to overwrite a block B 1 in main memory when another block B 2 needs to be brought into memory. If B 1 has been modified
+
+  [chunk 1242 | sec~24]
+    . - Before a block of data in main memory can be output to the database (in nonvolatile storage), all log records pertaining to data in that block must have been output to stable storage.  Page 927 This rule is called the write-ahead logging (WAL) rule. (Strictly speaking, the WAL rule requires only that the undo information in the log has been output to stable storage, and it permits the redo inf
+
+  [chunk 1073 | sec~21]  <<ADDED BY GRAPH>>
+    . The durability property guarantees that, once a transaction completes successfully, all the if there is a system failure after the transaction updates that it carried out on the database persist, even completes execution. We assume for now that a failure of the computer system may result in loss of data in main memory, but data written to disk are never lost. Protection against loss of data on d
+
+  -- Graph-only top-5  (spread=1024) --
+  [chunk 1042 | sec~20]
+    Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To simplify our description, we replace updates to a tuple by deletion of the tuple followed by insertion
+
+  [chunk 1054 | sec~21]
+    Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is ≥ $100,000) must be handled carefully. If the update is done while the selection is being evaluated by an index scan, an updated tu
+
+  [chunk   30 | sec~0]
+    . The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attributes we want to capture in the database and how to group these attributes to form the various table
+
+  [chunk   36 | sec~0]
+    Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, the funds transfer must happen in its entirety or not at all. This all-or-none requirement is called
+
+  [chunk   37 | sec~0]
+    . For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, each program by itself does not transform the database from a consistent state to a new consistent stat
+
+
+----------------------------------------------------------------------------------------------------
+  mh_hash_join_memory
+  Q:  What makes a hash join faster than a nested-loop join, and when does this advantage disappear?
+  KW: ['hash join', 'nested-loop', 'hash table', 'memory', 'partition', 'I/O', 'probe']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 19                90               1027      
+  Sections covered                       2                 3                 2        
+  KHR                                   0.86              0.86              0.43      
+  Chunk IDs                       [947, 954, 938, 948, 935]  [1028, 947, 1024, 954, 938]  [1024, 1028, 5, 7, 1032]
+
+  -- FAISS top-5  (spread=19, clustered) --
+  [chunk  947 | sec~18]
+    Page 713 The idea behind the hash-join algorithm is this: Suppose that an r tuple and an s tuple satisfy the join condition; then, they have the same value for the join attributes. If that value is hashed to some value i , the r tuple has to be in r i and the s tuple in s i . Therefore, r tuples in r i need only be compared with s tuples in s i ; they do not need to be compared with s tuples in an
+
+  [chunk  954 | sec~19]
+    . The cost estimate goes down to b r + b s block transfers and two seeks. Indexed nested loops join can have a much lower cost than hash join in case the outer relation is small, and the index lookups fetch only a few tuples from the inner (indexed) relation. However, in case a secondary index is used, and the number of tuples in the outer relation is large, indexed nested loops join can have a ve
+
+  [chunk  938 | sec~18]
+    In a nested-loop join (Figure 15.5), if an index is available on the inner loop's join attribute, index lookups can replace file scans. For each tuple t r in the outer relation r , the index is used to look up tuples in s that will satisfy the join condition with tuple t r . This join method is called an indexed nested-loop join ; it can be used with existing indices, as well as with temporary ind
+
+  [chunk  948 | sec~18]
+    . In the course of the indexed nested-loop  Page 714 join, the system uses this hash index to retrieve records that match records in the probe input. The build and probe phases require only a single pass through both the build and probe inputs. It is straightforward to extend the hash-join algorithm to compute general equi-joins. The value n h must be chosen to be large enough such that, for each 
+
+  [chunk  935 | sec~18]
+    . We need only one seek for each scan on the inner relation s since it is read sequentially, and a total of b r seeks to read r , leading to a total of n r + b r seeks. In the best case, there is enough space for both relations to fit simultaneously in memory, so each block would have to be read only once; hence, only b r + b s block transfers would be required, along with two seeks. If one of the
+
+  -- FAISS+Graph top-5  (spread=90) --
+  [chunk 1028 | sec~20]  <<ADDED BY GRAPH>>
+    The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be handled by using equivalence rules. In this section we outline how to create a general-purpose cost-ba
+
+  [chunk  947 | sec~18]
+    Page 713 The idea behind the hash-join algorithm is this: Suppose that an r tuple and an s tuple satisfy the join condition; then, they have the same value for the join attributes. If that value is hashed to some value i , the r tuple has to be in r i and the s tuple in s i . Therefore, r tuples in r i need only be compared with s tuples in s i ; they do not need to be compared with s tuples in an
+
+  [chunk 1024 | sec~20]  <<ADDED BY GRAPH>>
+    . If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referred to as a relation scan ). 2 If there is any selection condition on S , other than those ensured by
+
+  [chunk  954 | sec~19]
+    . The cost estimate goes down to b r + b s block transfers and two seeks. Indexed nested loops join can have a much lower cost than hash join in case the outer relation is small, and the index lookups fetch only a few tuples from the inner (indexed) relation. However, in case a secondary index is used, and the number of tuples in the outer relation is large, indexed nested loops join can have a ve
+
+  [chunk  938 | sec~18]
+    In a nested-loop join (Figure 15.5), if an index is available on the inner loop's join attribute, index lookups can replace file scans. For each tuple t r in the outer relation r , the index is used to look up tuples in s that will satisfy the join condition with tuple t r . This join method is called an indexed nested-loop join ; it can be used with existing indices, as well as with temporary ind
+
+  -- Graph-only top-5  (spread=1027) --
+  [chunk 1024 | sec~20]  <<also in FAISS+G>>
+    . If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referred to as a relation scan ). 2 If there is any selection condition on S , other than those ensured by
+
+  [chunk 1028 | sec~20]  <<also in FAISS+G>>
+    The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be handled by using equivalence rules. In this section we outline how to create a general-purpose cost-ba
+
+  [chunk    5 | sec~0]
+    . - The second mode is to support data analytics , that is, the processing of data to draw conclusions, and infer rules or decision procedures, which are then used to drive business decisions. Page 5 For example, banks need to decide whether to give a loan to a loan applicant, online advertisers need to decide which advertisement to show to a particular user. These tasks are addressed in two steps
+
+  [chunk    7 | sec~0]
+    . Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and the programs may be written in several programming languages. Moreover, the same information may be 
+
+  [chunk 1032 | sec~20]
+    . The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time required to find the best overall join order. The System R optimizer uses heuristics to push selectio
+
+
+====================================================================================================
+SINGLE-HOP EXAMPLES — FAISS tight clusters (depth over breadth)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+  sh_conflict_serializable
+  Q:  What does it mean for a schedule to be conflict serializable?
+  KW: ['conflict serializable', 'serial schedule', 'conflict-equivalent', 'precedence graph', 'acyclic']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 5                 30               1286      
+  Sections covered                       1                 2                 3        
+  KHR                                   0.60              0.60              0.00      
+
+  -- FAISS top-5  (spread=5 — tight cluster) --
+  [chunk 1089 | sec~21]
+    . Figure 17.8 Schedule 6-a serial schedule that is equivalent to schedule 3. If a schedule S can be transformed into a schedule S ′ by a series of swaps of non-conflicting instructions, we say that S and S′ are conflict equivalent . 2 Page 816 Not all serial schedules are conflict equivalent to each other. For example, schedules 1 and 2 are not conflict equivalent. The concept of conflict equivale
+
+  [chunk 1091 | sec~21]
+    . 3 Returning to our previous examples, note that the precedence graphs for schedules 1 and 2 (Figure 17.10) indeed do not contain cycles. The precedence graph for schedule 4 (Figure 17.11), on the other hand, contains a  Page 818 cycle, indicating that this schedule is not conflict serializable. It is possible to have two schedules that produce the same outcome but that are not conflict equivalen
+
+  [chunk 1086 | sec~21]
+    Page 813 Before we can consider how the concurrency-control component of the database system can ensure serializability, we consider how to determine when a schedule is serializable. Certainly, serial schedules are serializable, but if steps of multiple transactions are interleaved, it is harder to determine whether a schedule is serializable. Since trans actions are programs, it is difficult to d
+
+  [chunk 1088 | sec~21]
+    . The write( A ) instruction of T 1 conflicts with the read( A ) instruction of T 2 . However, the write( A ) instruction of T 2 does not conflict with the read( B ) instruction of T 1 because the two instructions access different data items. Let I and J be consecutive instructions of a schedule S . If I and J are instructions of different transactions and I and J do not conflict, then we can swap
+
+  [chunk 1090 | sec~21]
+    . For example, the precedence graph for schedule 1 in Figure 17.10a contains the single edge T 1 → T 2 , since all the instructions of T 1 are executed before the first instruction of T 2 is executed. Similarly, Figure 17.10b shows the precedence graph for schedule 2 with the single edge T 2 → T 1 , since all the instructions of T 2 are executed before the first instruction of T 1 is executed.  Fi
+
+  -- Graph-only top-5  (spread=1286 — wide, crosses sections) --
+  [chunk 1538 | sec~30]
+    . Locks are obtained on the partitions/data items, updates up to that point are applied from the log, and the node is added to the list of replicas for the partitions or data items, before releasing the locks. Subsequent updates will be applied directly to the node, since it will be in the list of replicas. Reintegration is much easier with the majority-based protocols in Section 23.4.3.1, since t
+
+  [chunk  262 | sec~5]
+    . It is not sufficient to check referential integrity on inserts alone; we also need to consider updates of section , as well as deletes and updates to the referenced table time slot. The second trigger definition in Figure 5.9 considers the case of deletes to time\_slot. This trigger checks that the time\_slot\_id of the tuple being deleted is either still present in time\_slot, or that no tuple 
+
+  [chunk 1547 | sec~30]
+    . As an illustration, consider two global transactions T 1 and T 2 , each of which accesses and updates two data items, A and B , located at nodes N 1 and N 2 , respectively. Suppose that the local schedules are serializable. It is still possible to have a situation where, at node N 1 , T 2 follows T 1 , whereas, at N 2 , T 1 follows T 2 , resulting in a nonserializable global schedule. Indeed, ev
+
+  [chunk 1291 | sec~25]
+    A typical transaction-server system today consists of multiple processes accessing data in shared memory, as in Figure 20.1. The processes that form part of the database system include:  Figure 20.1 Shared memory and process structure. - Page 965 Server processes : These are processes that receive user queries (transactions), execute them, and send the results back. The queries may be submitted to
+
+  [chunk 1548 | sec~30]
+    . Some are based on imposing sufficient conditions to ensure global serializability. Others ensure only a form of consistency weaker than serializability but achieve this consistency by less restrictive means. There are several schemes to ensure global serializability in an environment where update transactions as well as read-only transactions can execute. Several of these schemes are based on th
+
+
+----------------------------------------------------------------------------------------------------
+  sh_aries_overview
+  Q:  What is the ARIES recovery algorithm?
+  KW: ['ARIES', 'analysis', 'redo', 'undo', 'write-ahead log', 'crash recovery']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 11               1241              519       
+  Sections covered                       1                 3                 2        
+  KHR                                   0.67              0.50              0.00      
+
+  -- FAISS top-5  (spread=11 — tight cluster) --
+  [chunk 1267 | sec~25]
+    The state of the art in recovery methods is best illustrated by the ARIES recovery method. The recovery technique that we described in Section 19.4, along with the logical undo logging techniques described in Section 19.8, are modeled after ARIES, but they have been simplified significantly to bring out key concepts and make them easier to understand. In contrast, ARIES uses a number of techniques
+
+  [chunk 1269 | sec~25]
+    Each log record in ARIES has a log sequence number (LSN) that uniquely identifies the record. The number is conceptually just a logical identifier whose value is greater for log records that occur later in the log. In practice, the LSN is generated in such a way that it can also be used to locate the log record on disk. Typically, ARIES splits a log into multiple log files, each of which has a fil
+
+  [chunk 1277 | sec~25]
+    Among other key features that ARIES provides are: - Nested top actions : ARIES allows the logging of operations that should not be undone even if a transaction gets rolled back; for example, if a transaction allocates a page to a relation, even if the  - transaction is rolled back, the page allocation should not be undone since other transactions may have stored records in the page. Such operation
+
+  [chunk 1278 | sec~25]
+    . - Recovery optimizations : The DirtyPageTable can be used to prefetch pages during redo, instead of fetching a page only when the system finds a log record to be applied to the page. Out-of-order redo is also possible: Redo can be postponed on a page being fetched from  - disk and performed when the page is fetched. Meanwhile, other log records can continue to be processed. designed to improve c
+
+  [chunk 1272 | sec~25]
+    ARIES recovers from a system crash in three passes.  - Analysis pass : This pass determines which transactions to undo, which pages were dirty at the time of the crash, and the LSN from which the redo pass should start. - Redo pass : This pass starts from a position determined during analysis and performs a redo, repeating history, to bring the database to a state it was in before the crash. - Und
+
+  -- Graph-only top-5  (spread=519 — wide, crosses sections) --
+  [chunk 1024 | sec~20]
+    . If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referred to as a relation scan ). 2 If there is any selection condition on S , other than those ensured by
+
+  [chunk 1026 | sec~20]
+    . Hence, it is not sufficient to find the best join order for each subset of the set of n given relations. Instead, we have to find the best join order for each subset, for each interesting sort order of the join result for that subset. The bestplan array can now be indexed by [ S , o ], where S is a set of relations, and o is an interesting sort order. The  FindBestPlan function can then be modif
+
+  [chunk 1030 | sec~20]
+    Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computational effort. Hence, optimizers use heuristics to reduce the cost of optimization. An example of a 
+
+  [chunk 1543 | sec~30]
+    . - Page 1131 The next piece of the solution is an idea called commit wait . The idea is as follows: After all locks have been acquired at all nodes, the local time t' is read at a coordinator node. We would like to use the true time as timestamp, but we don't have the exact value. Instead, the highest possible value of true time, namely, t' + ε, is used as a commit timestamp t c . The transaction
+
+  [chunk 1033 | sec~20]
+    . The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries (using the ∪, ∩, or - operation), the optimizer processes each component separately and combines the
+
+
+----------------------------------------------------------------------------------------------------
+  sh_functional_dependency
+  Q:  What is a functional dependency?
+  KW: ['functional dependency', 'attributes', 'tuples', 'agree', 'constraint']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 25                17               1406      
+  Sections covered                       2                 1                 5        
+  KHR                                   0.80              0.80              0.80      
+
+  -- FAISS top-5  (spread=25 — tight cluster) --
+  [chunk  388 | sec~7]
+    . 4 Functional dependencies allow us to express constraints that we cannot express with superkeys. In Section 7.1, we considered the schema: in\_dep ( ID , name, salary, dept\_name, building, budget ) in which the functional dependency dept\_name → budget holds because for each department (identified by dept\_name ) there is a unique budget amount. We denote the fact that the pair of attributes ( 
+
+  [chunk  406 | sec~8]
+    We shall see that, given a set F of functional dependencies on a schema, we can prove that certain other functional dependencies also hold on the schema. We say that such functional dependencies are 'logically implied' by F . When testing for normal forms, it is not sufficient to consider the given set of functional dependencies; rather, we need to consider all functional dependencies that hold on
+
+  [chunk  387 | sec~7]
+    Some of the most commonly used types of real-world constraints can be represented formally as keys (superkeys, candidate keys, and primary keys), or as functional dependencies, which we define below. In Section 2.3, we defined the notion of a superkey as a set of one or more attributes that, taken collectively, allows us to identify uniquely a tuple in the relation. We restate that definition here
+
+  [chunk  389 | sec~7]
+    . Thus, we have found a pair of tuples t 1 and t 2 such that t 1 [ C ] = t 2 [ C ], but t 1 [ A ] ≠ t 2 [ A ]. Figure 7.4 Sample instance of relation r .  Page 312 Some functional dependencies are said to be trivial because they are satisfied by all relations. For example, A → A is satisfied by all relations involving attribute A . Reading the definition of functional dependency literally, we see 
+
+  [chunk  412 | sec~8]
+    Suppose that we have a set of functional dependencies F on a relation schema. Whenever a user performs an update on the relation, the database system must ensure that the update does not violate any functional dependencies, that is, all the functional dependencies in F are satisfied in the new database state. The system must roll back the update if it violates any functional dependencies in the se
+
+  -- Graph-only top-5  (spread=1406 — wide, crosses sections) --
+  [chunk 1160 | sec~23]
+    The timestamp-ordering protocol can be extended to a multiversion protocol. With each transaction T i in the system, we associate a unique static timestamp, denoted by TS( T i ). The database system assigns this timestamp before the transaction starts execution, as described in Section 18.5. With each data item Q , a sequence of versions &lt;Q 1 , Q 2 ,..., Q m &gt; is associated. Each version Q k
+
+  [chunk 1677 | sec~33]
+    Performance of queries can sometimes be improved by tuning of the logical schema. For example, within the constraints of the chosen normal form, it is possible to partition relations vertically. Consider the course relation, with the schema: course ( course\_id, title, dept\_name, credits ) for which course\_id is a key. Within the constraints of the normal forms (BCNF and 3NF), we can partition t
+
+  [chunk  398 | sec~7]
+    . With this new E-R diagram, the schemas for the instructor, department, and student relations are unchanged. However, the schema derived from the dept\_advisor relationship set is now: dept\_advisor ( s\_ID, i\_ID , dept\_name ) Although not specified in the E-R diagram, suppose we have the additional constraint that 'an instructor can act as advisor for only a single department.' Then, the follo
+
+  [chunk  271 | sec~5]
+    Page 215 One way to write the preceding query is to use iteration: First find those courses that are a direct prerequisite of CS347, then those courses that are a prerequisite of all the courses under the first set, and so on. This iterative process continues until we reach an iteration where no courses are added. Figure 5.14 shows a function findAllPrereqs(cid) to carry out this task; the functio
+
+  [chunk  400 | sec~8]
+    BCNF requires that all nontrivial dependencies be of the form α → β, where α is a superkey. Third normal form (3NF) relaxes this constraint slightly by allowing certain nontrivial functional dependencies whose left side is not a superkey. Before we define 3NF, we recall that a candidate key is a minimal superkey-that is, a superkey no proper subset of which is also a superkey.  A relation schema R
+
+
+----------------------------------------------------------------------------------------------------
+  sh_wal_rule
+  Q:  What is the write-ahead logging rule?
+  KW: ['write-ahead', 'log record', 'stable storage', 'before', 'disk', 'undo']
+
+                                       FAISS          FAISS+Graph        Graph-only   
+  Spread                                 27               1207              1533      
+  Sections covered                       1                 3                 3        
+  KHR                                   1.00              1.00              0.17      
+
+  -- FAISS top-5  (spread=27 — tight cluster) --
+  [chunk 1242 | sec~24]
+    . - Before a block of data in main memory can be output to the database (in nonvolatile storage), all log records pertaining to data in that block must have been output to stable storage.  Page 927 This rule is called the write-ahead logging (WAL) rule. (Strictly speaking, the WAL rule requires only that the undo information in the log has been output to stable storage, and it permits the redo inf
+
+  [chunk 1241 | sec~24]
+    So far, we have assumed that every log record is output to stable storage at the time it is created. This assumption imposes a high overhead on system execution for several reasons: Typically, output to stable storage is in units of blocks. In most cases, a log record is much smaller than a block. Thus, the output of each log record translates to a much larger output at the physical level. Further
+
+  [chunk 1217 | sec~24]
+    The most widely used structure for recording database modifications is the log . The log is a sequence of log records , recording all the update activities in the database. There are several types of log records. An update log record describes a single database write. It has these fields: - Transaction identifier , which is the unique identifier of the transaction that performed the write operatio
+
+  [chunk 1244 | sec~24]
+    . Further, the no-steal policy does not work with transactions that perform a large number of updates, since the buffer may get filled with updated pages that cannot be evicted to disk, and the transaction cannot then proceed. As a result, the standard approach taken by most systems is the steal policy. To illustrate the need for the write-ahead logging requirement, consider our banking example wi
+
+  [chunk 1222 | sec~24]
+    As we noted earlier, a transaction creates a log record prior to modifying the database. The log records allow the system to undo changes made by a transaction in the event that the transaction must be aborted; they allow the system also to redo changes made by a transaction if the transaction has committed but the system crashed before those changes could be stored in the database on disk. In ord
+
+  -- Graph-only top-5  (spread=1533 — wide, crosses sections) --
+  [chunk 1536 | sec~30]
+    . This can be ensured using leases as we saw earlier in Section 23.7. Furthermore, this approach requires an efficient way for the new coordinator to ensure that it has the latest version of all data items. This can be done by having a log at each node and ensuring the logs are consistent with each other. This problem is by itself a nontrivial process, but it can be solved using distributed consen
+
+  [chunk 1538 | sec~30]
+    . Locks are obtained on the partitions/data items, updates up to that point are applied from the log, and the node is added to the list of replicas for the partitions or data items, before releasing the locks. Subsequent updates will be applied directly to the node, since it will be in the list of replicas. Reintegration is much easier with the majority-based protocols in Section 23.4.3.1, since t
+
+  [chunk 1028 | sec~20]
+    The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be handled by using equivalence rules. In this section we outline how to create a general-purpose cost-ba
+
+  [chunk    5 | sec~0]
+    . - The second mode is to support data analytics , that is, the processing of data to draw conclusions, and infer rules or decision procedures, which are then used to drive business decisions. Page 5 For example, banks need to decide whether to give a loan to a loan applicant, online advertisers need to decide which advertisement to show to a particular user. These tasks are addressed in two steps
+
+  [chunk 1030 | sec~20]
+    Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computational effort. Hence, optimizers use heuristics to reduce the cost of optimization. An example of a 
+
+
+====================================================================================================
+END OF REPORT
+====================================================================================================

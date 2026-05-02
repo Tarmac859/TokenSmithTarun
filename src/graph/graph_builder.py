@@ -15,7 +15,6 @@ Or call build_graph_index() from a custom script.
 import json
 import pickle
 import re
-from pathlib import Path
 from typing import List, Tuple
 
 from tqdm import tqdm
@@ -48,26 +47,42 @@ def extract_triples(
     max_tokens: int = 256,
 ) -> List[Tuple[str, str, str]]:
 
-    prompt = _TRIPLE_PROMPT.format(text=text[:900])   # cap input length
+    prompt = _TRIPLE_PROMPT.format(text=text[:900])
     try:
         result = model.create_completion(
             prompt,
             max_tokens=max_tokens,
             temperature=0.0,
-            stop=["\n\n", "```", "Note"],
+            stop=["```", "Note:"],
         )
         raw = result["choices"][0]["text"].strip()
 
-        # Pull out the first JSON array in the response
-        match = re.search(r"\[.*\]", raw, re.DOTALL)
-        if not match:
+        # The model sometimes prepends "[] " before the real array, or uses
+        # dict format {"entity1":..., "relation":..., "entity2":...} instead
+        # of arrays. Scan every '[' position and take the first non-empty parse.
+        parsed = None
+        for m in re.finditer(r"\[", raw):
+            try:
+                candidate = json.loads(raw[m.start():])
+                if candidate:
+                    parsed = candidate
+                    break
+            except json.JSONDecodeError:
+                continue
+
+        if not parsed:
             return []
 
-        parsed = json.loads(match.group())
         triples = []
         for item in parsed:
             if isinstance(item, list) and len(item) == 3:
                 h, r, t = str(item[0]).strip(), str(item[1]).strip(), str(item[2]).strip()
+                if h and r and t:
+                    triples.append((h, r, t))
+            elif isinstance(item, dict):
+                h = str(item.get("entity1", item.get("head", ""))).strip()
+                r = str(item.get("relation", "")).strip()
+                t = str(item.get("entity2", item.get("tail", ""))).strip()
                 if h and r and t:
                     triples.append((h, r, t))
         return triples
@@ -82,6 +97,7 @@ def build_graph_index(
     n_ctx: int = 2048,
     n_gpu_layers: int = -1,
 ) -> None:
+    import sys
     model = Llama(
         model_path=gen_model_path,
         n_ctx=n_ctx,
@@ -89,20 +105,29 @@ def build_graph_index(
         n_gpu_layers=n_gpu_layers,
     )
 
-    print(f"Building graph index for {len(chunks):,} chunks...")
+    # Single query to get all already-processed chunk IDs
+    done_ids = graph_store.get_processed_chunk_ids()
+    already_done = len(done_ids)
+    print(f"Building graph index for {len(chunks):,} chunks "
+          f"({already_done:,} already processed, resuming)...", flush=True)
     total_triples = 0
+    skipped = 0
 
-    for chunk_id, chunk_text in enumerate(tqdm(chunks, desc="Extracting triples")):
+    for chunk_id, chunk_text in enumerate(tqdm(chunks, desc="Extracting triples", file=sys.stdout)):
+        if chunk_id in done_ids:
+            skipped += 1
+            continue
         triples = extract_triples(chunk_text, model)
-        for head, relation, tail in triples:
-            graph_store.add_triple(head, relation, tail, chunk_id)
+        graph_store.add_triples_batch(triples, chunk_id)
+        graph_store.mark_processed(chunk_id)
         total_triples += len(triples)
 
     print(
         f"\nGraph index complete: "
         f"{graph_store.entity_count():,} entities, "
         f"{graph_store.edge_count():,} edges "
-        f"({total_triples:,} triples extracted)"
+        f"({total_triples:,} new triples, {skipped:,} chunks skipped)",
+        flush=True,
     )
 
 
@@ -119,7 +144,8 @@ def main():
 
     chunks = pickle.load(open(chunks_path, "rb"))
     store  = GraphStore(db_path=db_path)
-    build_graph_index(chunks, gen_model_path=gen_model, graph_store=store)
+    # n_gpu_layers=0 forces CPU-only — avoids Vulkan driver crashes on long runs
+    build_graph_index(chunks, gen_model_path=gen_model, graph_store=store, n_gpu_layers=0)
 
 
 if __name__ == "__main__":

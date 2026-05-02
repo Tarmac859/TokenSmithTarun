@@ -44,6 +44,11 @@ class GraphStore:
                     FOREIGN KEY(tail_id) REFERENCES entities(id)
                 )
             """)
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS processed_chunks (
+                    chunk_id INTEGER PRIMARY KEY
+                )
+            """)
             conn.execute("CREATE INDEX IF NOT EXISTS idx_edges_head ON edges(head_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_edges_tail ON edges(tail_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_entity_name ON entities(name)")
@@ -52,32 +57,46 @@ class GraphStore:
     # Write
     # ------------------------------------------------------------------
     def add_triple(self, head: str, relation: str, tail: str, chunk_id: int):
-        """Insert a (head, relation, tail) triple linked to chunk_id."""
+        self.add_triples_batch([(head, relation, tail)], chunk_id)
+
+    def add_triples_batch(self, triples: list, chunk_id: int):
+        if not triples:
+            return
+        with sqlite3.connect(self.db_path) as conn:
+            for head, relation, tail in triples:
+                head, relation, tail = head.strip(), relation.strip(), tail.strip()
+                conn.execute("INSERT OR IGNORE INTO entities(name) VALUES (?)", (head,))
+                head_id = conn.execute(
+                    "SELECT id FROM entities WHERE name=?", (head,)
+                ).fetchone()[0]
+                conn.execute("INSERT OR IGNORE INTO entities(name) VALUES (?)", (tail,))
+                tail_id = conn.execute(
+                    "SELECT id FROM entities WHERE name=?", (tail,)
+                ).fetchone()[0]
+                conn.execute(
+                    "INSERT INTO edges(head_id, relation, tail_id, chunk_id) VALUES (?,?,?,?)",
+                    (head_id, relation, tail_id, chunk_id),
+                )
+
+    def has_chunk(self, chunk_id: int) -> bool:
+        with sqlite3.connect(self.db_path) as conn:
+            count = conn.execute(
+                "SELECT COUNT(*) FROM processed_chunks WHERE chunk_id=?", (chunk_id,)
+            ).fetchone()[0]
+        return count > 0
+
+    def mark_processed(self, chunk_id: int):
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                "INSERT OR IGNORE INTO entities(name) VALUES (?)", (head.strip(),)
+                "INSERT OR IGNORE INTO processed_chunks(chunk_id) VALUES (?)", (chunk_id,)
             )
-            head_id = conn.execute(
-                "SELECT id FROM entities WHERE name=?", (head.strip(),)
-            ).fetchone()[0]
 
-            conn.execute(
-                "INSERT OR IGNORE INTO entities(name) VALUES (?)", (tail.strip(),)
-            )
-            tail_id = conn.execute(
-                "SELECT id FROM entities WHERE name=?", (tail.strip(),)
-            ).fetchone()[0]
-
-            conn.execute(
-                "INSERT INTO edges(head_id, relation, tail_id, chunk_id) VALUES (?,?,?,?)",
-                (head_id, relation.strip(), tail_id, chunk_id),
-            )
+    def get_processed_chunk_ids(self) -> set:
+        with sqlite3.connect(self.db_path) as conn:
+            rows = conn.execute("SELECT chunk_id FROM processed_chunks").fetchall()
+        return {row[0] for row in rows}
 
     def get_chunk_ids_for_entity(self, entity_name: str, hops: int = 2) -> Set[int]:
-        """
-        BFS traversal up to `hops` from any entity whose name contains
-        entity_name (case-insensitive), collecting all linked chunk IDs.
-        """
         chunk_ids: Set[int] = set()
         with sqlite3.connect(self.db_path) as conn:
             seed_rows = conn.execute(

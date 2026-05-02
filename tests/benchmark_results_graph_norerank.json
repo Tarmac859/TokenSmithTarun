@@ -1,0 +1,1862 @@
+[
+  {
+    "id": "sh_wal_rule",
+    "hop": "single",
+    "question": "What is the write-ahead logging rule?",
+    "answer": "The write-ahead logging rule, as described in the text, is a          \n mechanism used to ensure that updates to data items are recorded in a log at  \n each node in a distributed system. This log ensures that the updates are      \n consistent across all nodes. The rule is crucial for maintaining data         \n integrity and consistency in distributed systems. It requires that before any \n update is applied to a data item, it must first be recorded in the log. This  \n ensures that if a node fails, the system can recover by replaying the log to  \n restore the state of the system to a consistent point before the failure.     \n                                                                               \n\nThe write-ahead logging rule is a fundamental step in implementing             \nfault-tolerant replication of data, and it is often used in conjunction with   \ndistributed consensus protocols to ensure that all nodes have the same version \nof the data. This approach is particularly important for systems that require  \nstrong consistency guarantees, such as database systems.                       \n\n<<>> This explanation is based on the provided text, which describes           \nwrite-ahead logging as a crucial step in maintaining consistency in distributed\nsystems, especially in the context of fault-tolerant replication and recovery  \nmechanisms.",
+    "keyword_hit_rate": 0.16666666666666663,
+    "missing_keywords": [
+      "write-ahead",
+      "log record",
+      "stable storage",
+      "disk",
+      "undo"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1536,
+        "snippet": ". This can be ensured using leases as we saw earlier in Section 23.7. Furthermore, this approach requires an efficient way for the new coordinator to ensure that it has the latest version of all data items. This can be done by having a log at each node and ensuring the logs are consistent with each ",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1538,
+        "snippet": ". Locks are obtained on the partitions/data items, updates up to that point are applied from the log, and the node is added to the list of replicas for the partitions or data items, before releasing the locks. Subsequent updates will be applied directly to the node, since it will be in the list of r",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1028,
+        "snippet": "The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be ha",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 5,
+        "snippet": ". - The second mode is to support data analytics , that is, the processing of data to draw conclusions, and infer rules or decision procedures, which are then used to drive business decisions. Page 5 For example, banks need to decide whether to give a loan to a loan applicant, online advertisers nee",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1543,
+        "snippet": ". - Page 1131 The next piece of the solution is an idea called commit wait . The idea is as follows: After all locks have been acquired at all nodes, the local time t' is read at a coordinator node. We would like to use the true time as timestamp, but we don't have the exact value. Instead, the high",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 525,
+        "snippet": ". For applications that require higher security, the server may invalidate (drop) the session after a time-out period, or when the user logs out. (Typically a user logs out by clicking on a logout button, which submits a logout form, whose action is to invalidate the current session.) Invalidating a",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1552,
+        "snippet": ". This last step requires that inconsistent copies of data items be identified; if one is an earlier version of the other, the earlier version can be replaced by the later version. It is possible, however, that the two copies were the result of independent updates to a common base copy. A scheme for",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 529,
+        "snippet": ". 4 If the user is properly authenticated, the login servlet would execute getSession(true), which would return a new session object. T o create a new session, the server would internally carry out the following tasks: set a cookie (called, for example, sessionId) with a session identifier as its as",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1554,
+        "snippet": ". A transaction may then request a version with required freshness properties, for example not more than 10 minutes old. If a local replica has a version of the data item satisfying the freshness criterion, it can be used; otherwise, the read may have to be sent to the primary node. Consider, for ex",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_dirty_read",
+    "hop": "single",
+    "question": "What is a dirty read in transaction processing?",
+    "answer": "A dirty read occurs in transaction processing when a transaction reads data    \nthat has been modified but not yet committed by another transaction. This      \nresults in the data being read by the transaction being inconsistent or        \nout-of-date. In other words, the transaction sees the data in an \"uncommitted\" \nstate, which can lead to incorrect results or inconsistencies in the database. \n\nFor example, if two transactions are updating the same record at the same time,\na dirty read would occur if one transaction reads the record before the other  \nhas committed its changes. This can lead to situations where the data appears  \nto have been changed by one transaction, but the changes are not actually      \ncommitted, leading to an inconsistent database state.                          \n\n<<>>",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "dirty read",
+      "uncommitted",
+      "abort",
+      "isolation",
+      "transaction"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 7,
+        "snippet": ". Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 9,
+        "snippet": ". If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both t",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1052,
+        "snippet": "Many queries fetch results sorted on some attributes, and require only the top K results for some K . Sometimes the bound K is specified explicitly. For example, some databases support a limit K clause which results in only the top K results being returned by the query. Other databases support alter",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_2pl",
+    "hop": "single",
+    "question": "What is the two-phase locking protocol?",
+    "answer": "The two-phase locking (2PL) protocol is a concurrency control mechanism used in\ndatabase systems to manage concurrent transactions and ensure data consistency.\nHere's a breakdown of how it works:                                            \n\n 1 Locking Phase: In the first phase, a transaction acquires all the locks it  \n   needs to access the data it intends to modify. This phase is called the     \n   \"acquire\" phase. During this phase, the transaction requests locks on all   \n   the data items it intends to modify, ensuring that no other transaction can \n   modify these items until the transaction has completed.                     \n 2 Execution Phase: In the second phase, the transaction executes its          \n   operations. During this phase, the transaction cannot acquire any new locks.\n   It can only release locks that it no longer needs. This phase is called the \n   \"hold\" phase.                                                               \n 3 Commit Phase: If a transaction successfully completes its operations (i.e., \n   it has executed the \"hold\" phase), it can then release all the locks it has \n   acquired. This phase is called the \"release\" phase. If the transaction fails\n   to complete its operations, it must release all the locks it has acquired to\n   ensure that other transactions can proceed.                                 \n\nThe two-phase locking protocol ensures that transactions are isolated from each\nother and that the database remains consistent. However, it can lead to        \ninefficiencies if a transaction fails in the \"hold\" phase, as it must wait for \nall locks to be released before it can commit or abort.                        \n\n2PL is a fundamental concept in concurrency control and is often used as a     \nbaseline for more advanced techniques like the three-phase locking protocol and\nthe MVCC (Multi-Version Concurrency Control) approach.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "two-phase locking",
+      "growing phase",
+      "shrinking phase",
+      "lock",
+      "serializability"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1065,
+        "snippet": ".   PAR T 7 ## MANAGEMENT The term transaction refers to a collection of operations that form a single logical unit of work. For instance, transfer of money from one account to another is a transaction consisting of two updates, one to each account. It is important that either all actions of a trans",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1066,
+        "snippet": ". Taken as a whole, the transaction-management component of a database system allows application developers to focus on the implementation of individual transactions, ignoring the issues of concurrency and fault tolerance.  ## Transactions Often, a collection of several operations on the database ap",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1067,
+        "snippet": "Page 800 A transaction is a unit of program execution that accesses and possibly updates various data items. Usually, a transaction is initiated by a user program written in a highlevel data-manipulation language (typically SQL), or programming language (e.g., C++ or Java), with embedded database ac",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_bptree_search",
+    "hop": "single",
+    "question": "How does a B+ tree support search operations?",
+    "answer": "A B+ tree supports search operations efficiently by organizing data in a way   \nthat allows for quick access to the information stored within the tree. Here's \nhow it works:                                                                  \n\n 1 Node Structure: Each node in a B+ tree contains keys and pointers. The keys \n   are used to partition the data, and the pointers point to the child nodes or\n   the actual data records.                                                    \n 2 Key Distribution: Keys are distributed across the nodes such that each node \n   contains a range of keys. This means that each node can have fewer keys than\n   its maximum capacity, which helps in reducing the height of the tree.       \n 3 Leaf Nodes: All leaf nodes are at the same level, and they contain the      \n   actual data records. This makes it easy to traverse from one leaf node to   \n   another, as they are all at the same depth.                                 \n 4 Pointer Organization: Each node (except the root) has at least half of its  \n   capacity filled with pointers. This ensures that the tree remains balanced  \n   and that the search operations are efficient.                               \n 5 Search Algorithm:                                                           \n    \u2022 Start at the Root: Begin the search at the root node.                    \n    \u2022 Compare Key with Query: Compare the query key with the keys in the       \n      current node.                                                            \n    \u2022 Move to the Appropriate Child: If the query key matches a key in the     \n      node, proceed to the child node pointed to by that key.                  \n    \u2022 Repeat: If the query key is less than the key in the node, move to the   \n      left child; if it is greater, move to the right child.                   \n    \u2022 End at a Leaf Node: Continue this process until you reach a leaf node.   \n    \u2022 Check the Data: Once at a leaf node, check the data records to see if    \n      they match the query.                                                    \n 6 Efficiency: The structure of the B+ tree ensures that the search operations \n   are efficient because:                                                      \n    \u2022 Balanced Tree: The tree remains balanced, ensuring that the height of the\n      tree is",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "B+ tree",
+      "root",
+      "leaf node",
+      "search key",
+      "internal node",
+      "pointer"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1028,
+        "snippet": "The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be ha",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1032,
+        "snippet": ". The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time r",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1049,
+        "snippet": "Query optimization can be performed by treating materialized views just like regular relations. However, materialized views offer further opportunities for optimization: - Rewriting queries to use materialized views: Page 783 Suppose a materialized view v = r \u00e2\u2039\u02c6 s is available, and a user submits a",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_functional_dependency",
+    "hop": "single",
+    "question": "What is a functional dependency?",
+    "answer": "",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "functional dependency",
+      "attributes",
+      "tuples",
+      "agree",
+      "constraint"
+    ],
+    "retrieved_chunks": []
+  },
+  {
+    "id": "sh_bcnf",
+    "hop": "single",
+    "question": "What is Boyce-Codd Normal Form (BCNF)?",
+    "answer": "Boyce-Codd Normal Form (BCNF) is a stricter form of normalization in database  \ntheory, which is a more advanced level of normalization beyond the Third Normal\nForm (3NF). A relation (table) is in BCNF if and only if for every functional  \ndependency X \u2192 Y, X is a superkey.                                             \n\nIn simpler terms, a relation is in BCNF if every determinant (the left-hand    \nside of a functional dependency) is a superkey. A superkey is a set of         \nattributes that can uniquely identify a tuple in the relation.                 \n\nBCNF is considered a stronger form of normalization because it ensures that no \ndeterminant is a proper subset of a superkey, which helps in avoiding          \ninsertion, update, and deletion anomalies. However, achieving BCNF is often    \nmore challenging and may require more complex database design strategies       \ncompared to 3NF.                                                               \n\nIt's worth noting that achieving BCNF is not always necessary for practical    \ndatabase design, as it is often sufficient to achieve 3NF or even 2NF. The     \ndecision to apply BCNF depends on the specific requirements and constraints of \nthe database system and the data being managed.",
+    "keyword_hit_rate": 0.19999999999999996,
+    "missing_keywords": [
+      "BCNF",
+      "superkey",
+      "functional dependency",
+      "non-trivial"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 513,
+        "snippet": "Page 404 Although many people interact with databases, very few people use a query language to interact with a database system directly. The most common way in which users interact with databases is through an application program that provides a user interface at the front end and interfaces with a ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 515,
+        "snippet": ". Browsers use a standardized syntax, the HyperText Markup Language ( HTML ) standard, which supports both formatted display of information and creation of forms-based interfaces. The HTML standard is independent of the operating system or  - browser, and pretty much every computer today has a be ac",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1540,
+        "snippet": "The multiversion two-phase locking (MV2PL) protocol, described in Section 18.7.2, combines the benefits of lockfree read-only transactions with the serializability guarantees of two-phase locking. Read-only transactions see a snapshot at a point in time, while update transactions use two-phase locki",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 7,
+        "snippet": ". Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and ",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 9,
+        "snippet": ". If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both t",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 523,
+        "snippet": ". But the connection may then be closed, and the next request could come over a new connection. In contrast, when a user logs on to a computer, or connects to a database using ODBC or JDBC, a session is created, and session information is retained at the server and the client until the session is te",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_checkpoint",
+    "hop": "single",
+    "question": "What is the purpose of a checkpoint in database recovery?",
+    "answer": "In database recovery, a checkpoint serves the purpose of marking a point in the\ntransaction log where the database system can safely stop and then resume from \nthat point in case of a failure. This allows the system to recover to a        \nconsistent state without having to reprocess all transactions from the         \nbeginning. Checkpoints are typically used to reduce the amount of work needed  \nto recover from a failure, by ensuring that the system can restart from a known\nconsistent state rather than from the start of the log. This is crucial for    \nmaintaining the integrity and availability of the database system, especially  \nin environments where transactions are long-running or critical.               \n\n<<<END_ANSWER>>> This explanation captures the essence of what a checkpoint is \nand its primary function in database recovery.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "checkpoint",
+      "log",
+      "dirty pages",
+      "flush",
+      "redo",
+      "recovery"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 3,
+        "snippet": ". - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for track",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 9,
+        "snippet": ". If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both t",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 12,
+        "snippet": "Underlying the structure of a database is the data model : a collection of conceptual tools for describing data, data relationships, data semantics, and consistency constraints. There are a number of different data models that we shall cover in the text. The data models can be classified into four d",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1041,
+        "snippet": ". Views can be maintained by manually written code: That is, every piece of code that updates the salary value can be modified to also update the total salary amount for the corresponding department. However, this approach is error prone, since it is easy to miss some places where the salary is upda",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_phantom_read",
+    "hop": "single",
+    "question": "What is a phantom read?",
+    "answer": "A phantom read occurs in a database system when a transaction reads   \n the same data multiple times, and the results of those reads appear different \n from the first read. This happens because the transaction reads data that was \n inserted or deleted by other transactions that occurred between the first and \n second reads. Essentially, it's a situation where the same data appears to    \n change or \"phantom\" between the times a transaction reads it.                 \n                                                                               \n\nIn the context of multiversion concurrency control (MVCC), a phantom read can  \nhappen when a transaction reads a snapshot of the database at a certain point  \nin time, and then later reads the same snapshot again. If other transactions   \nhave committed updates between these reads, those updates can appear as changes\nto the data, leading to a situation where the transaction sees different       \nresults when it reads the same data multiple times.                            \n\nThis phenomenon is particularly problematic in systems that do not properly    \nmanage transactions and their visibility, as it can lead to inconsistent       \nresults and data corruption. To mitigate phantom reads, MVCC systems use       \ntechniques like snapshot isolation, which ensures that a transaction sees a    \nconsistent view of the database at a specific point in time, and that this view\nremains consistent even if other transactions modify the database between      \nreads.",
+    "keyword_hit_rate": 0.16666666666666663,
+    "missing_keywords": [
+      "phantom",
+      "new rows",
+      "inserted",
+      "re-execute",
+      "committed"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1538,
+        "snippet": ". Locks are obtained on the partitions/data items, updates up to that point are applied from the log, and the node is added to the list of replicas for the partitions or data items, before releasing the locks. Subsequent updates will be applied directly to the node, since it will be in the list of r",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1540,
+        "snippet": "The multiversion two-phase locking (MV2PL) protocol, described in Section 18.7.2, combines the benefits of lockfree read-only transactions with the serializability guarantees of two-phase locking. Read-only transactions see a snapshot at a point in time, while update transactions use two-phase locki",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1543,
+        "snippet": ". - Page 1131 The next piece of the solution is an idea called commit wait . The idea is as follows: After all locks have been acquired at all nodes, the local time t' is read at a coordinator node. We would like to use the true time as timestamp, but we don't have the exact value. Instead, the high",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1547,
+        "snippet": ". As an illustration, consider two global transactions T 1 and T 2 , each of which accesses and updates two data items, A and B , located at nodes N 1 and N 2 , respectively. Suppose that the local schedules are serializable. It is still possible to have a situation where, at node N 1 , T 2 follows ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 527,
+        "snippet": ". The form specifies that the HTTP get mechanism is used for transmitting parameters. So the doGet() method of the servlet, as defined in the code, is invoked. Each servlet request results in a new thread within which the call is executed, so multiple requests can be handled in parallel. Any values ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1554,
+        "snippet": ". A transaction may then request a version with required freshness properties, for example not more than 10 minutes old. If a local replica has a version of the data item satisfying the freshness criterion, it can be used; otherwise, the read may have to be sent to the primary node. Consider, for ex",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_clustered_vs_unclustered",
+    "hop": "single",
+    "question": "What is the difference between a clustered and an unclustered index?",
+    "answer": "The provided text excerpt does not contain information about clustered and     \nunclustered indexes. The text primarily discusses various aspects of database  \nmanagement, including query optimization, data types, integrity constraints,   \nand the conceptual design process. For a detailed explanation of clustered and \nunclustered indexes, you would need to refer to a database management textbook \nor resource that covers SQL Server or relational database management systems in\ngeneral.                                                                       \n\nClustered and unclustered indexes are concepts specific to SQL Server and other\nrelational database management systems (RDBMS) that organize data differently: \n\n 1 Clustered Index:                                                            \n    \u2022 A clustered index physically organizes the data rows in the table in the \n      order of the index key.                                                  \n    \u2022 Only one clustered index can exist per table.                            \n    \u2022 The table itself is the clustered index. If a clustered index is dropped,\n      the table is reorganized to remove the index, and the data is no longer  \n      organized in the order of the clustered index.                           \n 2 Unclustered Index:                                                          \n    \u2022 An unclustered index does not physically reorder the data rows in the    \n      table.                                                                   \n    \u2022 Multiple unclustered indexes can exist per table.                        \n    \u2022 The index key values are stored in a B-tree structure, but the actual    \n      data rows are stored in the table in their original order.               \n\nFor a comprehensive understanding, you would need to consult a resource that   \ncovers SQL Server or relational database management systems.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "clustered",
+      "unclustered",
+      "order",
+      "range scan",
+      "I/O",
+      "records"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 24,
+        "snippet": "SQL provides a rich DDL that allows one to define tables with data types and integrity constraints. For instance, the following SQL DDL statement defines the department table: create table department ( dept\\_name char (20), building char (15), budget numeric (12,2)); Page 15 Execution of the precedi",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1056,
+        "snippet": "When a batch of queries are submitted together, a query optimizer can potentially exploit common subexpressions between the different queries, evaluating them once and reusing them where required. Complex queries may in fact have subexpressions repeated in different parts of the query, which can be ",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_conflict_serializable",
+    "hop": "single",
+    "question": "What does it mean for a schedule to be conflict serializable?",
+    "answer": "For a schedule to be conflict serializable, it means that the sequence of      \ntransactions executed in the system can be transformed into a serial schedule  \nthat is equivalent to the original schedule, without violating any of the      \nserializability conditions. Specifically, in a conflict serializable schedule: \n\n 1 No two conflicting transactions are executed concurrently.                  \n 2 The order of execution of conflicting transactions is preserved.            \n 3 The order of execution of non-conflicting transactions is preserved.        \n\nConflict serializability ensures that the final result of the transactions is  \nthe same as if they were executed serially, but allows for the transactions to \nbe executed in a concurrent manner. This is important for systems where        \ntransactions may need to be executed in parallel to improve performance, while \nstill maintaining the correctness and consistency of the data.                 \n\nConflict serializability is a stronger condition than serializability, as it   \nnot only requires that the final result be the same as a serial schedule but   \nalso that the order of execution of transactions be preserved. A schedule that \nis conflict serializable is also serializable, but not all serializable        \nschedules are conflict serializable.                                           \n\nIn the context of federated database systems, ensuring conflict serializability\ncan be challenging due to the distributed nature of the system and the         \npotential for local transactions to execute in a non-serializable manner.      \nTechniques such as two-phase locking, global serialization protocols, and      \nticket-based systems are used to achieve conflict serializability in such      \nenvironments.<<>",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "conflict serializable",
+      "serial schedule",
+      "conflict-equivalent",
+      "precedence graph",
+      "acyclic"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1538,
+        "snippet": ". Locks are obtained on the partitions/data items, updates up to that point are applied from the log, and the node is added to the list of replicas for the partitions or data items, before releasing the locks. Subsequent updates will be applied directly to the node, since it will be in the list of r",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 262,
+        "snippet": ". It is not sufficient to check referential integrity on inserts alone; we also need to consider updates of section , as well as deletes and updates to the referenced table time slot. The second trigger definition in Figure 5.9 considers the case of deletes to time\\_slot. This trigger checks that th",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1547,
+        "snippet": ". As an illustration, consider two global transactions T 1 and T 2 , each of which accesses and updates two data items, A and B , located at nodes N 1 and N 2 , respectively. Suppose that the local schedules are serializable. It is still possible to have a situation where, at node N 1 , T 2 follows ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1291,
+        "snippet": "A typical transaction-server system today consists of multiple processes accessing data in shared memory, as in Figure 20.1. The processes that form part of the database system include:  Figure 20.1 Shared memory and process structure. - Page 965 Server processes : These are processes that receive u",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1548,
+        "snippet": ". Some are based on imposing sufficient conditions to ensure global serializability. Others ensure only a form of consistency weaker than serializability but achieve this consistency by less restrictive means. There are several schemes to ensure global serializability in an environment where update ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 525,
+        "snippet": ". For applications that require higher security, the server may invalidate (drop) the session after a time-out period, or when the user logs out. (Typically a user logs out by clicking on a logout button, which submits a logout form, whose action is to invalidate the current session.) Invalidating a",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1552,
+        "snippet": ". This last step requires that inconsistent copies of data items be identified; if one is an earlier version of the other, the earlier version can be replaced by the later version. It is possible, however, that the two copies were the result of independent updates to a common base copy. A scheme for",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 274,
+        "snippet": ". Any recursive view must be defined as the union 8 of two subqueries: a base query that is nonrecursive and a recursive query that uses the recursive view. In the example in Figure 5.16, the base query is the select on prereq while the recursive query computes the join of prereq and rec\\_prereq. Th",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 275,
+        "snippet": ". However, this would result in computing (course, prerequisite) pairs for all courses, all of which are irrelevant except for those for the course CS-347. In fact the database system is not required to use this iterative technique to compute the full result of the recursive query and then perform t",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_aries_overview",
+    "hop": "single",
+    "question": "What is the ARIES recovery algorithm?",
+    "answer": "The ARIES (Atomicity, Recovery, Isolation, and Serializability) recovery       \nalgorithm is a recovery method designed for database systems to ensure that    \ntransactions are executed in a consistent manner, even in the presence of      \nfailures. It is a part of the recovery process that aims to restore the        \ndatabase to a consistent state after a failure.                                \n\nThe ARIES algorithm is particularly known for its approach to handling failures\nin a distributed database environment. It ensures that the recovery process is \nefficient and that the database can be restored to a consistent state as       \nquickly as possible. The algorithm is designed to handle failures by           \nidentifying the state of the database before the failure and then applying the \nnecessary transactions to bring the database back to that state.               \n\nHowever, the specific details of the ARIES recovery algorithm are not provided \nin the given text excerpts. The text mentions that ARIES is a recovery method  \nused to ensure atomicity, recovery, isolation, and serializability in database \nsystems, but it does not provide the algorithm's exact steps or mechanisms. For\na detailed understanding of the ARIES recovery algorithm, one would need to    \nrefer to specific database literature or technical documentation that provides \na comprehensive explanation of the algorithm's implementation and operation.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "ARIES",
+      "analysis",
+      "redo",
+      "undo",
+      "write-ahead log",
+      "crash recovery"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1026,
+        "snippet": ". Hence, it is not sufficient to find the best join order for each subset of the set of n given relations. Instead, we have to find the best join order for each subset, for each interesting sort order of the join result for that subset. The bestplan array can now be indexed by [ S , o ], where S is ",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1543,
+        "snippet": ". - Page 1131 The next piece of the solution is an idea called commit wait . The idea is as follows: After all locks have been acquired at all nodes, the local time t' is read at a coordinator node. We would like to use the true time as timestamp, but we don't have the exact value. Instead, the high",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1554,
+        "snippet": ". A transaction may then request a version with required freshness properties, for example not more than 10 minutes old. If a local replica has a version of the data item satisfying the freshness criterion, it can be used; otherwise, the read may have to be sent to the primary node. Consider, for ex",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1058,
+        "snippet": "As we noted earlier, query optimization is based on estimates that are at best approximations. Thus, it is possible at times for the optimizer to choose a plan that turns out to perform very badly. Adaptive operators that choose the specific operator at execution time provide a partial solution to t",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "sh_query_optimization",
+    "hop": "single",
+    "question": "What is the goal of query optimization?",
+    "answer": "The goal of query optimization is to find the most efficient way to execute a  \ngiven query. This involves selecting the best execution plan based on the      \ncharacteristics of the database, such as the data distribution, the types of   \noperations involved, and the available indexes. The primary objective is to    \nminimize the execution time or cost of the query while ensuring that the       \nresults are correct. Query optimizers use various techniques, including        \ncost-based optimization and heuristic approaches, to achieve this goal. They   \naim to reduce the cost of query optimization itself, which can be              \ncomputationally expensive, by applying heuristics and generating alternative   \naccess plans where necessary. The goal is to produce a plan that not only      \nexecutes quickly but also handles the query efficiently across different data  \nscenarios and query executions, such as those with varying constant values or  \nrepeated executions of similar queries.<<>",
+    "keyword_hit_rate": 0.6,
+    "missing_keywords": [
+      "execution plan",
+      "statistics"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1538,
+        "snippet": ". Locks are obtained on the partitions/data items, updates up to that point are applied from the log, and the node is added to the list of replicas for the partitions or data items, before releasing the locks. Subsequent updates will be applied directly to the node, since it will be in the list of r",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1028,
+        "snippet": "The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be ha",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1032,
+        "snippet": ". The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time r",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1038,
+        "snippet": ". If an in clause is used instead of exists , the relational algebra query can be appropriately modified by adding a corresponding predicate in the semijoin predicate, as our earlier example illustrated. The process of replacing a nested query by a query with a join, semijoin, or antisemijoin is cal",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_aries_steal_wal",
+    "hop": "multi",
+    "question": "What logging strategy does the buffer management policy that ARIES adopts require, and why?",
+    "answer": "The passage does not provide specific details about the buffer        \n management policy adopted by ARIES or any logging strategy it requires. The   \n text provided focuses on various aspects of query optimization, including     \n cost-based optimization, heuristics, materialized views, and adaptive         \n operators. It does not mention ARIES or its buffer management policy.         \n                                                                               \n\nTo accurately answer the question, we would need additional information        \nspecifically about ARIES's buffer management policy and its logging strategy.  \nThe passage does not contain this information.                                 \n\nIf you have more context or details about ARIES's buffer management policy, I  \nwould be happy to help analyze that information.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "steal",
+      "no-force",
+      "undo",
+      "redo",
+      "write-ahead logging",
+      "ARIES",
+      "dirty pages"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1049,
+        "snippet": "Query optimization can be performed by treating materialized views just like regular relations. However, materialized views offer further opportunities for optimization: - Rewriting queries to use materialized views: Page 783 Suppose a materialized view v = r \u00e2\u2039\u02c6 s is available, and a user submits a",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1056,
+        "snippet": "When a batch of queries are submitted together, a query optimizer can potentially exploit common subexpressions between the different queries, evaluating them once and reusing them where required. Complex queries may in fact have subexpressions repeated in different parts of the query, which can be ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1057,
+        "snippet": "Plan caching, which we saw in Section 16.4.3, is used as a heuristic in many databases. Recall that with plan caching, if a query is invoked with some constants, the plan chosen by the optimizer is cached and reused if the query is submitted again, even if the constants in the query are different. F",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1058,
+        "snippet": "As we noted earlier, query optimization is based on estimates that are at best approximations. Thus, it is possible at times for the optimizer to choose a plan that turns out to perform very badly. Adaptive operators that choose the specific operator at execution time provide a partial solution to t",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_strict2pl_cascading",
+    "hop": "multi",
+    "question": "Why does strict two-phase locking prevent cascading aborts while basic two-phase locking does not?",
+    "answer": "Strict two-phase locking prevents cascading aborts because it ensures \n that all resources acquired by a transaction are released before the          \n transaction commits or aborts. This is achieved by requiring that all         \n resources be locked before any work is done, and then releasing all locks     \n before committing. If a transaction aborts, all locks held by the transaction \n are immediately released, preventing other transactions from being blocked by \n the aborted transaction's locks.                                              \n                                                                               \n\nIn contrast, basic two-phase locking does not prevent cascading aborts. In this\nmodel, a transaction acquires locks as it needs them, and releases them when it\nis done with the resources. If a transaction aborts, it does not necessarily   \nrelease all the locks it has acquired. Other transactions that have acquired   \nlocks on the same resources may be blocked because the original transaction's  \nlocks are still held. This can lead to a situation where multiple transactions \nabort, each blocking the others, creating a cascade of aborts.                 \n\nTherefore, strict two-phase locking prevents cascading aborts by ensuring that \nall locks are released before a transaction commits or aborts, while basic     \ntwo-phase locking does not, as it allows locks to remain held even after a     \ntransaction aborts.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "strict 2PL",
+      "cascading abort",
+      "shrinking phase",
+      "write locks",
+      "uncommitted",
+      "commit"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1038,
+        "snippet": ". If an in clause is used instead of exists , the relational algebra query can be appropriately modified by adding a corresponding predicate in the semijoin predicate, as our earlier example illustrated. The process of replacing a nested query by a query with a join, semijoin, or antisemijoin is cal",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1057,
+        "snippet": "Plan caching, which we saw in Section 16.4.3, is used as a heuristic in many databases. Recall that with plan caching, if a query is invoked with some constants, the plan chosen by the optimizer is cached and reused if the query is submitted again, even if the constants in the query are different. F",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1065,
+        "snippet": ".   PAR T 7 ## MANAGEMENT The term transaction refers to a collection of operations that form a single logical unit of work. For instance, transfer of money from one account to another is a transaction consisting of two updates, one to each account. It is important that either all actions of a trans",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_dpt_redo_scope",
+    "hop": "multi",
+    "question": "How does the dirty page table in ARIES limit the amount of work done during the redo pass?",
+    "answer": "The question you've asked appears to be about ARIES (Advanced         \n Recovery and Integrity System), which is a recovery mechanism used in Oracle  \n databases. However, the provided text excerpt does not contain any            \n information about a \"dirty page table\" or the ARIES redo pass. The text       \n excerpt is about database systems, data models, and SQL concepts, not         \n specifically about ARIES or redo passes.                                      \n                                                                               \n\nTo accurately answer your question, we would need a section of text that       \nspecifically discusses ARIES and its redo pass. If you could provide the       \nrelevant section or clarify which database system and recovery mechanism you   \nare referring to, I would be happy to provide an accurate answer.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "dirty page table",
+      "recLSN",
+      "pageLSN",
+      "redo pass",
+      "skip",
+      "ARIES"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 3,
+        "snippet": ". - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for track",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1032,
+        "snippet": ". The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time r",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 12,
+        "snippet": "Underlying the structure of a database is the data model : a collection of conceptual tools for describing data, data relationships, data semantics, and consistency constraints. There are a number of different data models that we shall cover in the text. The data models can be classified into four d",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 24,
+        "snippet": "SQL provides a rich DDL that allows one to define tables with data types and integrity constraints. For instance, the following SQL DDL statement defines the department table: create table department ( dept\\_name char (20), building char (15), budget numeric (12,2)); Page 15 Execution of the precedi",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1050,
+        "snippet": "Another related optimization problem is that of materialized view selection , namely, 'What is the best set of views to materialize?' This decision must be made on the basis of the system workload , which is a sequence of queries and updates that reflects the typical load on the system. One simple c",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_steal_atomicity",
+    "hop": "multi",
+    "question": "How does write-ahead logging ensure atomicity even when the steal buffer policy allows uncommitted pages to reach disk?",
+    "answer": "Write-ahead logging (WAL) ensures atomicity even when the steal       \n buffer policy allows uncommitted pages to reach disk through a mechanism      \n called the log file. Here's how it works:                                     \n                                                                               \n\n 1 Log File: WAL uses a log file to record all changes made to the database.   \n   This log file is a sequence of records that describe the changes in a       \n   transaction.                                                                \n 2 Transaction Commit: When a transaction is committed, its changes are written\n   to the log file before being written to the database. This ensures that the \n   changes are durable and can be recovered if the system crashes.             \n 3 Recovery Mechanism: If the system crashes, the recovery process reads the   \n   log file to determine which changes were made but not yet written to the    \n   database. It then applies these changes to the database to restore it to a  \n   consistent state.                                                           \n 4 Steal Buffer Policy: This policy allows uncommitted pages to reach disk, but\n   it does not affect the log file. The log file still records all changes made\n   by transactions, ensuring that the changes are durable.                     \n 5 Atomicity: Even if uncommitted pages are written to disk, the log file      \n   ensures that the changes are not lost. When the system recovers, it can     \n   apply the changes recorded in the log file, thus maintaining the atomicity  \n   of the transaction.                                                         \n\nIn summary, the log file in WAL provides a mechanism to ensure that all changes\nmade by a transaction are durable and can be recovered, even if the steal      \nbuffer policy allows uncommitted pages to reach disk. This way, the atomicity  \nproperty of transactions is maintained.                                        \n\n<<>",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "write-ahead logging",
+      "steal",
+      "atomicity",
+      "undo",
+      "stable storage",
+      "crash",
+      "uncommitted"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1065,
+        "snippet": ".   PAR T 7 ## MANAGEMENT The term transaction refers to a collection of operations that form a single logical unit of work. For instance, transfer of money from one account to another is a transaction consisting of two updates, one to each account. It is important that either all actions of a trans",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1066,
+        "snippet": ". Taken as a whole, the transaction-management component of a database system allows application developers to focus on the implementation of individual transactions, ignoring the issues of concurrency and fault tolerance.  ## Transactions Often, a collection of several operations on the database ap",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1067,
+        "snippet": "Page 800 A transaction is a unit of program execution that accesses and possibly updates various data items. Usually, a transaction is initiated by a user program written in a highlevel data-manipulation language (typically SQL), or programming language (e.g., C++ or Java), with embedded database ac",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1068,
+        "snippet": ". Therefore, the database system must take special actions to ensure that transactions operate properly without interference from concurrently executing database statements. This property is referred to as isolation . Even if the system ensures correct execution of a transaction, this serves little ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1072,
+        "snippet": ".  Page 803 Thus, because of the failure, the state of the system no longer reflects a real state of the world that the database is supposed to capture. We term such a state an inconsistent state . We must ensure that such inconsistencies are not visible in a database system. Note, however, that the",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_repeatable_read_phantom",
+    "hop": "multi",
+    "question": "Why does the repeatable read isolation level fail to prevent phantom reads even though it prevents non-repeatable reads?",
+    "answer": "The repeatable read isolation level does not prevent phantom reads    \n because it does not prevent changes made by other transactions between the    \n start and end of a transaction. Here's a detailed explanation:                \n                                                                               \n\n 1 Repeatable Read Isolation Level: This level ensures that once a transaction \n   begins, all data seen by the transaction remains unchanged until the        \n   transaction completes. This means that if a transaction reads a row, it will\n   see the same row throughout the transaction, and no other transaction can   \n   modify that row until the transaction is committed.                         \n 2 Phantom Reads: A phantom read occurs when a transaction reads a row, then   \n   another transaction inserts a new row that matches the original             \n   transaction's criteria, and the original transaction then reads the new row.\n   This new row is not seen by the original transaction, leading to a \"phantom\"\n   effect.                                                                     \n 3 Difference Between Repeatable Read and Phantom Reads:                       \n    \u2022 Repeatable Read: Ensures that the data seen by a transaction remains     \n      unchanged. If a transaction reads a row and then another transaction     \n      inserts a new row that matches the original transaction's criteria, the  \n      original transaction will not see the new row because it is not committed\n      yet.                                                                     \n    \u2022 Phantom Reads: Can occur because the original transaction reads a row,   \n      and another transaction inserts a new row that matches the criteria. The \n      original transaction will see the new row because it is not part of the  \n      original transaction's read set.                                         \n 4 Why Repeatable Read Does Not Prevent Phantom Reads:                         \n    \u2022 The repeatable read isolation level ensures that the data seen by a      \n      transaction remains unchanged until the transaction commits. However, it \n      does not prevent other transactions from inserting new rows that match   \n      the criteria of the original transaction's read set.                     \n    \u2022 The original transaction will see the new row because the new row is     \n      inserted by another transaction, and it is not part of the original      \n      transaction's read set. This new row is considered a \"phantom\" because it\n      was not present in the original transaction's",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "repeatable read",
+      "phantom",
+      "predicate locking",
+      "insert",
+      "shared locks",
+      "non-repeatable"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 9,
+        "snippet": ". If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both t",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1041,
+        "snippet": ". Views can be maintained by manually written code: That is, every piece of code that updates the salary value can be modified to also update the total salary amount for the corresponding department. However, this approach is error prone, since it is easy to miss some places where the salary is upda",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 32,
+        "snippet": ". It is the job of the database system to translate updates and queries written in a nonprocedural language, at the logical level, into an efficient sequence of operations at the physical level. The transaction manager is important because it allows application developers to treat a sequence of data",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1056,
+        "snippet": "When a batch of queries are submitted together, a query optimizer can potentially exploit common subexpressions between the different queries, evaluating them once and reusing them where required. Complex queries may in fact have subexpressions repeated in different parts of the query, which can be ",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_no_force_commit",
+    "hop": "multi",
+    "question": "What mechanism allows a database to commit a transaction without forcing its dirty pages to disk at commit time?",
+    "answer": "The mechanism that allows a database to commit a transaction without  \n forcing its dirty pages to disk at commit time is called \"write-ahead         \n logging\" or \"logging\".                                                        \n                                                                               \n\nWrite-ahead logging is a technique used in database systems to ensure data     \nconsistency and durability. It works by recording all changes made to the      \ndatabase before they are actually written to the disk. This way, if a system   \nfailure occurs, the database can recover by replaying the log to restore the   \nstate of the database to a consistent point before the failure.                \n\nIn the context of a transaction, when a database commits a transaction, it does\nnot need to wait for all changes to be written to disk because the changes are \nalready recorded in the log. The log ensures that if a crash occurs, the       \ndatabase can roll back to a consistent state by undoing the changes as recorded\nin the log.                                                                    \n\nHowever, it's important to note that while write-ahead logging allows for      \ncommitting transactions without immediately writing to disk, it still requires \nthe database to periodically flush the log to disk to ensure that the log      \nitself is not corrupted. This is typically done at regular intervals or when   \nthe log reaches a certain size.                                                \n\nSo, to summarize, the mechanism that allows a database to commit a transaction \nwithout forcing its dirty pages to disk at commit time is write-ahead logging.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "no-force",
+      "commit",
+      "redo log",
+      "stable storage",
+      "durability",
+      "crash",
+      "buffer"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 3,
+        "snippet": ". - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for track",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 5,
+        "snippet": ". - The second mode is to support data analytics , that is, the processing of data to draw conclusions, and infer rules or decision procedures, which are then used to drive business decisions. Page 5 For example, banks need to decide whether to give a loan to a loan applicant, online advertisers nee",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 7,
+        "snippet": ". Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and ",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 9,
+        "snippet": ". If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both t",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 12,
+        "snippet": "Underlying the structure of a database is the data model : a collection of conceptual tools for describing data, data relationships, data semantics, and consistency constraints. There are a number of different data models that we shall cover in the text. The data models can be classified into four d",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 24,
+        "snippet": "SQL provides a rich DDL that allows one to define tables with data types and integrity constraints. For instance, the following SQL DDL statement defines the department table: create table department ( dept\\_name char (20), building char (15), budget numeric (12,2)); Page 15 Execution of the precedi",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 28,
+        "snippet": "Page 17 Non-procedural query languages such as SQL are not as powerful as a universal Turing machine; that is, there are some computations that are possible using a generalpurpose programming language but are not possible using SQL. SQL also does not support actions such as input from users, output ",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_clr_crash_during_undo",
+    "hop": "multi",
+    "question": "How do compensation log records in ARIES prevent repeated undo operations if the system crashes during the undo pass?",
+    "answer": "The passage provided does not contain information about ARIES         \n (Advanced Recovery and Integrity System) or compensation log records. The     \n text appears to be from a database management textbook discussing database    \n transactions, consistency, and durability. Therefore, I cannot provide an     \n accurate answer to the question based on the given text.                      \n                                                                               \n\nThe question seems to be asking about a specific feature of ARIES, which is not\ncovered in the excerpt provided. ARIES is a recovery system designed for Oracle\ndatabases, and its compensation log records are used to ensure that undo       \noperations are not repeated in the event of a system crash. However, without   \nspecific details about ARIES from the given text, I cannot provide a precise   \nexplanation of how compensation log records prevent repeated undo operations in\nARIES.                                                                         \n\nIf you could provide more context or the relevant section from the ARIES       \ndocumentation, I would be able to offer a more accurate explanation.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "CLR",
+      "compensation log record",
+      "undoNextLSN",
+      "redo-only",
+      "crash during undo",
+      "ARIES"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 3,
+        "snippet": ". - Web-based services - Social-media: For keeping records of users, connections between users (such as friend/follows information), posts made by users, rating/like information about posts, etc. - Online retailers: For keeping records of sales data and orders as for any retailer, but also for track",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 7,
+        "snippet": ". Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 9,
+        "snippet": ". If a system failure occurs during the execution of the program, it is possible that the $500 was removed from the balance of account A but was not credited to the balance of account B , resulting in an inconsistent database state. Clearly, it is essential to database consistency that either both t",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 24,
+        "snippet": "SQL provides a rich DDL that allows one to define tables with data types and integrity constraints. For instance, the following SQL DDL statement defines the department table: create table department ( dept\\_name char (20), building char (15), budget numeric (12,2)); Page 15 Execution of the precedi",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 29,
+        "snippet": "Database systems are designed to manage large bodies of information. These large bodies of information do not exist in isolation. They are part of the operation of some enterprise whose end product may be information from the database or may be some device or service for which the database plays onl",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 32,
+        "snippet": ". It is the job of the database system to translate updates and queries written in a nonprocedural language, at the logical level, into an efficient sequence of operations at the physical level. The transaction manager is important because it allows application developers to treat a sequence of data",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_bcnf_fd_preservation",
+    "hop": "multi",
+    "question": "Why does decomposing a relation into BCNF not always preserve all functional dependencies?",
+    "answer": "In the decomposition of a relation into BCNF (Boyce-Codd Normal      \n Form), not all functional dependencies (FDs) are always preserved. This is    \n because BCNF decomposes a relation into a set of relations where each         \n relation is in a higher normal form (specifically, it eliminates transitive   \n dependencies). However, this process can sometimes result in the loss of some \n dependencies.                                                                 \n                                                                               \n\nIn BCNF, a relation R is in BCNF if for every non-trivial functional dependency\nX -> Y, X is a superkey of R. A superkey is a set of attributes that can       \nuniquely identify a tuple in the relation. In BCNF, if X -> Y is a dependency, \nthen X must be a superkey, meaning X must be able to uniquely identify all     \ntuples in R.                                                                   \n\nDecomposing a relation into BCNF involves breaking it down into relations where\neach relation is in BCNF. This process can sometimes result in the loss of some\ndependencies because the decomposition may create new dependencies that were   \nnot present in the original relation. Specifically, the decomposition process  \nmay introduce dependencies between attributes that were not originally         \ndependent on each other.                                                       \n\nTherefore, while decomposing a relation into BCNF ensures that each relation is\nin a higher normal form and eliminates transitive dependencies, it does not    \nalways preserve all the original functional dependencies. The goal is to ensure\nthat the decomposed relations are in BCNF, which is a stricter form of         \nnormalization, but this stricter form may mean some dependencies are lost in   \nthe process.                                                                   \n\n<<>>",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "BCNF",
+      "functional dependency",
+      "decomposition",
+      "dependency preservation",
+      "3NF",
+      "superkey"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 12,
+        "snippet": "Underlying the structure of a database is the data model : a collection of conceptual tools for describing data, data relationships, data semantics, and consistency constraints. There are a number of different data models that we shall cover in the text. The data models can be classified into four d",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 24,
+        "snippet": "SQL provides a rich DDL that allows one to define tables with data types and integrity constraints. For instance, the following SQL DDL statement defines the department table: create table department ( dept\\_name char (20), building char (15), budget numeric (12,2)); Page 15 Execution of the precedi",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 28,
+        "snippet": "Page 17 Non-procedural query languages such as SQL are not as powerful as a universal Turing machine; that is, there are some computations that are possible using a generalpurpose programming language but are not possible using SQL. SQL also does not support actions such as input from users, output ",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 32,
+        "snippet": ". It is the job of the database system to translate updates and queries written in a nonprocedural language, at the logical level, into an efficient sequence of operations at the physical level. The transaction manager is important because it allows application developers to treat a sequence of data",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_lsn_redo_undo",
+    "hop": "multi",
+    "question": "How does the log sequence number serve both the redo pass and the undo pass in ARIES?",
+    "answer": "In ARIES (Atomicity, Recovery, Isolation, and Consistency), the log sequence   \nnumber (LSN) serves a dual purpose in both the redo and undo passes:           \n\n 1 Redo Pass:                                                                  \n    \u2022 The LSN in the redo pass is used to identify the specific log record that\n      needs to be applied to the database to restore it to a consistent state  \n      after a crash or failure.                                                \n    \u2022 Each log record is assigned a unique LSN, which is incremented for each  \n      new log record. This ensures that the redo process can correctly apply   \n      the changes in the correct order.                                        \n 2 Undo Pass:                                                                  \n    \u2022 In the undo pass, the LSN helps in identifying the log record that needs \n      to be rolled back to undo the changes made by a transaction.             \n    \u2022 The LSN is crucial for determining which log records need to be retracted\n      to return the database to its state before the transaction began.        \n    \u2022 By using the LSN, the undo process can efficiently identify and revert   \n      the specific changes made by a transaction.                              \n\nIn summary, the LSN in ARIES is a critical identifier that ensures both the    \ncorrect application of changes (redo) and the precise retraction of changes    \n(undo) in the recovery process, maintaining the atomicity, consistency, and    \ndurability of the database.                                                    \n\n<<>><",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "LSN",
+      "pageLSN",
+      "redo pass",
+      "undo pass",
+      "CLR",
+      "undoNextLSN",
+      "prevLSN",
+      "ARIES"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1026,
+        "snippet": ". Hence, it is not sufficient to find the best join order for each subset of the set of n given relations. Instead, we have to find the best join order for each subset, for each interesting sort order of the join result for that subset. The bestplan array can now be indexed by [ S , o ], where S is ",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1042,
+        "snippet": "Page 780 To understand how to maintain materialized views incrementally, we start off by considering individual operations, and then we see how to handle a complete expression. The changes to a relation that can cause a materialized view to become out-of-date are inserts, deletes, and updates. To si",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1050,
+        "snippet": "Another related optimization problem is that of materialized view selection , namely, 'What is the best set of views to materialize?' This decision must be made on the basis of the system workload , which is a sequence of queries and updates that reflects the typical load on the system. One simple c",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1052,
+        "snippet": "Many queries fetch results sorted on some attributes, and require only the top K results for some K . Sometimes the bound K is specified explicitly. For example, some databases support a limit K clause which results in only the top K results being returned by the query. Other databases support alter",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 32,
+        "snippet": ". It is the job of the database system to translate updates and queries written in a nonprocedural language, at the logical level, into an efficient sequence of operations at the physical level. The transaction manager is important because it allows application developers to treat a sequence of data",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 33,
+        "snippet": "The storage manager is the component of a database system that provides the interface between the low-level data stored in the database and the application programs and queries submitted to the system. The storage manager is responsible for the interaction with the file manager. The raw data are sto",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_bptree_fanout_io",
+    "hop": "multi",
+    "question": "How does the fan-out of a B+ tree relate to the number of I/Os required to answer a range query?",
+    "answer": "The fan-out of a B+ tree does not directly determine the number of    \n I/Os required to answer a range query. Instead, the fan-out affects the       \n height of the B+ tree, which in turn influences the number of I/Os.           \n                                                                               \n\nThe fan-out of a B+ tree is the maximum number of children a node can have. A  \nhigher fan-out means that a node can have more children, which can reduce the  \nheight of the tree and thus the number of I/Os required to access a node.      \nHowever, the number of I/Os required to answer a range query is primarily      \ndetermined by the height of the tree, which is influenced by the fan-out but   \nalso by the number of keys in the tree and the number of nodes that need to be \naccessed.                                                                      \n\nTo answer a range query, the system must traverse the tree from the root to a  \nleaf node that contains the range of interest. The height of the tree          \ndetermines how many levels of nodes need to be accessed. A higher fan-out can  \nreduce the height of the tree, thereby reducing the number of I/Os required to \nreach the leaf nodes. However, the actual number of I/Os needed will also      \ndepend on the distribution of keys and the number of nodes that need to be     \naccessed to cover the range.                                                   \n\nIn summary, while a higher fan-out can reduce the height of the B+ tree and    \nthus",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "fan-out",
+      "B+ tree",
+      "height",
+      "I/O",
+      "range query",
+      "leaf",
+      "log"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1026,
+        "snippet": ". Hence, it is not sufficient to find the best join order for each subset of the set of n given relations. Instead, we have to find the best join order for each subset, for each interesting sort order of the join result for that subset. The bestplan array can now be indexed by [ S , o ], where S is ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1028,
+        "snippet": "The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be ha",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1030,
+        "snippet": "Page 772 A drawback of cost-based optimization is the cost of optimization itself. Although the cost of query optimization can be reduced by clever algorithms, the number of different evaluation plans for a query can be very large, and finding the optimal plan from this set requires a lot of computa",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1032,
+        "snippet": ". The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time r",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 1033,
+        "snippet": ". The cost-based optimization techniques described here are used for each block of the query separately. The optimizers in several database products, such as IBM DB2 and Oracle, are based on the above approach, with extensions to handle other operations such as aggregation. For compound SQL queries ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1038,
+        "snippet": ". If an in clause is used instead of exists , the relational algebra query can be appropriately modified by adding a corresponding predicate in the semijoin predicate, as our earlier example illustrated. The process of replacing a nested query by a query with a join, semijoin, or antisemijoin is cal",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_mvcc_readers",
+    "hop": "multi",
+    "question": "What allows multi-version concurrency control to serve readers without acquiring read locks?",
+    "answer": "In multi-version concurrency control (MVCC), readers do not need to  \n acquire read locks because each transaction sees a snapshot of the database   \n at a specific point in time, known as a version. This snapshot is independent \n of other transactions and allows multiple readers to access the database      \n concurrently without interfering with each other or with writers. The system  \n maintains multiple versions of the database, each representing the state of   \n the database at different points in time, and readers can choose which        \n version to use based on their needs. This approach ensures that readers can   \n read data without blocking each other or writers, thus allowing for           \n concurrent access and improving performance.                                  \n                                                                               \n\nHowever, it's important to note that MVCC is not a universal solution and may  \nnot be suitable for all types of databases or applications. It has its own     \ntrade-offs and limitations, such as increased storage requirements and         \ncomplexity in managing multiple versions.",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "MVCC",
+      "version",
+      "snapshot",
+      "timestamp",
+      "read lock",
+      "writer",
+      "reader"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1052,
+        "snippet": "Many queries fetch results sorted on some attributes, and require only the top K results for some K . Sometimes the bound K is specified explicitly. For example, some databases support a limit K clause which results in only the top K results being returned by the query. Other databases support alter",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1065,
+        "snippet": ".   PAR T 7 ## MANAGEMENT The term transaction refers to a collection of operations that form a single logical unit of work. For instance, transfer of money from one account to another is a transaction consisting of two updates, one to each account. It is important that either all actions of a trans",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_hash_join_memory",
+    "hop": "multi",
+    "question": "What makes a hash join faster than a nested-loop join, and when does this advantage disappear?",
+    "answer": "A hash join can be faster than a nested-loop join in scenarios where  \n the join keys are large and the data is distributed in a way that allows for  \n efficient hashing. Specifically, a hash join involves creating a hash table   \n from one of the join relations and then scanning the other relation to match  \n keys with the hash table. This approach can be faster if the join key is not  \n small and the data distribution allows for a good hash distribution, which    \n can reduce the number of comparisons needed during the join process.          \n                                                                               \n\nHowever, the advantage of a hash join over a nested-loop join disappears when: \n\n 1 The join key is small (e.g., a single integer or a short string), making it \n   inefficient to hash the key.                                                \n 2 The data distribution is not favorable for a good hash distribution, leading\n   to a large number of collisions and additional overhead.                    \n 3 The data volume is small, and the overhead of creating the hash table       \n   outweighs the benefits of the join operation.                               \n\nIn such cases, a nested-loop join, which directly compares pairs of tuples from\nthe two relations, can be more efficient. Nested-loop joins are generally      \nsimpler and more flexible, making them a fallback option when other join       \nmethods are not suitable.                                                      \n\n<<>>",
+    "keyword_hit_rate": 0.0,
+    "missing_keywords": [
+      "hash join",
+      "nested-loop",
+      "hash table",
+      "memory",
+      "partition",
+      "I/O",
+      "probe"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 1024,
+        "snippet": ". If S contains only one relation, the best way of accessing S (taking selections on S , if any, into account) is recorded in bestplan. This may involve using an index to identify tuples, and then fetching the tuples (often referred to as an index scan), or scanning the entire relation (often referr",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1028,
+        "snippet": "The join-order optimization technique we just saw handles the most common class of queries, which perform an inner join of a set of relations. However, many queries use other features, such as aggregation, outer join, and nested queries, which are not addressed by join-order selection, but can be ha",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 5,
+        "snippet": ". - The second mode is to support data analytics , that is, the processing of data to draw conclusions, and infer rules or decision procedures, which are then used to drive business decisions. Page 5 For example, banks need to decide whether to give a loan to a loan applicant, online advertisers nee",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 7,
+        "snippet": ". Keeping organizational information in a file-processing system has a number of major disadvantages:  - Page 6 Data redundancy and inconsistency. Since different programmers create the files and application programs over a long period, the various files are likely to have different structures, and ",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1032,
+        "snippet": ". The time it takes to consider all left-deep join orders is O ( n !), which is much less than the time to consider all join orders. With the use of dynamic-programming optimizations, the System R optimizer can find the best join order in time O ( n 2 n ). Contrast this cost with the O (3 n ) time r",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1035,
+        "snippet": "Page 775 SQL conceptually treats nested subqueries in the where clause as functions that take parameters and return either a single value or a set of values (possibly an empty set). The parameters are the variables from an outer-level query that are used in the nested subquery (these variables are c",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 1038,
+        "snippet": ". If an in clause is used instead of exists , the relational algebra query can be appropriately modified by adding a corresponding predicate in the semijoin predicate, as our earlier example illustrated. The process of replacing a nested query by a query with a join, semijoin, or antisemijoin is cal",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 23,
+        "snippet": ". For example, the department listed for each course must be one that actually exists in the university. More precisely, the dept\\_name value in a course record must appear in the dept\\_name attribute of some record of the department relation. Database modifications can cause violations of referenti",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 24,
+        "snippet": "SQL provides a rich DDL that allows one to define tables with data types and integrity constraints. For instance, the following SQL DDL statement defines the department table: create table department ( dept\\_name char (20), building char (15), budget numeric (12,2)); Page 15 Execution of the precedi",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.014285714285714285
+      }
+    ]
+  },
+  {
+    "id": "mh_deadlock_granularity",
+    "hop": "multi",
+    "question": "How does lock granularity in two-phase locking affect the likelihood of deadlock?",
+    "answer": "Lock granularity in two-phase locking (2PL) refers to the size of the resources\n(locks) that are acquired and released during the transaction execution. The   \nimpact of lock granularity on the likelihood of deadlock is as follows:        \n\n 1 Lock Granularity and Deadlock Likelihood:                                   \n    \u2022 Coarse Lock Granularity: When locks are acquired and released at a coarse\n      level (i.e., fewer resources are locked at a time), the likelihood of    \n      deadlock increases. This is because there are fewer opportunities for    \n      conflicts to arise, and thus fewer chances for a deadlock to form.       \n    \u2022 Fine Lock Granularity: When locks are acquired and released at a fine    \n      level (i.e., more resources are locked at a time), the likelihood of     \n      deadlock decreases. This is because there are more opportunities for     \n      conflicts to arise, and thus more chances for a deadlock to form.        \n 2 Reasoning:                                                                  \n    \u2022 Coarse Lock Granularity: With fewer resources locked at a time, it is    \n      less likely that two transactions will acquire the same set of locks     \n      simultaneously. If a deadlock does occur, it is more likely to be        \n      resolved quickly because fewer resources are involved.                   \n    \u2022 Fine Lock Granularity: With more resources locked at a time, it is more  \n      likely that two transactions will acquire the same set of locks          \n      simultaneously. If a deadlock does occur, it is more complex and         \n      difficult to resolve because more resources are involved.                \n 3 Balancing:                                                                  \n    \u2022 Optimal Granularity: The optimal lock granularity is a trade-off between \n      minimizing the likelihood of deadlock and maximizing concurrency. Too    \n      coarse a granularity can lead to inefficiencies due to unnecessary       \n      locking, while too fine a granularity can increase the likelihood of     \n      deadlock.                                                                \n\nIn summary, a higher lock granularity (fewer resources locked at a time)       \ngenerally increases the likelihood of deadlock, while a lower lock granularity \n(more resources locked at a time) generally decreases the likelihood of        \ndeadlock.                                                                      \n\n<<>",
+    "keyword_hit_rate": 0.1428571428571429,
+    "missing_keywords": [
+      "lock granularity",
+      "deadlock",
+      "waits-for graph",
+      "tuple",
+      "table",
+      "two-phase locking"
+    ],
+    "retrieved_chunks": [
+      {
+        "rank": 1,
+        "chunk_id": 0,
+        "snippet": "Page 2 The earliest database systems arose in the 1960s in response to the computerized management of commercial data. Those earlier applications were relatively simple compared to modern database applications. Modern applications include highly sophisticated, worldwide enterprises. All database app",
+        "score": 0.01639344262295082
+      },
+      {
+        "rank": 2,
+        "chunk_id": 1,
+        "snippet": ". Information of this sort has a standard, repeating structure and is representative of the type of database applications that go back to the 1960s. Contrast this simple university database application with a social-networking site. Users of the site post varying types of information about themselve",
+        "score": 0.016129032258064516
+      },
+      {
+        "rank": 3,
+        "chunk_id": 1040,
+        "snippet": "When a view is defined, normally the database stores only the query defining the view. In contrast, a materialized view is a view whose contents are computed and stored. Materialized views constitute redundant data, in that their contents can be inferred from the view definition and the rest of the ",
+        "score": 0.015873015873015872
+      },
+      {
+        "rank": 4,
+        "chunk_id": 30,
+        "snippet": ". The designer can also examine the design to remove any redundant features. The focus at this point is on describing the data and their relationships, rather than on specifying physical storage details. In terms of the relational model, the conceptual-design process involves decisions on what attri",
+        "score": 0.015625
+      },
+      {
+        "rank": 5,
+        "chunk_id": 1054,
+        "snippet": "Page 785 Update queries often involve subqueries in the set and where clauses, which must also be taken into account in optimizing the update. Updates that involve a selection on the updated column (e.g., give a 10 percent salary raise to all employees whose salary is \u00e2\u2030\u00a5 $100,000) must be handled c",
+        "score": 0.015384615384615385
+      },
+      {
+        "rank": 6,
+        "chunk_id": 1057,
+        "snippet": "Plan caching, which we saw in Section 16.4.3, is used as a heuristic in many databases. Recall that with plan caching, if a query is invoked with some constants, the plan chosen by the optimizer is cached and reused if the query is submitted again, even if the constants in the query are different. F",
+        "score": 0.015151515151515152
+      },
+      {
+        "rank": 7,
+        "chunk_id": 36,
+        "snippet": "Often, several operations on the database form a single logical unit of work. An example is a funds transfer, as in Section 1.2, in which one account A is debited and another account B is credited. Clearly, it is essential that either both the credit and debit occur, or that neither occur. That is, ",
+        "score": 0.014925373134328358
+      },
+      {
+        "rank": 8,
+        "chunk_id": 37,
+        "snippet": ". For example, the transaction to transfer funds from account A to account B could be defined to be composed of two separate programs: one that debits account A and another that credits account B . The execution of these two programs one after the other will indeed preserve consistency. However, eac",
+        "score": 0.014705882352941176
+      },
+      {
+        "rank": 9,
+        "chunk_id": 1065,
+        "snippet": ".   PAR T 7 ## MANAGEMENT The term transaction refers to a collection of operations that form a single logical unit of work. For instance, transfer of money from one account to another is a transaction consisting of two updates, one to each account. It is important that either all actions of a trans",
+        "score": 0.014492753623188406
+      },
+      {
+        "rank": 10,
+        "chunk_id": 1066,
+        "snippet": ". Taken as a whole, the transaction-management component of a database system allows application developers to focus on the implementation of individual transactions, ignoring the issues of concurrency and fault tolerance.  ## Transactions Often, a collection of several operations on the database ap",
+        "score": 0.014285714285714285
+      }
+    ]
+  }
+]

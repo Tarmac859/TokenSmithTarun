@@ -16,6 +16,7 @@ import re
 from typing import Dict, List, Set
 
 import nltk
+nltk.download("wordnet", quiet=True)
 from nltk.stem import WordNetLemmatizer
 
 from src.retriever import Retriever
@@ -30,7 +31,6 @@ _STOPWORDS = {
 
 
 def _extract_entities(query: str) -> List[str]:
-    nltk.download("wordnet", quiet=True)
     lemmatizer = WordNetLemmatizer()
 
     tokens = re.findall(r"[a-zA-Z0-9_+\-']+", query.lower())
